@@ -1,195 +1,447 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GiftPrises - Магазин подарков</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --text: #ffffff;
+            --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-light {
+            --primary: #4f46e5;
+            --secondary: #7c3aed;
+            --accent: #ec4899;
+            --text: #1f2937;
+            --bg: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-dark {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --text: #f3f4f6;
+            --bg: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            padding: 20px;
-            color: white;
+            transition: var(--transition);
+            overflow-x: hidden;
         }
-        
+
         .container {
-            max-width: 400px;
+            max-width: 100%;
             margin: 0 auto;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Header */
+        .header {
             text-align: center;
+            margin-bottom: 30px;
+            position: relative;
         }
-        
+
+        .theme-switcher {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            color: var(--text);
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-switcher:hover {
+            transform: rotate(180deg) scale(1.1);
+        }
+
         .logo {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-        
-        .title {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 4rem;
             margin-bottom: 10px;
+            animation: bounce 2s infinite;
         }
-        
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .subtitle {
-            font-size: 16px;
-            opacity: 0.9;
+            font-size: 1.1rem;
+            opacity: 0.8;
             margin-bottom: 30px;
         }
-        
-        .button {
-            background: white;
-            color: #667eea;
-            border: none;
-            padding: 15px 20px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            margin: 10px 0;
-            width: 100%;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
+
+        /* Navigation Grid */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
         }
-        
-        .button:hover {
-            transform: translateY(-2px);
-        }
-        
-        .button.secondary {
-            background: rgba(255,255,255,0.2);
-            color: white;
+
+        .nav-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px 15px;
+            text-align: center;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .nav-card:hover::before {
+            left: 100%;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .nav-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .nav-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .nav-desc {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* Features */
         .features {
-            margin: 30px 0;
-            text-align: left;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.6s ease-out;
         }
-        
+
         .feature {
             display: flex;
             align-items: center;
-            margin: 15px 0;
-            font-size: 14px;
+            margin: 18px 0;
+            font-size: 0.95rem;
+            animation: fadeIn 0.8s ease-out;
         }
-        
+
         .feature-icon {
-            font-size: 20px;
-            margin-right: 10px;
+            font-size: 1.3rem;
+            margin-right: 15px;
             min-width: 30px;
+            color: var(--accent);
         }
-        
+
+        /* Footer */
         .footer {
+            text-align: center;
             margin-top: 30px;
-            font-size: 12px;
-            opacity: 0.7;
+            font-size: 0.8rem;
+            opacity: 0.6;
         }
-        
-        .status {
-            background: rgba(255,255,255,0.1);
-            padding: 10px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-size: 14px;
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">🎁</div>
-        <div class="title">GiftPrises</div>
-        <div class="subtitle">Твой магазин уникальных подарков</div>
-        
-        <div class="status">
-            ✅ WebApp успешно загружен!<br>
-            📱 Интерфейс готов к работе
+        <div class="header">
+            <button class="theme-switcher" onclick="switchTheme()">
+                <i class="fas fa-palette"></i>
+            </button>
+            
+            <div class="logo">🎁</div>
+            <h1 class="title">GiftPrises</h1>
+            <p class="subtitle">Твой мир уникальных подарков</p>
         </div>
-        
-        <button class="button" onclick="startShopping()">
-            🛍️ Начать покупки
-        </button>
-        
-        <button class="button secondary" onclick="showCatalog()">
-            📋 Посмотреть каталог
-        </button>
-        
-        <button class="button secondary" onclick="searchByBudget()">
-            💰 Поиск по бюджету
-        </button>
-        
+
+        <div class="nav-grid">
+            <div class="nav-card" onclick="openCategory('models')">
+                <div class="nav-icon">🎭</div>
+                <div class="nav-title">Модели</div>
+                <div class="nav-desc">Выбери дизайн</div>
+            </div>
+            
+            <div class="nav-card" onclick="openCategory('backdrops')">
+                <div class="nav-icon">🌄</div>
+                <div class="nav-title">Фоны</div>
+                <div class="nav-desc">Настрой окружение</div>
+            </div>
+            
+            <div class="nav-card" onclick="openCategory('symbols')">
+                <div class="nav-icon">✨</div>
+                <div class="nav-title">Узоры</div>
+                <div class="nav-desc">Добавь детали</div>
+            </div>
+            
+            <div class="nav-card" onclick="openCategory('budget')">
+                <div class="nav-icon">💰</div>
+                <div class="nav-title">Бюджет</div>
+                <div class="nav-desc">Установи лимит</div>
+            </div>
+            
+            <div class="nav-card" onclick="searchGifts()">
+                <div class="nav-icon">🔍</div>
+                <div class="nav-title">Поиск</div>
+                <div class="nav-desc">Найди подарки</div>
+            </div>
+            
+            <div class="nav-card" onclick="showCatalog()">
+                <div class="nav-icon">📚</div>
+                <div class="nav-title">Каталог</div>
+                <div class="nav-desc">Все модели</div>
+            </div>
+        </div>
+
         <div class="features">
             <div class="feature">
                 <span class="feature-icon">⚡</span>
-                Быстрая покупка за 2 клика
+                Мгновенная доставка подарков в Telegram
             </div>
             <div class="feature">
                 <span class="feature-icon">🎨</span>
-                Тысячи уникальных комбинаций
-            </div>
-            <div class="feature">
-                <span class="feature-icon">🎁</span>
-                Мгновенная доставка подарков
+                Тысячи уникальных комбинаций моделей, фонов и узоров
             </div>
             <div class="feature">
                 <span class="feature-icon">💫</span>
-                Подарки для себя и друзей
+                Подарки для себя и друзей с автоматической доставкой
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🛡️</span>
+                Безопасные платежи через TON blockchain
             </div>
         </div>
-        
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Загружаем...</p>
+        </div>
+
         <div class="footer">
-            🚀 Тестовый WebApp • GiftPrises
+            Powered by Telegram WebApp • GiftPrises 2025
         </div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
+        let currentTheme = 'default';
         
         // Инициализация WebApp
         tg.expand();
         tg.ready();
+        tg.MainButton.setText('GiftPrises').show();
         
-        function startShopping() {
-            sendToBot('start_shopping', { type: 'full_shopping' });
+        // Загрузка темы из localStorage
+        const savedTheme = localStorage.getItem('giftprizes-theme');
+        if (savedTheme) {
+            document.body.className = savedTheme;
+            currentTheme = savedTheme;
+        }
+        
+        function switchTheme() {
+            const themes = ['default', 'theme-light', 'theme-dark'];
+            const currentIndex = themes.indexOf(currentTheme);
+            const nextIndex = (currentIndex + 1) % themes.length;
+            currentTheme = themes[nextIndex];
+            
+            document.body.className = currentTheme;
+            localStorage.setItem('giftprizes-theme', currentTheme);
+            
+            // Анимация переключения
+            document.body.style.opacity = '0.7';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 200);
+        }
+        
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function openCategory(category) {
+            showLoading();
+            
+            // Анимация перехода
+            document.querySelector('.container').style.animation = 'fadeOut 0.5s forwards';
+            
+            setTimeout(() => {
+                sendToBot('open_category', { category: category });
+            }, 300);
+        }
+        
+        function searchGifts() {
+            showLoading();
+            sendToBot('search_gifts', { method: 'webapp' });
         }
         
         function showCatalog() {
-            sendToBot('show_catalog', { view: 'all_models' });
-        }
-        
-        function searchByBudget() {
-            sendToBot('search_budget', { method: 'webapp' });
+            showLoading();
+            sendToBot('show_catalog', { view: 'full' });
         }
         
         function sendToBot(action, data = {}) {
             const message = {
                 action: action,
-                timestamp: new Date().toISOString(),
+                source: 'webapp',
+                timestamp: Date.now(),
+                theme: currentTheme,
                 ...data
             };
             
+            tg.sendData(JSON.stringify(message));
+            
+            // Показываем подтверждение
             tg.showPopup({
-                title: 'Успешно!',
-                message: 'Команда отправлена в бота\n\nЗакройте окно чтобы вернуться в Telegram',
+                title: '🎯 Отлично!',
+                message: 'Команда отправлена в бота\n\nЗакройте окно чтобы увидеть результат',
                 buttons: [{ type: 'close' }]
             });
             
-            tg.sendData(JSON.stringify(message));
+            // Закрываем WebApp через 2 секунды
+            setTimeout(() => {
+                tg.close();
+            }, 2000);
         }
         
-        // Показываем что WebApp готов
-        tg.MainButton.setText('WebApp готов!').show();
+        // Обработка нажатия основной кнопки
         tg.MainButton.onClick(() => {
             tg.showPopup({
-                title: 'GiftPrises WebApp',
-                message: 'Используйте кнопки выше для навигации',
+                title: '👋 Добро пожаловать!',
+                message: 'Используйте карточки выше для навигации по магазину подарков\n\n🎨 Нажмите на палитру для смены темы',
                 buttons: [{ type: 'ok' }]
+            });
+        });
+        
+        // Добавляем анимацию при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.nav-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
             });
         });
     </script>
