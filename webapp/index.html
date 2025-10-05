@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiftPrises - Магазин подарков</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 10px 0;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .button.secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        
+        .features {
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        
+        .feature-icon {
+            font-size: 20px;
+            margin-right: 10px;
+            min-width: 30px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .status {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎁</div>
+        <div class="title">GiftPrises</div>
+        <div class="subtitle">Твой магазин уникальных подарков</div>
+        
+        <div class="status">
+            ✅ WebApp успешно загружен!<br>
+            📱 Интерфейс готов к работе
+        </div>
+        
+        <button class="button" onclick="startShopping()">
+            🛍️ Начать покупки
+        </button>
+        
+        <button class="button secondary" onclick="showCatalog()">
+            📋 Посмотреть каталог
+        </button>
+        
+        <button class="button secondary" onclick="searchByBudget()">
+            💰 Поиск по бюджету
+        </button>
+        
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon">⚡</span>
+                Быстрая покупка за 2 клика
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🎨</span>
+                Тысячи уникальных комбинаций
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🎁</span>
+                Мгновенная доставка подарков
+            </div>
+            <div class="feature">
+                <span class="feature-icon">💫</span>
+                Подарки для себя и друзей
+            </div>
+        </div>
+        
+        <div class="footer">
+            🚀 Тестовый WebApp • GiftPrises
+        </div>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        
+        // Инициализация WebApp
+        tg.expand();
+        tg.ready();
+        
+        function startShopping() {
+            sendToBot('start_shopping', { type: 'full_shopping' });
+        }
+        
+        function showCatalog() {
+            sendToBot('show_catalog', { view: 'all_models' });
+        }
+        
+        function searchByBudget() {
+            sendToBot('search_budget', { method: 'webapp' });
+        }
+        
+        function sendToBot(action, data = {}) {
+            const message = {
+                action: action,
+                timestamp: new Date().toISOString(),
+                ...data
+            };
+            
+            tg.showPopup({
+                title: 'Успешно!',
+                message: 'Команда отправлена в бота\n\nЗакройте окно чтобы вернуться в Telegram',
+                buttons: [{ type: 'close' }]
+            });
+            
+            tg.sendData(JSON.stringify(message));
+        }
+        
+        // Показываем что WebApp готов
+        tg.MainButton.setText('WebApp готов!').show();
+        tg.MainButton.onClick(() => {
+            tg.showPopup({
+                title: 'GiftPrises WebApp',
+                message: 'Используйте кнопки выше для навигации',
+                buttons: [{ type: 'ok' }]
+            });
+        });
+    </script>
+</body>
+</html>
