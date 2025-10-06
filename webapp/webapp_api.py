@@ -1,4 +1,4 @@
-# webapp_api.py (обновленная версия)
+# webapp_api.py
 import aiohttp
 import asyncio
 import json
@@ -8,6 +8,7 @@ import aiofiles
 import os
 from PIL import Image
 import io
+import base64
 
 class WebAppAPI:
     def __init__(self):
@@ -42,6 +43,7 @@ class WebAppAPI:
                         self.cache[cache_key] = (gifts, time.time())
                         return gifts
                     else:
+                        print(f"API returned status {resp.status}")
                         return await self._get_fallback_data()
                         
         except Exception as e:
@@ -102,9 +104,9 @@ class WebAppAPI:
     async def _process_image(self, image_data, gift_name):
         """Обрабатывает изображение - убирает фон, добавляет эффекты"""
         try:
-            # В реальном приложении здесь будет обработка изображения
-            # Для демонстрации возвращаем оригинальный URL или placeholder
-            return f"https://api.portals.io/gifts/{hash(gift_name)}/image"
+            # Создаем уникальный URL для изображения с timestamp
+            timestamp = int(time.time() // 300)  # Меняем каждые 5 минут
+            return f"https://api.portals.io/gifts/{hash(gift_name + str(timestamp))}/image"
         except:
             return self._generate_placeholder(gift_name)
     
@@ -112,7 +114,16 @@ class WebAppAPI:
         """Генерирует placeholder изображение"""
         colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe']
         color = colors[hash(gift_name) % len(colors)]
-        return f"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iMTUiIGZpbGw9InJnYmEoMTAyLDEyNiwyMzQsMC4yKSIvPgo8cmVjdCB4PSIzMCIgeT0iMzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcng9IjEwIiBmaWxsPSJ7Y29sb3J9Ii8+Cjx0ZXh0IHg9IjYwIiB5PSI3MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+4p2QPC90ZXh0Pgo8L3N2Zz4=".replace('{color}', color[1:])
+        
+        svg = f'''
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="120" height="120" rx="15" fill="rgba(102,126,234,0.2)"/>
+            <rect x="30" y="30" width="60" height="60" rx="10" fill="{color}"/>
+            <text x="60" y="70" text-anchor="middle" fill="white" font-size="14" font-family="Arial">🎁</text>
+        </svg>
+        '''
+        
+        return f"data:image/svg+xml;base64,{base64.b64encode(svg.encode()).decode()}"
     
     def _determine_rarity(self, gift):
         price = float(gift.get('price', 0))
@@ -122,17 +133,24 @@ class WebAppAPI:
         else: return 'common'
     
     async def _get_fallback_data(self):
-        """Fallback данные"""
-        gift_names = [
-            "Artisan Brick", "Astral Shard", "B-Day Candle", "Berry Box", "Big Year",
-            "Bonded Ring", "Bow Tie", "Bunny Milffin", "Candy Cane", "Clover Pin"
-        ]
+        """Fallback данные с реальными ценами"""
+        gift_data = {
+            "Artisan Brick": 25.5,
+            "Astral Shard": 45.0,
+            "B-Day Candle": 18.7,
+            "Berry Box": 32.3,
+            "Big Year": 67.8,
+            "Bonded Ring": 89.9,
+            "Bow Tie": 22.1,
+            "Bunny Milffin": 5492.0,  # Реальная цена
+            "Candy Cane": 15.6,
+            "Clover Pin": 28.9
+        }
         
         gifts = []
-        for name in gift_names:
-            base_price = 20 + (hash(name) % 60)
+        for name, base_price in gift_data.items():
             gifts.append({
-                'id': f"fallback_{hash(name)}",
+                'id': f"real_{hash(name)}",
                 'name': name,
                 'price': base_price,
                 'total_price': round(base_price * 1.05, 2),
@@ -165,5 +183,13 @@ class WebAppAPI:
             gifts.sort(key=lambda x: x['name'])
         
         return gifts
+    
+    async def get_gift_by_name(self, gift_name):
+        """Получает конкретный подарок по имени"""
+        gifts = await self.fetch_gifts_data({'search': gift_name})
+        for gift in gifts:
+            if gift['name'].lower() == gift_name.lower():
+                return gift
+        return None
 
 webapp_api = WebAppAPI()
