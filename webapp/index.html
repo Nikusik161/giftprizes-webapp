@@ -1565,6 +1565,142 @@
                 catalogContent.innerHTML = '<div class="no-results">❌ Ошибка загрузки каталога</div>';
             }
         }
+        // Загрузка реальных данных о подарках
+        async function loadRealGiftsData() {
+            showLoading(true, "Загружаем актуальные подарки с маркетплейса...");
+            
+            try {
+                // Пробуем получить данные с API
+                const response = await fetch(`${window.location.origin}/api/get_all_gifts`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        window.realGifts = data.data;
+                        displayRealGifts(window.realGifts);
+                        showStatusMessage(`✅ Загружено ${window.realGifts.length} подарков`, 'success');
+                    } else {
+                        throw new Error('API returned error');
+                    }
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            } catch (error) {
+                console.error('Failed to load gifts from API:', error);
+                
+                // Fallback: используем локальные данные
+                showStatusMessage('Используем локальные данные', 'warning');
+                
+                // Создаем реалистичные подарки локально
+                const realisticGifts = [
+                    "Artisan Brick", "Astral Shard", "B-Day Candle", "Berry Box", "Big Year",
+                    "Bonded Ring", "Bow Tie", "Bunny Milffin", "Candy Cane", "Clover Pin",
+                    "Cookie Heart", "Crystal Ball", "Cupid Charm", "Desk Calendar", "Diamond Ring",
+                    "Durov's Cap", "Easter Egg", "Electric Skull", "Eternal Candle", "Eternal Rose",
+                    "Evil Eye", "Flying Broom", "Fresh Socks", "Gem Signet", "Genie Lamp",
+                    "Ginger Cookie", "Hanging Star", "Heart Locket", "Heroic Helmet", "Hex Pot",
+                    "Holiday Drink", "Homemade Cake", "Hypno Lollipop", "Input Key", "Ion Gem",
+                    "Ionic Dryer", "Jack-in-the-Box", "Jelly Bunny", "Jester Hat", "Jingle Bells",
+                    "Jolly Chimp", "Joyful Bundle", "Kissed Frog", "Light Sword", "Lol Pop",
+                    "Loot Bag", "Love Candle", "Love Potion", "Low Rider", "Lunar Snake",
+                    "Lush Bouquet", "Mad Pumpkin", "Magic Potion", "Mighty Arm", "Mini Oscar",
+                    "Moon Pandante", "Nail Bracelet", "Neko Helmet", "Party Sparkler", "Perfume Bottle",
+                    "Pet Snake", "Plush Pepe", "Precious Peach", "Record Player", "Restless Jar",
+                    "Sakura Flower", "Santa Hat", "Scared Cat", "Sharp Tongue", "Signet Ring",
+                    "Skull Flower", "Sky Stilettos", "Sleigh Bell", "Snake Box", "Snoop Cigar",
+                    "Snoop Dogg", "Snow Globe", "Snow Mittens", "Spiced Wine", "Spy Agaric",
+                    "Star Notepad", "Stellar Rocket", "Swag Bag", "Swiss Watch", "Tama Gadget",
+                    "Top Hat", "Toy Bear", "Trapped Heart", "Valentine Box", "Vintage Cigar",
+                    "Voodoo Doll", "Westside Sign", "Whip Cupcake", "Winter Weath", "Witch Hat",
+                    "Xmas Strocking"
+                ];
+                
+                window.realGifts = realisticGifts.map((name, index) => {
+                    const basePrice = getRealisticPrice(name);
+                    const marketFee = basePrice * 0.05;
+                    const myFee = basePrice * 0.08;
+                    const totalPrice = basePrice + marketFee + myFee;
+                    
+                    return {
+                        id: `gift_${index + 1}`,
+                        name: name,
+                        base_price: basePrice,
+                        market_fee: Math.round(marketFee * 100) / 100,
+                        my_fee: Math.round(myFee * 100) / 100,
+                        total_price: Math.round(totalPrice * 100) / 100,
+                        image_url: generatePlaceholder(name),
+                        market: 'Portals',
+                        attributes: {
+                            model: name,
+                            backdrop: ['Звездный', 'Городской', 'Природный', 'Абстрактный'][index % 4],
+                            symbol: ['Звезды', 'Цветы', 'Геометрия', 'Полосы'][index % 4]
+                        },
+                        is_transferable: true,
+                        rarity: determineRarity(basePrice),
+                        sales_count: Math.floor(Math.random() * 100) + 1
+                    };
+                });
+                
+                displayRealGifts(window.realGifts);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Вспомогательные функции для fallback данных
+        function getRealisticPrice(giftName) {
+            const priceRanges = {
+                "Bunny Milffin": 5492,
+                "Plush Pepe": 4500,
+                "Snoop Dogg": 3800,
+                "Durov's Cap": 3200,
+                "Diamond Ring": 890,
+                "Eternal Rose": 750,
+                "Crystal Ball": 680,
+                "Genie Lamp": 590,
+                "Astral Shard": 450,
+                "Heroic Helmet": 380,
+                "Magic Potion": 320,
+                "Electric Skull": 280,
+                "Artisan Brick": 45,
+                "Candy Cane": 32,
+                "Bow Tie": 28,
+                "Fresh Socks": 22
+            };
+            
+            return priceRanges[giftName] || (Math.floor(Math.random() * 80) + 20);
+        }
+        
+        function determineRarity(price) {
+            if (price > 1000) return 'legendary';
+            else if (price > 500) return 'epic';
+            else if (price > 100) return 'rare';
+            else return 'common';
+        }
+        
+        function generatePlaceholder(giftName) {
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe'];
+            const color = colors[hashCode(giftName) % colors.length];
+            
+            const svg = `
+            <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="120" height="120" rx="15" fill="rgba(102,126,234,0.2)"/>
+                <rect x="30" y="30" width="60" height="60" rx="10" fill="${color}"/>
+                <text x="60" y="70" text-anchor="middle" fill="white" font-size="14" font-family="Arial">🎁</text>
+            </svg>
+            `;
+            
+            return `data:image/svg+xml;base64,${btoa(svg)}`;
+        }
+        
+        function hashCode(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                hash |= 0;
+            }
+            return Math.abs(hash);
+        }
         
         // Получение названия редкости
         function getRarityName(rarity) {
