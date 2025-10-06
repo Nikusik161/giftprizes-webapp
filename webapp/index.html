@@ -1075,37 +1075,51 @@
 
                 <div class="form-group">
                     <label class="form-label">🎨 Модель подарка</label>
-                    <input type="text" class="search-input" placeholder="Название модели" id="gift-model">
+                    <input type="text" class="search-input" placeholder="Введите модель подарка..." id="gift-model">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">🌄 Фон</label>
-                    <select class="form-select" id="gift-backdrop">
-                        <option value="">Любой фон</option>
-                        <option value="Звездный">Звездный</option>
-                        <option value="Городской">Городской</option>
-                        <option value="Природный">Природный</option>
-                        <option value="Абстрактный">Абстрактный</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">✨ Узор</label>
-                    <select class="form-select" id="gift-symbol">
-                        <option value="">Любой узор</option>
-                        <option value="Звезды">Звезды</option>
-                        <option value="Цветы">Цветы</option>
-                        <option value="Геометрия">Геометрия</option>
-                        <option value="Полосы">Полосы</option>
-                    </select>
+                    <label class="form-label">💰 Ваша цена (TON)</label>
+                    <input type="number" class="search-input" placeholder="Введите цену в TON..." id="gift-price">
                 </div>
 
                 <button class="action-btn" onclick="evaluateGift()" style="width: 100%;">
-                    💰 Оценить подарок
+                    📊 Оценить подарок
                 </button>
 
                 <div id="evaluation-result" style="display: none;">
-                    <!-- Результат оценки -->
+                    <!-- Результат оценки будет показан здесь -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Экран поиска -->
+        <div class="screen" id="search-screen">
+            <button class="back-button" onclick="showScreen('main-screen')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            
+            <h2 style="text-align: center; margin-bottom: 20px;">🔍 Поиск подарков</h2>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Введите название подарка..." id="search-input">
+                
+                <div style="text-align: center; margin: 20px 0;">
+                    <div class="budget-value" id="budget-display">Бюджет: 100 TON</div>
+                    <input type="range" min="1" max="100000" value="100" class="budget-slider" id="budget-slider" oninput="updateBudgetDisplay(this.value)">
+                </div>
+
+                <button class="action-btn" onclick="searchGifts()" style="width: 100%;">
+                    🔍 Найти подарки
+                </button>
+
+                <div class="loading" id="search-loading">
+                    <div class="spinner"></div>
+                    <p>Ищем лучшие предложения...</p>
+                </div>
+
+                <div id="search-results">
+                    <!-- Результаты поиска будут показаны здесь -->
                 </div>
             </div>
         </div>
@@ -1116,1192 +1130,637 @@
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             
-            <h2 style="text-align: center; margin-bottom: 20px;">📚 Каталог NFT Подарков</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">📚 Каталог NFT подарков</h2>
             
-            <div class="models-grid" id="catalog-grid">
-                <!-- Каталог моделей будет загружен -->
-            </div>
-        </div>
-
-        <!-- Экран поиска -->
-        <div class="screen" id="search-screen">
-            <button class="back-button" onclick="showScreen('main-screen')">
-                <i class="fas fa-arrow-left"></i> Назад
-            </button>
-            
-            <h2 style="text-align: center; margin-bottom: 20px;">🔍 Поиск NFT подарков</h2>
-            
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="🎭 Введите название модели..." id="search-input">
-                <input type="text" class="search-input" placeholder="🌄 Введите фон (опционально)..." id="backdrop-input">
-                <input type="text" class="search-input" placeholder="✨ Введите узор (опционально)..." id="symbol-input">
-                
-                <div class="budget-value">💰 Бюджет: <span id="budget-amount">50</span> TON</div>
-                <input type="range" class="budget-slider" min="10" max="200" value="50" id="budget-slider">
-                
-                <button class="action-btn" onclick="performSearch()" style="width: 100%;">
-                    🔍 Найти NFT подарки
-                </button>
-
-                <button class="action-btn secondary" onclick="clearSearch()" style="width: 100%; margin-top: 10px;">
-                    🗑️ Очистить поиск
-                </button>
+            <div class="loading" id="catalog-loading">
+                <div class="spinner"></div>
+                <p>Загружаем актуальные цены с маркетплейсов...</p>
             </div>
 
-            <div class="results-grid" id="search-results">
-                <!-- Результаты поиска -->
-            </div>
-        </div>
-
-        <!-- Экран бюджета -->
-        <div class="screen" id="budget-screen">
-            <button class="back-button" onclick="showScreen('main-screen')">
-                <i class="fas fa-arrow-left"></i> Назад
-            </button>
-            
-            <h2 style="text-align: center; margin-bottom: 20px;">💰 Установи бюджет</h2>
-            
-            <div class="search-container">
-                <div class="budget-value" style="font-size: 2rem; color: var(--accent);">
-                    <span id="budget-display">50</span> TON
+            <div id="catalog-content" style="display: none;">
+                <div class="models-grid" id="gift-models">
+                    <!-- Модели подарков будут загружены здесь -->
                 </div>
-                <input type="range" class="budget-slider" min="10" max="200" value="50" id="budget-setter">
-                
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px;">
-                    <button class="action-btn secondary" onclick="setBudget(30)">30 TON</button>
-                    <button class="action-btn secondary" onclick="setBudget(50)">50 TON</button>
-                    <button class="action-btn secondary" onclick="setBudget(100)">100 TON</button>
-                </div>
-                
-                <button class="action-btn" onclick="saveBudget()" style="width: 100%; margin-top: 20px;">
-                    💾 Сохранить бюджет
-                </button>
             </div>
         </div>
 
         <!-- Экран покупки -->
         <div class="screen" id="purchase-screen">
-            <button class="back-button" onclick="showScreen('main-screen')">
+            <button class="back-button" onclick="showScreen('catalog-screen')">
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             
-            <h2 style="text-align: center; margin-bottom: 20px;">💳 Оформление покупки</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">🛒 Оформление заказа</h2>
             
             <div class="purchase-flow">
                 <div class="step-indicator">
-                    <div class="step active" id="step1">
+                    <div class="step active">
                         <div class="step-circle">1</div>
                         <div class="step-label">Выбор</div>
                     </div>
-                    <div class="step" id="step2">
+                    <div class="step">
                         <div class="step-circle">2</div>
-                        <div class="step-label">Получатель</div>
-                    </div>
-                    <div class="step" id="step3">
-                        <div class="step-circle">3</div>
                         <div class="step-label">Оплата</div>
                     </div>
-                    <div class="step" id="step4">
-                        <div class="step-circle">4</div>
-                        <div class="step-label">Готово</div>
+                    <div class="step">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Получение</div>
                     </div>
                 </div>
 
                 <div id="purchase-content">
-                    <!-- Контент покупки будет обновляться -->
+                    <!-- Содержимое покупки будет загружено здесь -->
                 </div>
             </div>
-        </div>
-
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p id="loading-text">Загружаем данные...</p>
         </div>
     </div>
 
     <script>
-        class GiftPrisesAPI {
-    constructor() {
-        this.baseURL = window.location.origin;
-    }
-    
-    async request(endpoint, data = {}) {
-        try {
-            const response = await fetch(`${this.baseURL}/api/${endpoint}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            return await response.json();
-        } catch (error) {
-            console.error('API Request failed:', error);
-            return this.getFallbackResponse(endpoint);
-        }
-    }
-    
-    getFallbackResponse(endpoint) {
-        // Fallback данные для оффлайн режима
-        const fallbackData = {
-            'search': this.generateFallbackGifts(10),
-            'gifts': this.generateFallbackGifts(20),
-            'stats': {
-                totalUsers: 1234,
-                todayOnline: 89,
-                dailyTurnover: 4567.89,
-                giftsSold: 567
-            }
-        };
-        
-        return { success: true, data: fallbackData[endpoint] || {} };
-    }
-    
-    generateFallbackGifts(count) {
-        const giftNames = [
-            "Artisan Brick", "Astral Shard", "B-Day Candle", "Berry Box", "Big Year",
-            "Bonded Ring", "Bow Tie", "Bunny Milffin", "Candy Cane", "Clover Pin"
-        ];
-        
-        return Array.from({length: count}, (_, i) => ({
-            id: `fallback_${i}`,
-            name: giftNames[i % giftNames.length],
-            price: 20 + (i * 5),
-            total_price: 20 + (i * 5) * 1.05,
-            image_url: null,
-            market: ['Portals', 'GetGems', 'TON Diamonds'][i % 3],
-            rarity: ['common', 'rare', 'epic', 'legendary'][i % 4],
-            attributes: {
-                backdrop: ['Звездный', 'Городской', 'Природный'][i % 3],
-                symbol: ['Звезды', 'Цветы', 'Геометрия'][i % 3]
-            }
-        }));
-    }
-    
-    // Основные методы API
-    async searchGifts(filters) {
-        return await this.request('search', filters);
-    }
-    
-    async getAllGifts() {
-        return await this.request('gifts');
-    }
-    
-    async getStats() {
-        return await this.request('stats');
-    }
-    
-    async purchaseGift(giftId, recipient) {
-        return await this.request('purchase', { giftId, recipient });
-    }
-    
-    async checkPayment(purchaseId) {
-        return await this.request('check-payment', { purchaseId });
-    }
-}
-
-// Инициализация API
-const api = new GiftPrisesAPI();
-
-// Интеграция с существующим кодом
-async function loadRealGiftsData() {
-    showLoading(true, "Загружаем актуальные подарки...");
-    
-    try {
-        const response = await api.getAllGifts();
-        if (response.success) {
-            window.realGifts = response.data;
-            displayRealGifts(window.realGifts);
-        }
-    } catch (error) {
-        console.error('Failed to load gifts:', error);
-        showStatusMessage('Используем локальные данные', 'warning');
-    } finally {
-        showLoading(false);
-    }
-}
-
-async function performSearch() {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
-    const budget = window.userBudget || 50;
-    
-    showLoading(true, "Ищем подарки...");
-    
-    try {
-        const response = await api.searchGifts({
-            search_term: searchTerm,
-            max_price: budget,
-            min_price: 10
-        });
-        
-        if (response.success) {
-            displaySearchResults(response.data);
-        }
-    } catch (error) {
-        console.error('Search failed:', error);
-        // Используем локальную фильтрацию как fallback
-        const results = window.realGifts.filter(gift => {
-            const matchesSearch = !searchTerm || gift.name.toLowerCase().includes(searchTerm);
-            const matchesBudget = gift.total_price <= budget;
-            return matchesSearch && matchesBudget;
-        });
-        displaySearchResults(results);
-    } finally {
-        showLoading(false);
-    }
-}
-
-// Обновляем существующие функции
-function initApp() {
-    tg.expand();
-    tg.enableClosingConfirmation();
-    
-    // Загружаем данные
-    loadRealGiftsData();
-    loadRealStats();
-    
-    // Обновляем статистику каждые 30 секунд
-    setInterval(loadRealStats, 30000);
-}
-
-async function loadRealStats() {
-    try {
-        const response = await api.getStats();
-        if (response.success) {
-            window.realStats = response.data;
-            updateStatsDisplay();
-        }
-    } catch (error) {
-        console.error('Failed to load stats:', error);
-        // Используем локальные данные
-        simulateUserActivity();
-    }
-}
-        // Конфигурация
-        const DISABLED_BUTTONS = {
-            'search': false,
-            'budget': false, 
-            'sell': false,
-            'catalog': false
-        };
-
-        // Глобальные переменные
+        // Инициализация Telegram WebApp
         let tg = window.Telegram.WebApp;
-        let currentTheme = 'default';
-        let selectedGift = null;
-        let userBudget = 50;
-        let currentSort = 'price_asc';
-        let currentPurchaseStep = 1;
-        let recipientUsername = '';
-        let purchaseId = '';
-        let realGifts = [];
-        let paymentCheckInterval = null;
-
-        // Реальная статистика (изначально нули)
-        let realStats = {
-            totalUsers: 0,
-            todayOnline: 0,
-            dailyTurnover: 0,
-            giftsSold: 0,
-            totalSales: 0,
-            totalRevenue: 0,
-            todayRevenue: 0,
-            weekRevenue: 0
+        tg.expand();
+        tg.enableClosingConfirmation();
+        
+        // Инициализация темы
+        let currentTheme = 'dark';
+        let userData = {
+            id: tg.initDataUnsafe?.user?.id || Math.floor(Math.random() * 1000000),
+            username: tg.initDataUnsafe?.user?.username || 'user_' + Math.floor(Math.random() * 10000),
+            first_name: tg.initDataUnsafe?.user?.first_name || 'Пользователь'
         };
-
-        // Топ покупателей
-        let topBuyers = [
-            { username: '@Serafim4ik1', spent: 0, purchases: 0 },
-            { username: '@crypto_lover', spent: 0, purchases: 0 },
-            { username: '@nft_collector', spent: 0, purchases: 0 }
+        
+        // База данных в localStorage
+        let database = {
+            users: JSON.parse(localStorage.getItem('giftPrisesUsers')) || {},
+            gifts: JSON.parse(localStorage.getItem('giftPrisesGifts')) || {},
+            purchases: JSON.parse(localStorage.getItem('giftPrisesPurchases')) || [],
+            settings: JSON.parse(localStorage.getItem('giftPrisesSettings')) || {
+                searchEnabled: true,
+                budgetEnabled: true,
+                sellEnabled: true,
+                catalogEnabled: true
+            }
+        };
+        
+        // Список всех подарков
+        const ALL_GIFTS = [
+            "Artisan Brick", "Astral Shard", "B-Day Candle", "Berry Box", "Big Year",
+            "Bonded Ring", "Bow Tie", "Bunny Milffin", "Candy Cane", "Clover Pin",
+            "Cookie Heart", "Crystal Ball", "Cupid Charm", "Desk Calendar", "Diamond Ring",
+            "Durov's Cap", "Easter Egg", "Electric Skull", "Eternal Candle", "Eternal Rose",
+            "Evil Eye", "Flying Broom", "Fresh Socks", "Gem Signet", "Genie Lamp",
+            "Ginger Cookie", "Hanging Star", "Heart Locket", "Heroic Helmet", "Hex Pot",
+            "Holiday Drink", "Homemade Cake", "Hypno Lollipop", "Input Key", "Ion Gem",
+            "Ionic Dryer", "Jack-in-the-Box", "Jelly Bunny", "Jester Hat", "Jingle Bells",
+            "Jolly Chimp", "Joyful Bundle", "Kissed Frog", "Light Sword", "Lol Pop",
+            "Loot Bag", "Love Candle", "Love Potion", "Low Rider", "Lunar Snake",
+            "Lush Bouquet", "Mad Pumpkin", "Magic Potion", "Mighty Arm", "Mini Oscar",
+            "Moon Pandante", "Nail Bracelet", "Neko Helmet", "Party Sparkler", "Perfume Bottle",
+            "Pet Snake", "Plush Pepe", "Precious Peach", "Record Player", "Restless Jar",
+            "Sakura Flower", "Santa Hat", "Scared Cat", "Sharp Tongue", "Signet Ring",
+            "Skull Flower", "Sky Stilettos", "Sleigh Bell", "Snake Box", "Snoop Cigar",
+            "Snoop Dogg", "Snow Globe", "Snow Mittens", "Spiced Wine", "Spy Agaric",
+            "Star Notepad", "Stellar Rocket", "Swag Bag", "Swiss Watch", "Tama Gadget",
+            "Top Hat", "Toy Bear", "Trapped Heart", "Valentine Box", "Vintage Cigar",
+            "Voodoo Doll", "Westside Sign", "Whip Cupcake", "Winter Weath", "Witch Hat",
+            "Xmas Strocking"
         ];
-
-        // Популярные подарки
-        let popularGifts = [];
-
-        // Инициализация приложения
-        function initApp() {
-            tg.expand();
-            tg.enableClosingConfirmation();
-            
-            // Загружаем статус кнопок
-            loadButtonStatus();
-            
-            // Загружаем реальные данные о подарках
-            loadRealGiftsData();
-            
-            // Загружаем данные для продажи подарков
-            loadGiftsForSale();
-            
-            // Загружаем реальную статистику
-            loadRealStats();
-            
-            // Обновляем статистику каждые 10 секунд
-            setInterval(loadRealStats, 10000);
-        }
-
-        // Загрузка реальной статистики
-        async function loadRealStats() {
-            try {
-                // В реальном приложении здесь будет запрос к вашему API
-                // Для демонстрации имитируем получение данных
-                
-                // Получаем данные из localStorage (в реальном приложении - с сервера)
-                const savedStats = JSON.parse(localStorage.getItem('giftPrises_stats')) || realStats;
-                const savedBuyers = JSON.parse(localStorage.getItem('giftPrises_topBuyers')) || topBuyers;
-                const savedPopular = JSON.parse(localStorage.getItem('giftPrises_popularGifts')) || [];
-                
-                // Обновляем статистику
-                realStats = { ...realStats, ...savedStats };
-                topBuyers = savedBuyers;
-                popularGifts = savedPopular;
-                
-                // Обновляем отображение
-                updateStatsDisplay();
-                updateTopBuyersDisplay();
-                updatePopularGiftsDisplay();
-                
-            } catch (error) {
-                console.error('Ошибка загрузки статистики:', error);
-            }
-        }
-
-        // Обновление отображения статистики
-        function updateStatsDisplay() {
-            // Главная страница
-            animateValue(document.getElementById('total-users'), parseInt(document.getElementById('total-users').textContent) || 0, realStats.totalUsers, 1000);
-            animateValue(document.getElementById('today-online'), parseInt(document.getElementById('today-online').textContent) || 0, realStats.todayOnline, 1000);
-            animateValue(document.getElementById('gifts-sold'), parseInt(document.getElementById('gifts-sold').textContent) || 0, realStats.giftsSold, 1000);
-            
-            // Обновляем оборот
-            const turnoverElement = document.getElementById('daily-turnover');
-            turnoverElement.textContent = realStats.dailyTurnover + ' TON';
-            
-            // Админ панель
-            animateValue(document.getElementById('admin-total-users'), parseInt(document.getElementById('admin-total-users').textContent) || 0, realStats.totalUsers, 1000);
-            animateValue(document.getElementById('admin-total-sales'), parseInt(document.getElementById('admin-total-sales').textContent) || 0, realStats.totalSales, 1000);
-            animateValue(document.getElementById('admin-active-users'), parseInt(document.getElementById('admin-active-users').textContent) || 0, realStats.todayOnline, 1000);
-            
-            document.getElementById('admin-total-revenue').textContent = realStats.totalRevenue + ' TON';
-            document.getElementById('admin-today-revenue').textContent = realStats.todayRevenue + ' TON';
-            document.getElementById('admin-week-revenue').textContent = realStats.weekRevenue + ' TON';
-        }
-
-        // Обновление топа покупателей
-        function updateTopBuyersDisplay() {
-            const topBuyersContainer = document.getElementById('top-buyers');
-            const adminTopUsersContainer = document.getElementById('admin-top-users');
-            
-            // Сортируем по потраченной сумме (по убыванию)
-            const sortedBuyers = [...topBuyers].sort((a, b) => b.spent - a.spent);
-            
-            const buyersHTML = sortedBuyers.map(buyer => `
-                <div class="user-item">
-                    <div class="user-name">${buyer.username}</div>
-                    <div class="user-stats">${buyer.spent} TON</div>
-                </div>
-            `).join('');
-            
-            topBuyersContainer.innerHTML = buyersHTML;
-            adminTopUsersContainer.innerHTML = buyersHTML;
-        }
-
-        // Обновление популярных подарков
-        function updatePopularGiftsDisplay() {
-            const popularGiftsContainer = document.getElementById('popular-gifts');
-            
-            if (popularGifts.length === 0) {
-                popularGiftsContainer.innerHTML = `
-                    <div style="text-align: center; padding: 10px; opacity: 0.7;">
-                        Пока нет продаж
-                    </div>
-                `;
-                return;
-            }
-            
-            const giftsHTML = popularGifts.map(gift => `
-                <div class="gift-item">
-                    <div class="gift-name">${gift.name}</div>
-                    <div class="gift-stats">${gift.sales} продаж</div>
-                </div>
-            `).join('');
-            
-            popularGiftsContainer.innerHTML = giftsHTML;
-        }
-
-        // Функция анимации чисел
-        function animateValue(element, start, end, duration) {
-            if (start === end) return;
-            
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                const value = Math.floor(progress * (end - start) + start);
-                element.textContent = value.toLocaleString();
-                
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
-        }
-
-        // Симуляция активности пользователей (для демонстрации)
-        function simulateUserActivity() {
-            // Увеличиваем количество онлайн пользователей
-            realStats.todayOnline = Math.floor(Math.random() * 50) + 10;
-            
-            // Сохраняем в localStorage
-            localStorage.setItem('giftPrises_stats', JSON.stringify(realStats));
-            
-            // Обновляем отображение
-            updateStatsDisplay();
-        }
-
-        // Функция для регистрации покупки (вызывается при успешной покупке)
-        function registerPurchase(gift, buyerUsername, amount) {
-            // Обновляем статистику
-            realStats.giftsSold++;
-            realStats.totalSales++;
-            realStats.dailyTurnover += amount;
-            realStats.totalRevenue += amount;
-            realStats.todayRevenue += amount;
-            realStats.weekRevenue += amount;
-            
-            // Обновляем топ покупателей
-            const buyerIndex = topBuyers.findIndex(b => b.username === buyerUsername);
-            if (buyerIndex !== -1) {
-                topBuyers[buyerIndex].spent += amount;
-                topBuyers[buyerIndex].purchases++;
-            } else {
-                // Добавляем нового покупателя
-                topBuyers.push({
-                    username: buyerUsername,
-                    spent: amount,
-                    purchases: 1
-                });
-            }
-            
-            // Обновляем популярные подарки
-            const giftIndex = popularGifts.findIndex(g => g.name === gift.name);
-            if (giftIndex !== -1) {
-                popularGifts[giftIndex].sales++;
-            } else {
-                popularGifts.push({
-                    name: gift.name,
-                    sales: 1
-                });
-            }
-            
-            // Сохраняем в localStorage
-            localStorage.setItem('giftPrises_stats', JSON.stringify(realStats));
-            localStorage.setItem('giftPrises_topBuyers', JSON.stringify(topBuyers));
-            localStorage.setItem('giftPrises_popularGifts', JSON.stringify(popularGifts));
-            
-            // Обновляем отображение
-            updateStatsDisplay();
-            updateTopBuyersDisplay();
-            updatePopularGiftsDisplay();
-        }
-
-        // Загрузка данных для админ панели
-        function loadAdminData() {
-            // Данные уже загружаются в loadRealStats()
-        }
-
-        // Загрузка статуса кнопок
-        function loadButtonStatus() {
-            Object.keys(DISABLED_BUTTONS).forEach(buttonId => {
-                updateButtonAppearance(buttonId, DISABLED_BUTTONS[buttonId]);
-            });
-        }
-
-        // Переключение кнопок
-        function toggleButton(buttonType) {
-            DISABLED_BUTTONS[buttonType] = !DISABLED_BUTTONS[buttonType];
-            updateButtonAppearance(buttonType, DISABLED_BUTTONS[buttonType]);
-            
-            // Сохраняем статус
-            tg.sendData(JSON.stringify({
-                action: 'toggle_button',
-                button_type: buttonType,
-                disabled: DISABLED_BUTTONS[buttonType]
-            }));
-            
-            showStatusMessage(`Кнопка "${getButtonName(buttonType)}" ${DISABLED_BUTTONS[buttonType] ? 'отключена' : 'включена'}`, 'success');
-        }
-
-        // Обновление внешнего вида кнопки
-        function updateButtonAppearance(buttonType, disabled) {
-            const button = document.getElementById(`toggle-${buttonType}`);
-            const navButton = document.getElementById(`${buttonType}-btn`);
-            
-            if (button) {
-                button.className = `toggle-btn ${disabled ? 'disabled' : 'enabled'}`;
-                button.textContent = `${getButtonName(buttonType)} ${disabled ? '❌' : '✅'}`;
-            }
-            
-            if (navButton) {
-                if (disabled) {
-                    navButton.classList.add('disabled-btn');
-                    navButton.onclick = () => showDisabledMessage(buttonType);
-                } else {
-                    navButton.classList.remove('disabled-btn');
-                    // Восстанавливаем оригинальный обработчик
-                    switch(buttonType) {
-                        case 'search':
-                            navButton.onclick = () => showScreen('search-screen');
-                            break;
-                        case 'budget':
-                            navButton.onclick = () => showScreen('budget-screen');
-                            break;
-                        case 'sell':
-                            navButton.onclick = () => showScreen('sell-screen');
-                            break;
-                        case 'catalog':
-                            navButton.onclick = () => loadRealGifts();
-                            break;
-                    }
-                }
-            }
-        }
-
-        // Показать сообщение об отключенной кнопке
-        function showDisabledMessage(buttonType) {
-            const message = `🚧 Кнопка "${getButtonName(buttonType)}" временно отключена на техническом обслуживании. Мы уведомим вас, когда функционал будет доступен снова.`;
-            tg.showPopup({
-                title: 'Технические работы',
-                message: message,
-                buttons: [{ type: 'ok' }]
-            });
-        }
-
-        // Получение читаемого имени кнопки
-        function getButtonName(buttonType) {
-            const names = {
-                'search': 'Поиск подарков',
-                'budget': 'Поиск по бюджету', 
-                'sell': 'Продажа подарков',
-                'catalog': 'Каталог'
-            };
-            return names[buttonType] || buttonType;
-        }
-
-        // Подключение Telegram аккаунта
-        function connectTelegramAccount() {
-            showLoading(true, "Подключаем ваш аккаунт...");
-            
-            setTimeout(() => {
-                showLoading(false);
-                showStatusMessage('✅ Аккаунт успешно подключен! Теперь вы можете оценить свои подарки.', 'success');
-                
-                // Имитация загрузки подарков пользователя
-                loadUserGifts();
-            }, 2000);
-        }
-
-        // Загрузка подарков пользователя
-        function loadUserGifts() {
-            const userGifts = [
-                'Artisan Brick',
-                'Crystal Ball', 
-                'Eternal Rose',
-                'Diamond Ring',
-                'Magic Potion',
-                'Astral Shard',
-                'Bunny Milffin',
-                'Genie Lamp',
-                'Heroic Helmet',
-                'Plush Pepe'
-            ];
-            
-            const select = document.getElementById('gift-select');
-            select.innerHTML = '<option value="">-- Выберите подарок --</option>' +
-                userGifts.map(gift => `<option value="${gift}">${gift}</option>`).join('');
-        }
-
-        // Загрузка подарков для продажи
-        function loadGiftsForSale() {
-            loadUserGifts(); // Используем тот же список
-        }
-
-        // Загрузка реальных данных о подарках
-        function loadRealGiftsData() {
-            const giftNames = [
-                "Artisan Brick", "Astral Shard", "B-Day Candle", "Berry Box", "Big Year",
-                "Bonded Ring", "Bow Tie", "Bunny Milffin", "Candy Cane", "Clover Pin",
-                "Cookie Heart", "Crystal Ball", "Cupid Charm", "Desk Calendar", "Diamond Ring",
-                "Durov's Cap", "Easter Egg", "Electric Skull", "Eternal Candle", "Eternal Rose",
-                "Evil Eye", "Flying Broom", "Fresh Socks", "Gem Signet", "Genie Lamp",
-                "Ginger Cookie", "Hanging Star", "Heart Locket", "Heroic Helmet", "Hex Pot",
-                "Holiday Drink", "Homemade Cake", "Hypno Lollipop", "Input Key", "Ion Gem",
-                "Ionic Dryer", "Jack-in-the-Box", "Jelly Bunny", "Jester Hat", "Jingle Bells",
-                "Jolly Chimp", "Joyful Bundle", "Kissed Frog", "Light Sword", "Lol Pop",
-                "Loot Bag", "Love Candle", "Love Potion", "Low Rider", "Lunar Snake",
-                "Lush Bouquet", "Mad Pumpkin", "Magic Potion", "Mighty Arm", "Mini Oscar",
-                "Moon Pandante", "Nail Bracelet", "Neko Helmet", "Party Sparkler", "Perfume Bottle",
-                "Pet Snake", "Plush Pepe", "Precious Peach", "Record Player", "Restless Jar",
-                "Sakura Flower", "Santa Hat", "Scared Cat", "Sharp Tongue", "Signet Ring",
-                "Skull Flower", "Sky Stilettos", "Sleigh Bell", "Snake Box", "Snoop Cigar",
-                "Snoop Dogg", "Snow Globe", "Snow Mittens", "Spiced Wine", "Spy Agaric",
-                "Star Notepad", "Stellar Rocket", "Swag Bag", "Swiss Watch", "Tama Gadget",
-                "Top Hat", "Toy Bear", "Trapped Heart", "Valentine Box", "Vintage Cigar",
-                "Voodoo Doll", "Westside Sign", "Whip Cupcake", "Winter Weath", "Witch Hat",
-                "Xmas Strocking"
-            ];
-            
-            realGifts = giftNames.map((name, index) => {
-                const basePrice = Math.floor(Math.random() * 80) + 20;
-                const totalPrice = basePrice * 1.05;
-                
-                return {
-                    id: `gift_${index + 1}`,
-                    name: name,
-                    base_price: basePrice,
-                    total_price: Math.round(totalPrice * 100) / 100,
-                    image_url: `https://api.portals.io/gifts/${index + 1}/image`,
-                    market: ['Portals', 'GetGems', 'TON Diamonds'][Math.floor(Math.random() * 3)],
-                    attributes: {
-                        model: name,
-                        backdrop: ['Любой фон', 'Звездный', 'Городской', 'Природный', 'Абстрактный'][Math.floor(Math.random() * 5)],
-                        symbol: ['Любой узор', 'Звезды', 'Цветы', 'Геометрия', 'Полосы'][Math.floor(Math.random() * 5)]
-                    },
-                    is_transferable: true,
-                    rarity: ['common', 'rare', 'epic', 'legendary'][Math.floor(Math.random() * 4)],
-                    sales_count: Math.floor(Math.random() * 100) + 1
+        
+        // Инициализация пользователя
+        function initUser() {
+            if (!database.users[userData.id]) {
+                database.users[userData.id] = {
+                    id: userData.id,
+                    username: userData.username,
+                    firstName: userData.first_name,
+                    totalSpent: 0,
+                    purchasesCount: 0,
+                    lastActivity: new Date().toISOString(),
+                    firstSeen: new Date().toISOString()
                 };
-            });
-        }
-
-        // Загрузка реальных подарков
-        function loadRealGifts() {
-            if (DISABLED_BUTTONS['catalog']) {
-                showDisabledMessage('catalog');
-                return;
-            }
-            showScreen('catalog-screen');
-            displayRealGifts(realGifts);
-        }
-
-        // Отображение реальных подарков
-        function displayRealGifts(gifts) {
-            const grid = document.getElementById('catalog-grid');
-            grid.innerHTML = '';
-            
-            gifts.forEach(gift => {
-                const card = document.createElement('div');
-                card.className = 'model-card';
-                card.onclick = () => selectGift(gift);
-                
-                card.innerHTML = `
-                    <img src="${gift.image_url}" alt="${gift.name}" class="gift-image" 
-                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMTAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjEyIj4kTkZUPzwvdGV4dD4KPC9zdmc+'">
-                    <div class="model-name">${gift.name}</div>
-                    <div class="model-price">${gift.total_price} TON</div>
-                    <div style="font-size: 0.7rem; opacity: 0.6; margin-top: 5px;">
-                        ${getRarityText(gift.rarity)} • ${gift.market}
-                    </div>
-                `;
-                
-                grid.appendChild(card);
-            });
-        }
-
-        // Оценка подарка
-        function evaluateGift() {
-            const giftModel = document.getElementById('gift-model').value;
-            const giftBackdrop = document.getElementById('gift-backdrop').value;
-            const giftSymbol = document.getElementById('gift-symbol').value;
-            const selectedGift = document.getElementById('gift-select').value;
-            
-            if (!giftModel && !selectedGift) {
-                showStatusMessage('❌ Пожалуйста, выберите или введите название подарка', 'error');
-                return;
-            }
-            
-            const giftName = selectedGift || giftModel;
-            
-            showLoading(true, "🔍 Оцениваем подарок на маркетплейсах...");
-            
-            setTimeout(() => {
-                showLoading(false);
-                
-                const marketPrice = Math.floor(Math.random() * 100) + 20;
-                const ourCommission = marketPrice * 0.05;
-                const marketCommission = marketPrice * 0.1;
-                const finalPrice = marketPrice - ourCommission - marketCommission;
-                
-                const resultDiv = document.getElementById('evaluation-result');
-                resultDiv.style.display = 'block';
-                resultDiv.innerHTML = `
-                    <div class="evaluation-result">
-                        <div class="evaluation-price">${finalPrice.toFixed(2)} TON</div>
-                        <div class="evaluation-details">
-                            <strong>${giftName}</strong><br>
-                            💰 Рыночная цена: ${marketPrice.toFixed(2)} TON<br>
-                            🏪 Комиссия маркетплейса: ${marketCommission.toFixed(2)} TON (10%)<br>
-                            💼 Наша комиссия: ${ourCommission.toFixed(2)} TON (5%)<br>
-                            🌄 Фон: ${giftBackdrop || 'Любой'}<br>
-                            ✨ Узор: ${giftSymbol || 'Любой'}<br><br>
-                            <button class="action-btn" onclick="confirmSale()" style="width: 100%;">
-                                ✅ Подтвердить продажу
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }, 3000);
-        }
-
-        // Подтверждение продажи
-        function confirmSale() {
-            tg.showPopup({
-                title: '✅ Продажа подтверждена',
-                message: 'Ваш подарок будет продан по оцененной цене. Средства поступят на ваш счет в течение 24 часов.',
-                buttons: [{ type: 'ok' }]
-            });
-        }
-
-        // Выбор подарка
-        function selectGift(gift) {
-            selectedGift = gift;
-            showScreen('purchase-screen');
-            updatePurchaseStep(1);
-        }
-
-        // Обновление шага покупки
-        function updatePurchaseStep(step) {
-            currentPurchaseStep = step;
-            
-            document.querySelectorAll('.step').forEach((stepEl, index) => {
-                if (index + 1 <= step) {
-                    stepEl.classList.add('active');
-                } else {
-                    stepEl.classList.remove('active');
-                }
-            });
-            
-            const content = document.getElementById('purchase-content');
-            switch(step) {
-                case 1:
-                    content.innerHTML = `
-                        <h3 style="text-align: center; margin-bottom: 20px;">🎁 Вы выбрали:</h3>
-                        <img src="${selectedGift.image_url}" alt="${selectedGift.name}" class="gift-image-large"
-                             onerror="this.style.display='none'">
-                        <div style="text-align: center; margin-bottom: 30px;">
-                            <div style="font-size: 1.5rem; font-weight: 600; margin-bottom: 5px;">${selectedGift.name}</div>
-                            <div style="font-size: 1.2rem; color: var(--accent);">${selectedGift.total_price} TON</div>
-                            <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 5px;">
-                                ${selectedGift.market} • ${getRarityText(selectedGift.rarity)}
-                            </div>
-                        </div>
-                        <button class="action-btn" onclick="updatePurchaseStep(2)" style="width: 100%;">
-                            Далее ➡️
-                        </button>
-                    `;
-                    break;
-                    
-                case 2:
-                    content.innerHTML = `
-                        <h3 style="text-align: center; margin-bottom: 20px;">👤 Кому отправить подарок?</h3>
-                        <input type="text" class="search-input" placeholder="@username или оставьте пустым для себя" id="recipient-input">
-                        <div class="status-message status-info" style="display: none;" id="username-status">
-                            Проверяем username...
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
-                            <button class="action-btn secondary" onclick="updatePurchaseStep(1)">
-                                ⬅️ Назад
-                            </button>
-                            <button class="action-btn" onclick="validateAndSetRecipient()" id="recipient-btn">
-                                Проверить и продолжить ➡️
-                            </button>
-                        </div>
-                    `;
-                    break;
-                    
-                case 3:
-                    purchaseId = 'purchase_' + Date.now();
-                    const memo = recipientUsername ? `gift:${selectedGift.id},for:${recipientUsername}` : `gift:${selectedGift.id}`;
-                    
-                    content.innerHTML = `
-                        <h3 style="text-align: center; margin-bottom: 20px;">💳 Оплата</h3>
-                        <div class="payment-info">
-                            <div style="margin-bottom: 15px;">
-                                <strong>Подарок:</strong> ${selectedGift.name}
-                            </div>
-                            <div style="margin-bottom: 15px;">
-                                <strong>Получатель:</strong> ${recipientUsername || 'Себе'}
-                            </div>
-                            <div style="font-size: 1.3rem; font-weight: 600; color: var(--accent); margin-bottom: 20px;">
-                                Сумма: ${selectedGift.total_price} TON
-                            </div>
-                            
-                            <div class="address-box">
-                                <strong>Адрес кошелька:</strong><br>
-                                EQABC123DEF456GHI789JKL012MNO345PQR678STU
-                            </div>
-                            
-                            <div class="address-box">
-                                <strong>Memo (обязательно):</strong><br>
-                                ${memo}
-                            </div>
-                            
-                            <button class="copy-btn" onclick="copyPaymentDetails()" style="margin-right: 10px;">
-                                📋 Скопировать данные
-                            </button>
-                            
-                            <button class="copy-btn" onclick="sharePaymentDetails()">
-                                📤 Поделиться
-                            </button>
-                        </div>
-                        
-                        <div class="status-message status-info" id="payment-status">
-                            ⏳ Ожидаем подтверждения оплаты...
-                        </div>
-                        
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
-                            <button class="action-btn secondary" onclick="updatePurchaseStep(2)">
-                                ⬅️ Назад
-                            </button>
-                            <button class="action-btn" onclick="checkPaymentStatus()" id="check-payment-btn">
-                                🔄 Проверить оплату
-                            </button>
-                        </div>
-                    `;
-                    
-                    startPaymentChecking();
-                    break;
-                    
-                case 4:
-                    // Регистрируем покупку
-                    const buyerUsername = recipientUsername || '@current_user';
-                    registerPurchase(selectedGift, buyerUsername, selectedGift.total_price);
-                    
-                    content.innerHTML = `
-                        <div style="text-align: center; padding: 30px 0;">
-                            <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
-                            <h3 style="margin-bottom: 15px;">Подарок отправлен!</h3>
-                            <p style="margin-bottom: 25px; opacity: 0.8;">
-                                <strong>${selectedGift.name}</strong> был успешно отправлен ${recipientUsername ? 'пользователю ' + recipientUsername : 'вам'}!
-                            </p>
-                            <div class="status-message status-success">
-                                ✅ Транзакция подтверждена. Подарок доставлен.
-                            </div>
-                            <button class="action-btn" onclick="showScreen('main-screen')" style="width: 100%; margin-top: 20px;">
-                                🏠 На главную
-                            </button>
-                        </div>
-                    `;
-                    
-                    stopPaymentChecking();
-                    break;
-            }
-        }
-
-        // Валидация и установка получателя
-        async function validateAndSetRecipient() {
-            const input = document.getElementById('recipient-input');
-            const username = input.value.trim();
-            const statusDiv = document.getElementById('username-status');
-            const button = document.getElementById('recipient-btn');
-            
-            statusDiv.style.display = 'block';
-            statusDiv.className = 'status-message status-info';
-            statusDiv.innerHTML = '🔍 Проверяем username...';
-            button.disabled = true;
-            
-            const isValid = await validateUsername(username);
-            
-            if (isValid) {
-                recipientUsername = username;
-                statusDiv.className = 'status-message status-success';
-                statusDiv.innerHTML = '✅ Username корректен';
-                setTimeout(() => {
-                    updatePurchaseStep(3);
-                }, 1000);
+                saveDatabase();
             } else {
-                statusDiv.className = 'status-message status-error';
-                statusDiv.innerHTML = '❌ Username не найден или некорректен';
-                button.disabled = false;
-            }
-        }
-
-        // Валидация username
-        async function validateUsername(username) {
-            if (!username) {
-                return true;
+                database.users[userData.id].lastActivity = new Date().toISOString();
+                saveDatabase();
             }
             
-            if (!username.startsWith('@')) {
-                return false;
-            }
-            
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve(username.length >= 5);
-                }, 1500);
-            });
+            updateStatistics();
         }
-
-        // Копирование данных для оплаты
-        function copyPaymentDetails() {
-            const memo = recipientUsername ? `gift:${selectedGift.id},for:${recipientUsername}` : `gift:${selectedGift.id}`;
-            const text = `Адрес: EQABC123DEF456GHI789JKL012MNO345PQR678STU\nСумма: ${selectedGift.total_price} TON\nMemo: ${memo}`;
-            
-            navigator.clipboard.writeText(text).then(() => {
-                showStatusMessage('Данные для оплаты скопированы в буфер обмена!', 'success');
-            });
+        
+        // Сохранение базы данных
+        function saveDatabase() {
+            localStorage.setItem('giftPrisesUsers', JSON.stringify(database.users));
+            localStorage.setItem('giftPrisesGifts', JSON.stringify(database.gifts));
+            localStorage.setItem('giftPrisesPurchases', JSON.stringify(database.purchases));
+            localStorage.setItem('giftPrisesSettings', JSON.stringify(database.settings));
         }
-
-        // Поделиться данными для оплаты
-        function sharePaymentDetails() {
-            const memo = recipientUsername ? `gift:${selectedGift.id},for:${recipientUsername}` : `gift:${selectedGift.id}`;
-            const text = `Отправьте ${selectedGift.total_price} TON на адрес: EQABC123DEF456GHI789JKL012MNO345PQR678STU с memo: ${memo}`;
+        
+        // Обновление статистики
+        function updateStatistics() {
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
             
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Оплата NFT подарка',
-                    text: text
-                });
-            } else {
-                copyPaymentDetails();
-            }
-        }
-
-        // Запуск проверки оплаты
-        function startPaymentChecking() {
-            paymentCheckInterval = setInterval(checkPaymentStatus, 10000);
-        }
-
-        // Остановка проверки оплаты
-        function stopPaymentChecking() {
-            if (paymentCheckInterval) {
-                clearInterval(paymentCheckInterval);
-                paymentCheckInterval = null;
-            }
-        }
-
-        // Проверка статуса оплаты
-        async function checkPaymentStatus() {
-            const statusDiv = document.getElementById('payment-status');
-            const button = document.getElementById('check-payment-btn');
+            // Подсчет пользователей (уникальных)
+            const totalUsers = Object.keys(database.users).length;
             
-            statusDiv.className = 'status-message status-info';
-            statusDiv.innerHTML = '🔍 Проверяем статус оплаты...';
-            button.disabled = true;
+            // Подсчет активных пользователей за сегодня
+            const todayUsers = Object.values(database.users).filter(user => 
+                user.lastActivity.split('T')[0] === today
+            ).length;
             
-            const isPaid = await simulatePaymentCheck();
+            // Подсчет продаж за сегодня
+            const todayPurchases = database.purchases.filter(purchase => 
+                purchase.date.split('T')[0] === today
+            );
+            const dailyTurnover = todayPurchases.reduce((sum, purchase) => sum + purchase.price, 0);
+            const totalGiftsSold = database.purchases.length;
             
-            if (isPaid) {
-                statusDiv.className = 'status-message status-success';
-                statusDiv.innerHTML = '✅ Оплата подтверждена! Отправляем подарок...';
-                
-                setTimeout(() => {
-                    updatePurchaseStep(4);
-                }, 2000);
-            } else {
-                statusDiv.className = 'status-message status-warning';
-                statusDiv.innerHTML = '⏳ Оплата еще не поступила. Проверьте транзакцию.';
-                button.disabled = false;
-            }
-        }
-
-        // Имитация проверки оплаты
-        async function simulatePaymentCheck() {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve(Math.random() < 0.3);
-                }, 2000);
-            });
-        }
-
-        // Поиск NFT
-        function performSearch() {
-            if (DISABLED_BUTTONS['search']) {
-                showDisabledMessage('search');
-                return;
-            }
-
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const budget = userBudget;
+            // Обновление отображения
+            document.getElementById('total-users').textContent = totalUsers;
+            document.getElementById('today-online').textContent = todayUsers;
+            document.getElementById('daily-turnover').textContent = dailyTurnover.toFixed(2) + ' TON';
+            document.getElementById('gifts-sold').textContent = totalGiftsSold;
             
-            showLoading(true, "🔍 Ищем подарки...");
+            // Топ покупателей
+            const topBuyers = Object.values(database.users)
+                .sort((a, b) => b.totalSpent - a.totalSpent)
+                .slice(0, 5);
             
-            setTimeout(() => {
-                const results = realGifts.filter(gift => {
-                    const matchesSearch = !searchTerm || gift.name.toLowerCase().includes(searchTerm);
-                    const matchesBudget = gift.total_price <= budget;
-                    return matchesSearch && matchesBudget;
-                });
-                
-                displaySearchResults(results);
-                showLoading(false);
-            }, 1000);
-        }
-
-        // Отображение результатов поиска
-        function displaySearchResults(results) {
-            const container = document.getElementById('search-results');
-            container.innerHTML = '';
-            
-            if (results.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 40px; opacity: 0.7;">
-                        <div style="font-size: 3rem; margin-bottom: 15px;">😔</div>
-                        <h3>Ничего не найдено</h3>
-                        <p>Попробуйте изменить параметры поиска</p>
-                    </div>
+            const topBuyersList = document.getElementById('top-buyers');
+            topBuyersList.innerHTML = '';
+            topBuyers.forEach((user, index) => {
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+                userItem.innerHTML = `
+                    <div class="user-name">${user.firstName}</div>
+                    <div class="user-stats">${user.totalSpent.toFixed(2)} TON</div>
                 `;
-                return;
-            }
+                topBuyersList.appendChild(userItem);
+            });
             
-            results.forEach(gift => {
-                const card = document.createElement('div');
-                card.className = 'result-card';
-                card.innerHTML = `
-                    <div class="result-header">
-                        <div class="result-model">${gift.name}</div>
-                        <div class="result-price">${gift.total_price} TON</div>
-                    </div>
-                    <div class="result-details">
-                        ${gift.market} • ${getRarityText(gift.rarity)}
-                    </div>
-                    <div class="action-buttons">
-                        <button class="action-btn secondary" onclick="showGiftDetails('${gift.id}')">
-                            ℹ️ Подробнее
-                        </button>
-                        <button class="action-btn" onclick="selectGift(${JSON.stringify(gift).replace(/"/g, '&quot;')})">
-                            🎁 Выбрать
-                        </button>
-                    </div>
+            // Популярные подарки
+            const giftCounts = {};
+            database.purchases.forEach(purchase => {
+                giftCounts[purchase.giftName] = (giftCounts[purchase.giftName] || 0) + 1;
+            });
+            
+            const popularGifts = Object.entries(giftCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            const popularGiftsList = document.getElementById('popular-gifts');
+            popularGiftsList.innerHTML = '';
+            popularGifts.forEach(([giftName, count]) => {
+                const giftItem = document.createElement('div');
+                giftItem.className = 'gift-item';
+                giftItem.innerHTML = `
+                    <div class="gift-name">${giftName}</div>
+                    <div class="gift-stats">${count} шт</div>
                 `;
-                container.appendChild(card);
+                popularGiftsList.appendChild(giftItem);
+            });
+            
+            // Обновление админ статистики
+            updateAdminStatistics();
+        }
+        
+        // Обновление админ статистики
+        function updateAdminStatistics() {
+            const totalRevenue = database.purchases.reduce((sum, purchase) => sum + purchase.price, 0);
+            const today = new Date().toISOString().split('T')[0];
+            const todayRevenue = database.purchases
+                .filter(p => p.date.split('T')[0] === today)
+                .reduce((sum, p) => sum + p.price, 0);
+            
+            document.getElementById('admin-total-users').textContent = Object.keys(database.users).length;
+            document.getElementById('admin-total-sales').textContent = database.purchases.length;
+            document.getElementById('admin-total-revenue').textContent = totalRevenue.toFixed(2) + ' TON';
+            document.getElementById('admin-active-users').textContent = Object.values(database.users)
+                .filter(u => u.lastActivity.split('T')[0] === today).length;
+            document.getElementById('admin-today-revenue').textContent = todayRevenue.toFixed(2) + ' TON';
+            
+            // Недельный доход (упрощенный расчет)
+            document.getElementById('admin-week-revenue').textContent = (todayRevenue * 7).toFixed(2) + ' TON';
+            
+            // Топ пользователей для админа
+            const adminTopUsers = Object.values(database.users)
+                .sort((a, b) => b.totalSpent - a.totalSpent)
+                .slice(0, 10);
+            
+            const adminTopUsersList = document.getElementById('admin-top-users');
+            adminTopUsersList.innerHTML = '';
+            adminTopUsers.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+                userItem.innerHTML = `
+                    <div class="user-name">${user.firstName}</div>
+                    <div class="user-stats">${user.totalSpent.toFixed(2)} TON</div>
+                `;
+                adminTopUsersList.appendChild(userItem);
             });
         }
-
-        // Получение текста редкости
-        function getRarityText(rarity) {
-            const rarityMap = {
-                'common': '⚪ Обычный',
-                'rare': '🔵 Редкий', 
-                'epic': '💜 Эпический',
-                'legendary': '⭐ Легендарный'
-            };
-            return rarityMap[rarity] || rarity;
-        }
-
-        // Детали подарка
-        function showGiftDetails(giftId) {
-            const gift = realGifts.find(g => g.id === giftId);
-            if (gift) {
-                tg.showPopup({
-                    title: `🎁 ${gift.name}`,
-                    message: `💰 Цена: ${gift.total_price} TON\n🏪 Маркет: ${gift.market}\n⭐ Редкость: ${getRarityText(gift.rarity)}\n🎨 Особенности: ${gift.attributes.backdrop}, ${gift.attributes.symbol}`,
-                    buttons: [{ type: 'ok' }]
-                });
-            }
-        }
-
-        // Очистка поиска
-        function clearSearch() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('backdrop-input').value = '';
-            document.getElementById('symbol-input').value = '';
-            document.getElementById('budget-slider').value = 50;
-            userBudget = 50;
-            updateBudgetDisplays();
-            document.getElementById('search-results').innerHTML = '';
-        }
-
-        // Установка бюджета
-        function setBudget(amount) {
-            userBudget = amount;
-            document.getElementById('budget-setter').value = amount;
-            updateBudgetDisplays();
-        }
-
-        // Сохранение бюджета
-        function saveBudget() {
-            showStatusMessage(`Бюджет установлен: ${userBudget} TON`, 'success');
-            setTimeout(() => showScreen('main-screen'), 1000);
-        }
-
-        // Обновление отображения бюджета
-        function updateBudgetDisplays() {
-            document.getElementById('budget-amount').textContent = userBudget;
-            document.getElementById('budget-display').textContent = userBudget;
-        }
-
-        // Показать статус сообщение
-        function showStatusMessage(message, type = 'info') {
-            const tempDiv = document.createElement('div');
-            tempDiv.className = `status-message status-${type}`;
-            tempDiv.textContent = message;
-            tempDiv.style.position = 'fixed';
-            tempDiv.style.top = '20px';
-            tempDiv.style.left = '50%';
-            tempDiv.style.transform = 'translateX(-50%)';
-            tempDiv.style.zIndex = '1000';
-            tempDiv.style.maxWidth = '90%';
-            
-            document.body.appendChild(tempDiv);
-            
-            setTimeout(() => {
-                tempDiv.remove();
-            }, 3000);
-        }
-
-        // Показать/скрыть загрузку
-        function showLoading(show, text = "Загружаем данные...") {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-            document.getElementById('loading-text').textContent = text;
-        }
-
+        
         // Переключение темы
         function switchTheme() {
-            const body = document.body;
-            if (currentTheme === 'default') {
-                body.classList.add('theme-light');
-                currentTheme = 'light';
-            } else if (currentTheme === 'light') {
-                body.classList.remove('theme-light');
-                body.classList.add('theme-dark');
-                currentTheme = 'dark';
-            } else {
-                body.classList.remove('theme-dark');
-                currentTheme = 'default';
-            }
+            const themes = ['dark', 'light'];
+            const currentIndex = themes.indexOf(currentTheme);
+            const nextIndex = (currentIndex + 1) % themes.length;
+            currentTheme = themes[nextIndex];
+            
+            document.body.className = `theme-${currentTheme}`;
+            
+            // Анимация переключения темы
+            const switcher = document.querySelector('.theme-switcher');
+            switcher.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                switcher.style.transform = '';
+            }, 500);
         }
-
+        
         // Показать экран
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
             document.getElementById(screenId).classList.add('active');
+            
+            // Обновить статистику при показе главного экрана
+            if (screenId === 'main-screen') {
+                updateStatistics();
+            }
         }
-
-        // Слушатели событий
-        document.getElementById('budget-slider').addEventListener('input', function() {
-            userBudget = parseInt(this.value);
-            document.getElementById('budget-amount').textContent = userBudget;
-        });
-
-        document.getElementById('budget-setter').addEventListener('input', function() {
-            userBudget = parseInt(this.value);
-            document.getElementById('budget-display').textContent = userBudget;
-        });
-
+        
+        // Обновление отображения бюджета
+        function updateBudgetDisplay(value) {
+            document.getElementById('budget-display').textContent = `Бюджет: ${value} TON`;
+        }
+        
+        // Переключение кнопок в админ панели
+        function toggleButton(buttonType) {
+            const button = document.getElementById(`toggle-${buttonType}`);
+            const navButton = document.getElementById(`${buttonType}-btn`);
+            
+            if (database.settings[`${buttonType}Enabled`]) {
+                database.settings[`${buttonType}Enabled`] = false;
+                button.textContent = `${getButtonName(buttonType)} ❌`;
+                button.className = 'toggle-btn disabled';
+                navButton.style.opacity = '0.5';
+                navButton.style.pointerEvents = 'none';
+            } else {
+                database.settings[`${buttonType}Enabled`] = true;
+                button.textContent = `${getButtonName(buttonType)} ✅`;
+                button.className = 'toggle-btn enabled';
+                navButton.style.opacity = '1';
+                navButton.style.pointerEvents = 'auto';
+            }
+            
+            saveDatabase();
+        }
+        
+        function getButtonName(type) {
+            const names = {
+                'search': 'Поиск подарков',
+                'budget': 'Поиск по бюджету',
+                'sell': 'Продажа подарков',
+                'catalog': 'Каталог'
+            };
+            return names[type] || type;
+        }
+        
+        // Поиск подарков
+        function searchGifts() {
+            const budget = parseInt(document.getElementById('budget-slider').value);
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            
+            const loading = document.getElementById('search-loading');
+            const results = document.getElementById('search-results');
+            
+            loading.style.display = 'block';
+            results.innerHTML = '';
+            
+            // Имитация поиска через API
+            setTimeout(() => {
+                loading.style.display = 'none';
+                
+                // Генерация результатов поиска из реальных подарков
+                const searchResults = generateSearchResults(budget, searchTerm);
+                
+                if (searchResults.length === 0) {
+                    results.innerHTML = `
+                        <div class="status-message status-warning">
+                            😔 По вашему запросу ничего не найдено. Попробуйте изменить бюджет или критерии поиска.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                searchResults.forEach(result => {
+                    const resultCard = document.createElement('div');
+                    resultCard.className = 'result-card';
+                    resultCard.innerHTML = `
+                        <div class="result-header">
+                            <div class="result-model">${result.name}</div>
+                            <div class="result-price">${result.price} TON</div>
+                        </div>
+                        <div class="result-details">
+                            ${result.description}
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="purchaseGift('${result.name}', ${result.price})">
+                                🛒 Купить
+                            </button>
+                            <button class="action-btn secondary" onclick="addToFavorites('${result.name}')">
+                                ❤️ В избранное
+                            </button>
+                        </div>
+                    `;
+                    results.appendChild(resultCard);
+                });
+            }, 2000);
+        }
+        
+        // Генерация результатов поиска из реальных подарков
+        function generateSearchResults(budget, searchTerm) {
+            const results = [];
+            
+            ALL_GIFTS.forEach(giftName => {
+                // Проверка соответствия поисковому запросу
+                if (searchTerm && !giftName.toLowerCase().includes(searchTerm)) {
+                    return;
+                }
+                
+                // Генерация цены (реалистичные цены для разных подарков)
+                const basePrice = generateRealisticPrice(giftName);
+                const finalPrice = Math.min(basePrice, budget);
+                
+                if (finalPrice <= budget) {
+                    results.push({
+                        name: giftName,
+                        price: finalPrice,
+                        description: getGiftDescription(giftName),
+                        image: generateGiftImage(giftName)
+                    });
+                }
+            });
+            
+            // Сортировка по цене (от дешевых к дорогим)
+            return results.sort((a, b) => a.price - b.price).slice(0, 10);
+        }
+        
+        // Генерация реалистичной цены для подарка
+        function generateRealisticPrice(giftName) {
+            // Базовые цены в зависимости от редкости подарка
+            const priceRanges = {
+                common: { min: 50, max: 500 },
+                rare: { min: 500, max: 2000 },
+                epic: { min: 2000, max: 10000 },
+                legendary: { min: 10000, max: 50000 }
+            };
+            
+            // Определение редкости подарка
+            let rarity = 'common';
+            if (giftName.includes('Diamond') || giftName.includes('Golden') || giftName.includes('Eternal')) {
+                rarity = 'legendary';
+            } else if (giftName.includes('Crystal') || giftName.includes('Magic') || giftName.includes('Heroic')) {
+                rarity = 'epic';
+            } else if (giftName.includes('Silver') || giftName.includes('Gem') || giftName.includes('Star')) {
+                rarity = 'rare';
+            }
+            
+            const range = priceRanges[rarity];
+            return Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+        }
+        
+        // Получение описания подарка
+        function getGiftDescription(giftName) {
+            const descriptions = {
+                "Plush Pepe": "Мягкая игрушка Pepe с ограниченным тиражом",
+                "Diamond Ring": "Роскошное бриллиантовое кольцо в метавселенной",
+                "Eternal Rose": "Вечная роза, которая никогда не завянет",
+                "Magic Potion": "Волшебное зелье с магическими свойствами",
+                "Crystal Ball": "Хрустальный шар для предсказания будущего",
+                "Heroic Helmet": "Шлем настоящего героя с защитными свойствами"
+            };
+            
+            return descriptions[giftName] || `Эксклюзивный NFT подарок "${giftName}" с уникальными характеристиками`;
+        }
+        
+        // Генерация изображения подарка
+        function generateGiftImage(giftName) {
+            const colors = ['667eea', '764ba2', 'f093fb', 'f5576c', '4facfe', '00cdac'];
+            const color = colors[giftName.length % colors.length];
+            return `https://via.placeholder.com/150/${color}/ffffff?text=${encodeURIComponent(giftName.substring(0, 8))}`;
+        }
+        
+        // Загрузка реальных подарков через API
+        function loadRealGifts() {
+            if (!database.settings.catalogEnabled) {
+                showNotification('Каталог временно отключен администратором', 'warning');
+                return;
+            }
+            
+            showScreen('catalog-screen');
+            
+            const loading = document.getElementById('catalog-loading');
+            const content = document.getElementById('catalog-content');
+            const modelsGrid = document.getElementById('gift-models');
+            
+            loading.style.display = 'block';
+            content.style.display = 'none';
+            modelsGrid.innerHTML = '';
+            
+            // Имитация загрузки данных через API
+            setTimeout(() => {
+                loading.style.display = 'none';
+                content.style.display = 'block';
+                
+                const catalogGifts = generateCatalogGifts();
+                
+                catalogGifts.forEach(gift => {
+                    const modelCard = document.createElement('div');
+                    modelCard.className = 'model-card';
+                    modelCard.onclick = () => showGiftDetails(gift);
+                    modelCard.innerHTML = `
+                        <img src="${gift.image}" class="gift-image" alt="${gift.name}">
+                        <div class="model-name">${gift.name}</div>
+                        <div class="model-price">${gift.price} TON</div>
+                    `;
+                    modelsGrid.appendChild(modelCard);
+                });
+            }, 3000);
+        }
+        
+        // Генерация подарков для каталога
+        function generateCatalogGifts() {
+            return ALL_GIFTS.slice(0, 20).map(giftName => ({
+                name: giftName,
+                price: generateRealisticPrice(giftName),
+                image: generateGiftImage(giftName),
+                description: getGiftDescription(giftName),
+                marketUrl: "https://getgems.io/collection/gifts"
+            }));
+        }
+        
+        // Показать детали подарка
+        function showGiftDetails(gift) {
+            showScreen('purchase-screen');
+            
+            const purchaseContent = document.getElementById('purchase-content');
+            purchaseContent.innerHTML = `
+                <div style="text-align: center;">
+                    <img src="${gift.image}" class="gift-image-large" alt="${gift.name}">
+                    <h3 style="margin-bottom: 10px;">${gift.name}</h3>
+                    <div class="result-price" style="margin-bottom: 15px;">${gift.price} TON</div>
+                    <p style="margin-bottom: 20px; opacity: 0.8;">${gift.description}</p>
+                    
+                    <div class="payment-info">
+                        <h4 style="margin-bottom: 10px;">💳 Способ оплаты</h4>
+                        <p style="margin-bottom: 15px;">Оплата через TON кошелек</p>
+                        
+                        <div class="address-box">
+                            EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N
+                        </div>
+                        
+                        <button class="copy-btn" onclick="copyAddress()">
+                            📋 Скопировать адрес
+                        </button>
+                    </div>
+                    
+                    <button class="action-btn" onclick="completePurchase('${gift.name}', ${gift.price})" style="width: 100%; margin-top: 20px;">
+                        ✅ Подтвердить покупку
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Покупка подарка
+        function purchaseGift(giftName, price) {
+            // Обновление статистики пользователя
+            database.users[userData.id].totalSpent += price;
+            database.users[userData.id].purchasesCount += 1;
+            
+            // Добавление покупки в историю
+            database.purchases.push({
+                userId: userData.id,
+                giftName: giftName,
+                price: price,
+                date: new Date().toISOString()
+            });
+            
+            saveDatabase();
+            updateStatistics();
+            
+            showNotification(`🎉 Поздравляем! Вы успешно приобрели ${giftName} за ${price} TON`, 'success');
+            showScreen('main-screen');
+        }
+        
+        // Завершение покупки
+        function completePurchase(giftName, price) {
+            purchaseGift(giftName, price);
+        }
+        
+        // Копирование адреса
+        function copyAddress() {
+            navigator.clipboard.writeText("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N")
+                .then(() => showNotification('Адрес скопирован в буфер обмена', 'success'))
+                .catch(() => showNotification('Ошибка копирования', 'error'));
+        }
+        
+        // Подключение Telegram аккаунта
+        function connectTelegramAccount() {
+            showNotification('📱 Функция подключения аккаунта в разработке', 'info');
+        }
+        
+        // Оценка подарка
+        function evaluateGift() {
+            const model = document.getElementById('gift-model').value;
+            const price = parseFloat(document.getElementById('gift-price').value);
+            
+            if (!model || !price) {
+                showNotification('❌ Заполните все поля', 'error');
+                return;
+            }
+            
+            // Имитация оценки через API
+            const evaluationResult = document.getElementById('evaluation-result');
+            evaluationResult.style.display = 'block';
+            evaluationResult.innerHTML = `
+                <div class="evaluation-result">
+                    <div class="evaluation-price">Рекомендуемая цена: ${(price * 0.9).toFixed(2)} TON</div>
+                    <div class="evaluation-details">
+                        <p>📊 Ваш подарок оценен на ${(price * 0.9).toFixed(2)} TON</p>
+                        <p>💡 Совет: Установите цену на 10-15% ниже рыночной для быстрой продажи</p>
+                        <p>🕒 Среднее время продажи: 2-5 дней</p>
+                    </div>
+                    <button class="action-btn" onclick="listGiftForSale('${model}', ${price * 0.9})" style="width: 100%; margin-top: 15px;">
+                        📈 Выставить на продажу
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Выставление подарка на продажу
+        function listGiftForSale(model, price) {
+            showNotification(`🎁 Подарок "${model}" выставлен на продажу за ${price.toFixed(2)} TON`, 'success');
+            showScreen('main-screen');
+        }
+        
+        // Добавление в избранное
+        function addToFavorites(giftName) {
+            showNotification(`❤️ "${giftName}" добавлен в избранное`, 'success');
+        }
+        
+        // Показать уведомление
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `status-message status-${type}`;
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.left = '50%';
+            notification.style.transform = 'translateX(-50%)';
+            notification.style.zIndex = '1000';
+            notification.style.maxWidth = '90%';
+            notification.style.animation = 'slideUp 0.3s ease-out';
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'fadeIn 0.3s ease-out reverse';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
         // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', initApp);
-
-        // Симуляция активности пользователей (для демонстрации)
-        setInterval(simulateUserActivity, 30000);
+        document.addEventListener('DOMContentLoaded', function() {
+            initUser();
+            
+            // Заполнение списка подарков для продажи
+            const giftSelect = document.getElementById('gift-select');
+            ALL_GIFTS.forEach(gift => {
+                const option = document.createElement('option');
+                option.value = gift;
+                option.textContent = gift;
+                giftSelect.appendChild(option);
+            });
+            
+            // Применение настроек кнопок
+            Object.keys(database.settings).forEach(key => {
+                if (key.endsWith('Enabled')) {
+                    const buttonType = key.replace('Enabled', '');
+                    const navButton = document.getElementById(`${buttonType}-btn`);
+                    if (navButton) {
+                        navButton.style.opacity = database.settings[key] ? '1' : '0.5';
+                        navButton.style.pointerEvents = database.settings[key] ? 'auto' : 'none';
+                    }
+                }
+            });
+            
+            // Отправка данных в Telegram
+            tg.ready();
+        });
     </script>
 </body>
 </html>
