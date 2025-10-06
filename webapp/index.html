@@ -143,6 +143,7 @@
         .nav-card:nth-child(2) { animation-delay: 0.2s; }
         .nav-card:nth-child(3) { animation-delay: 0.3s; }
         .nav-card:nth-child(4) { animation-delay: 0.4s; }
+        .nav-card:nth-child(5) { animation-delay: 0.5s; }
 
         .nav-card::before {
             content: '';
@@ -175,6 +176,7 @@
         .nav-card:nth-child(2) .nav-icon { animation-delay: 0.5s; }
         .nav-card:nth-child(3) .nav-icon { animation-delay: 1s; }
         .nav-card:nth-child(4) .nav-icon { animation-delay: 1.5s; }
+        .nav-card:nth-child(5) .nav-icon { animation-delay: 2s; }
 
         .nav-title {
             font-size: 1.1rem;
@@ -185,6 +187,154 @@
         .nav-desc {
             font-size: 0.85rem;
             opacity: 0.7;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .admin-section {
+            margin-bottom: 30px;
+        }
+
+        .admin-section h3 {
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .user-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-stats {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .toggle-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .toggle-btn.disabled {
+            background: #ef4444;
+            color: white;
+        }
+
+        .toggle-btn.enabled {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Sell Gift Screen */
+        .sell-form {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .evaluation-result {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        .evaluation-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .evaluation-details {
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
 
         /* Screens */
@@ -228,7 +378,7 @@
         .model-card {
             background: var(--card-bg);
             border-radius: 16px;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             backdrop-filter: blur(10px);
             border: 2px solid transparent;
@@ -267,12 +417,13 @@
             animation: pulse 2s infinite;
         }
 
-        .model-icon {
-            font-size: 2.5rem;
+        .gift-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
             margin-bottom: 10px;
-            display: inline-block;
-            animation: bounce 2s infinite, rotate 4s linear infinite;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+            border: 2px solid rgba(255,255,255,0.1);
         }
 
         .model-name {
@@ -418,6 +569,17 @@
             color: var(--text);
         }
 
+        .action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .action-btn.disabled-btn {
+            background: #6b7280 !important;
+            cursor: not-allowed;
+        }
+
         /* Loading */
         .loading {
             display: none;
@@ -435,45 +597,61 @@
             margin: 0 auto 20px;
         }
 
-        /* Filters */
-        .filters {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .filter-group {
-            margin-bottom: 15px;
-        }
-
-        .filter-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .sort-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .sort-btn {
-            padding: 10px;
-            border: none;
+        /* Status Messages */
+        .status-message {
+            padding: 15px;
             border-radius: 10px;
-            background: var(--card-bg);
-            color: var(--text);
-            cursor: pointer;
-            transition: var(--transition);
+            margin: 10px 0;
+            text-align: center;
         }
 
-        .sort-btn.active {
-            background: var(--primary);
-            color: white;
+        .status-success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .status-warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.5);
+        }
+
+        .status-info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+
+        /* Features */
+        .features {
+            margin: 30px 0;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.6;
+            font-size: 0.9rem;
         }
 
         /* Purchase Flow */
@@ -565,33 +743,15 @@
             transform: scale(1.05);
         }
 
-        /* Features */
-        .features {
-            margin: 30px 0;
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            animation: slideUp 0.6s ease-out;
-        }
-
-        .feature-icon {
-            font-size: 1.5rem;
-            margin-right: 15px;
-            animation: bounce 2s infinite;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            opacity: 0.6;
-            font-size: 0.9rem;
+        /* Gift Image */
+        .gift-image-large {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin: 0 auto 20px;
+            display: block;
+            border: 3px solid rgba(255,255,255,0.2);
         }
 
         /* Анимации */
@@ -665,7 +825,7 @@
 
         /* Responsive */
         @media (max-width: 480px) {
-            .nav-grid, .models-grid {
+            .nav-grid, .models-grid, .stats-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -694,28 +854,35 @@
             </div>
 
             <div class="nav-grid">
-                <div class="nav-card" onclick="showScreen('catalog-screen')">
+                <div class="nav-card" onclick="loadRealGifts()" id="catalog-btn">
                     <div class="nav-icon">📚</div>
                     <div class="nav-title">Каталог NFT</div>
-                    <div class="nav-desc">Все 80+ подарков</div>
+                    <div class="nav-desc">Реальные подарки с маркетплейсов</div>
                 </div>
                 
-                <div class="nav-card" onclick="showScreen('search-screen')">
+                <div class="nav-card" onclick="showScreen('search-screen')" id="search-btn">
                     <div class="nav-icon">🔍</div>
                     <div class="nav-title">Поиск</div>
                     <div class="nav-desc">Найди идеальный подарок</div>
                 </div>
                 
-                <div class="nav-card" onclick="showScreen('budget-screen')">
+                <div class="nav-card" onclick="showScreen('budget-screen')" id="budget-btn">
                     <div class="nav-icon">💰</div>
                     <div class="nav-title">Бюджет</div>
                     <div class="nav-desc">Установи лимит</div>
                 </div>
                 
-                <div class="nav-card" onclick="showScreen('filters-screen')">
-                    <div class="nav-icon">🎯</div>
-                    <div class="nav-title">Фильтры</div>
-                    <div class="nav-desc">Расширенный поиск</div>
+                <div class="nav-card" onclick="showScreen('sell-screen')" id="sell-btn">
+                    <div class="nav-icon">💎</div>
+                    <div class="nav-title">Продать подарок</div>
+                    <div class="nav-desc">Оцени и продай свой NFT</div>
+                </div>
+
+                <!-- Админ панель (временно доступна всем) -->
+                <div class="nav-card" onclick="showScreen('admin-screen')" id="admin-btn">
+                    <div class="nav-icon">⚙️</div>
+                    <div class="nav-title">Админ панель</div>
+                    <div class="nav-desc">Управление ботом</div>
                 </div>
             </div>
 
@@ -726,11 +893,11 @@
                 </div>
                 <div class="feature">
                     <span class="feature-icon">🎨</span>
-                    80+ уникальных анимированных NFT подарков
+                    Реальные NFT с маркетплейсов по лучшим ценам
                 </div>
                 <div class="feature">
                     <span class="feature-icon">💫</span>
-                    Подарки для себя и друзей с автоматической доставкой
+                    Продажа и оценка ваших NFT подарков
                 </div>
                 <div class="feature">
                     <span class="feature-icon">🛡️</span>
@@ -739,7 +906,140 @@
             </div>
 
             <div class="footer">
-                Powered by Telegram WebApp • GiftPrises 2025
+                Powered by Telegram WebApp • GiftPrises 2024
+            </div>
+        </div>
+
+        <!-- Админ панель -->
+        <div class="screen" id="admin-screen">
+            <button class="back-button" onclick="showScreen('main-screen')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            
+            <h2 style="text-align: center; margin-bottom: 20px;">⚙️ Админ панель</h2>
+            
+            <div class="admin-panel">
+                <div class="admin-section">
+                    <h3>📊 Статистика</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-users">1,247</div>
+                            <div class="stat-label">Всего пользователей</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-sales">589</div>
+                            <div class="stat-label">Всего продаж</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-revenue">45,672 TON</div>
+                            <div class="stat-label">Общий доход</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="active-users">89</div>
+                            <div class="stat-label">Активных сегодня</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <h3>🏆 Топ покупателей</h3>
+                    <div class="user-list" id="top-users">
+                        <!-- Список топ пользователей -->
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <h3>🔧 Управление кнопками</h3>
+                    <div class="toggle-buttons">
+                        <button class="toggle-btn enabled" id="toggle-search" onclick="toggleButton('search')">
+                            Поиск подарков ✅
+                        </button>
+                        <button class="toggle-btn enabled" id="toggle-budget" onclick="toggleButton('budget')">
+                            Поиск по бюджету ✅
+                        </button>
+                        <button class="toggle-btn enabled" id="toggle-sell" onclick="toggleButton('sell')">
+                            Продажа подарков ✅
+                        </button>
+                        <button class="toggle-btn enabled" id="toggle-catalog" onclick="toggleButton('catalog')">
+                            Каталог ✅
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <h3>📈 Финансы</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="today-revenue">2,345 TON</div>
+                            <div class="stat-label">Доход за сегодня</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="week-revenue">15,678 TON</div>
+                            <div class="stat-label">Доход за неделю</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Экран продажи подарков -->
+        <div class="screen" id="sell-screen">
+            <button class="back-button" onclick="showScreen('main-screen')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            
+            <h2 style="text-align: center; margin-bottom: 20px;">💎 Продать NFT подарок</h2>
+            
+            <div class="sell-form">
+                <div class="form-group">
+                    <label class="form-label">🔗 Подключите ваш Telegram аккаунт</label>
+                    <button class="action-btn" onclick="connectTelegramAccount()" style="width: 100%;">
+                        📱 Подключить аккаунт
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🎁 Выберите подарок для оценки</label>
+                    <select class="form-select" id="gift-select">
+                        <option value="">-- Выберите подарок --</option>
+                        <!-- Список подарков будет загружен -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🎨 Модель подарка</label>
+                    <input type="text" class="search-input" placeholder="Название модели" id="gift-model">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🌄 Фон</label>
+                    <select class="form-select" id="gift-backdrop">
+                        <option value="">Любой фон</option>
+                        <option value="Звездный">Звездный</option>
+                        <option value="Городской">Городской</option>
+                        <option value="Природный">Природный</option>
+                        <option value="Абстрактный">Абстрактный</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">✨ Узор</label>
+                    <select class="form-select" id="gift-symbol">
+                        <option value="">Любой узор</option>
+                        <option value="Звезды">Звезды</option>
+                        <option value="Цветы">Цветы</option>
+                        <option value="Геометрия">Геометрия</option>
+                        <option value="Полосы">Полосы</option>
+                    </select>
+                </div>
+
+                <button class="action-btn" onclick="evaluateGift()" style="width: 100%;">
+                    💰 Оценить подарок
+                </button>
+
+                <div id="evaluation-result" style="display: none;">
+                    <!-- Результат оценки -->
+                </div>
             </div>
         </div>
 
@@ -749,10 +1049,10 @@
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             
-            <h2 style="text-align: center; margin-bottom: 20px; animation: textShine 3s infinite;">📚 Каталог NFT Подарков</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">📚 Каталог NFT Подарков</h2>
             
             <div class="models-grid" id="catalog-grid">
-                <!-- Каталог моделей -->
+                <!-- Каталог моделей будет загружен -->
             </div>
         </div>
 
@@ -762,7 +1062,7 @@
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             
-            <h2 style="text-align: center; margin-bottom: 20px; animation: textShine 3s infinite;">🔍 Поиск NFT подарков</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">🔍 Поиск NFT подарков</h2>
             
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="🎭 Введите название модели..." id="search-input">
@@ -792,7 +1092,7 @@
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             
-            <h2 style="text-align: center; margin-bottom: 20px; animation: textShine 3s infinite;">💰 Установи бюджет</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">💰 Установи бюджет</h2>
             
             <div class="search-container">
                 <div class="budget-value" style="font-size: 2rem; color: var(--accent);">
@@ -812,48 +1112,13 @@
             </div>
         </div>
 
-        <!-- Экран фильтров -->
-        <div class="screen" id="filters-screen">
-            <button class="back-button" onclick="showScreen('main-screen')">
-                <i class="fas fa-arrow-left"></i> Назад
-            </button>
-            
-            <h2 style="text-align: center; margin-bottom: 20px; animation: textShine 3s infinite;">🎯 Расширенные фильтры</h2>
-            
-            <div class="filters">
-                <div class="filter-group">
-                    <label class="filter-label">🔍 Поиск по названию</label>
-                    <input type="text" class="search-input" placeholder="Введите название..." id="filter-search-input">
-                </div>
-                
-                <div class="filter-group">
-                    <label class="filter-label">💰 Бюджет: <span id="filter-budget-value">50</span> TON</label>
-                    <input type="range" class="budget-slider" min="1" max="200" value="50" id="filter-budget-slider">
-                </div>
-                
-                <div class="filter-group">
-                    <label class="filter-label">📊 Сортировка</label>
-                    <div class="sort-buttons">
-                        <button class="sort-btn active" onclick="setSort('price_asc')">Сначала дешевые</button>
-                        <button class="sort-btn" onclick="setSort('price_desc')">Сначала дорогие</button>
-                        <button class="sort-btn" onclick="setSort('rarity')">По редкости</button>
-                        <button class="sort-btn" onclick="setSort('name')">По названию</button>
-                    </div>
-                </div>
-                
-                <button class="action-btn" onclick="performAdvancedSearch()" style="width: 100%;">
-                    🚀 Применить фильтры
-                </button>
-            </div>
-        </div>
-
         <!-- Экран покупки -->
         <div class="screen" id="purchase-screen">
             <button class="back-button" onclick="showScreen('main-screen')">
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             
-            <h2 style="text-align: center; margin-bottom: 20px; animation: textShine 3s infinite;">💳 Оформление покупки</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">💳 Оформление покупки</h2>
             
             <div class="purchase-flow">
                 <div class="step-indicator">
@@ -883,164 +1148,304 @@
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Загружаем NFT подарки...</p>
+            <p id="loading-text">Загружаем данные...</p>
         </div>
     </div>
 
     <script>
+        // Конфигурация
+        const DISABLED_BUTTONS = {
+            'search': false,
+            'budget': false, 
+            'sell': false,
+            'catalog': false
+        };
+
+        // Глобальные переменные
         let tg = window.Telegram.WebApp;
         let currentTheme = 'default';
-        let selectedModel = null;
+        let selectedGift = null;
         let userBudget = 50;
         let currentSort = 'price_asc';
         let currentPurchaseStep = 1;
-        let selectedGift = null;
         let recipientUsername = '';
-        
-        // Все NFT подарки с эмодзи и ценами
-        const nftGifts = [
-            { id: 1, name: 'Artisan Brick', price: 45, icon: '🧱', rarity: 'rare' },
-            { id: 2, name: 'Astral Shard', price: 38, icon: '💎', rarity: 'epic' },
-            { id: 3, name: 'B-Day Candle', price: 42, icon: '🎂', rarity: 'common' },
-            { id: 4, name: 'Berry Box', price: 35, icon: '🍓', rarity: 'common' },
-            { id: 5, name: 'Big Year', price: 48, icon: '📅', rarity: 'rare' },
-            { id: 6, name: 'Bonded Ring', price: 55, icon: '💍', rarity: 'epic' },
-            { id: 7, name: 'Bow Tie', price: 32, icon: '🎀', rarity: 'common' },
-            { id: 8, name: 'Bunny Milffin', price: 40, icon: '🐰', rarity: 'rare' },
-            { id: 9, name: 'Candy Cane', price: 28, icon: '🍬', rarity: 'common' },
-            { id: 10, name: 'Clover Pin', price: 36, icon: '🍀', rarity: 'rare' },
-            { id: 11, name: 'Cookie Heart', price: 33, icon: '🍪', rarity: 'common' },
-            { id: 12, name: 'Crystal Ball', price: 52, icon: '🔮', rarity: 'epic' },
-            { id: 13, name: 'Cupid Charm', price: 44, icon: '🏹', rarity: 'rare' },
-            { id: 14, name: 'Desk Calendar', price: 37, icon: '📆', rarity: 'common' },
-            { id: 15, name: 'Diamond Ring', price: 68, icon: '💎', rarity: 'legendary' },
-            { id: 16, name: 'Durov\'s Cap', price: 75, icon: '👒', rarity: 'legendary' },
-            { id: 17, name: 'Easter Egg', price: 39, icon: '🥚', rarity: 'rare' },
-            { id: 18, name: 'Electric Skull', price: 58, icon: '💀', rarity: 'epic' },
-            { id: 19, name: 'Eternal Candle', price: 47, icon: '🕯️', rarity: 'rare' },
-            { id: 20, name: 'Eternal Rose', price: 49, icon: '🌹', rarity: 'epic' },
-            { id: 21, name: 'Evil Eye', price: 41, icon: '👁️', rarity: 'rare' },
-            { id: 22, name: 'Flying Broom', price: 43, icon: '🧹', rarity: 'rare' },
-            { id: 23, name: 'Fresh Socks', price: 29, icon: '🧦', rarity: 'common' },
-            { id: 24, name: 'Gem Signet', price: 51, icon: '💍', rarity: 'epic' },
-            { id: 25, name: 'Genie Lamp', price: 63, icon: '🪔', rarity: 'legendary' },
-            { id: 26, name: 'Ginger Cookie', price: 31, icon: '🍪', rarity: 'common' },
-            { id: 27, name: 'Hanging Star', price: 46, icon: '⭐', rarity: 'rare' },
-            { id: 28, name: 'Heart Locket', price: 38, icon: '🔒', rarity: 'common' },
-            { id: 29, name: 'Heroic Helmet', price: 56, icon: '⛑️', rarity: 'epic' },
-            { id: 30, name: 'Hex Pot', price: 42, icon: '🧪', rarity: 'rare' },
-            { id: 31, name: 'Holiday Drink', price: 34, icon: '🍹', rarity: 'common' },
-            { id: 32, name: 'Homemade Cake', price: 37, icon: '🎂', rarity: 'common' },
-            { id: 33, name: 'Hypno Lollipop', price: 39, icon: '🍭', rarity: 'rare' },
-            { id: 34, name: 'Ice Crystal', price: 44, icon: '❄️', rarity: 'rare' },
-            { id: 35, name: 'Infinite Cube', price: 72, icon: '🧊', rarity: 'legendary' },
-            { id: 36, name: 'Jelly Bean', price: 26, icon: '🍬', rarity: 'common' },
-            { id: 37, name: 'Jeweled Crown', price: 78, icon: '👑', rarity: 'legendary' },
-            { id: 38, name: 'Kawaii Donut', price: 33, icon: '🍩', rarity: 'common' },
-            { id: 39, name: 'Key Chain', price: 35, icon: '🔑', rarity: 'common' },
-            { id: 40, name: 'Leprechaun Hat', price: 45, icon: '🎩', rarity: 'rare' },
-            { id: 41, name: 'Lucky Horseshoe', price: 41, icon: '🍀', rarity: 'rare' },
-            { id: 42, name: 'Magic Wand', price: 53, icon: '🪄', rarity: 'epic' },
-            { id: 43, name: 'Marshmallow', price: 30, icon: '🍡', rarity: 'common' },
-            { id: 44, name: 'Mighty Hammer', price: 59, icon: '🔨', rarity: 'epic' },
-            { id: 45, name: 'Mini Rocket', price: 61, icon: '🚀', rarity: 'epic' },
-            { id: 46, name: 'Mochi', price: 32, icon: '🍡', rarity: 'common' },
-            { id: 47, name: 'Moon Charm', price: 48, icon: '🌙', rarity: 'rare' },
-            { id: 48, name: 'Mushroom Lamp', price: 43, icon: '🍄', rarity: 'rare' },
-            { id: 49, name: 'Music Box', price: 50, icon: '🎵', rarity: 'epic' },
-            { id: 50, name: 'Mystery Box', price: 55, icon: '🎁', rarity: 'epic' },
-            { id: 51, name: 'Mystic Orb', price: 65, icon: '🔮', rarity: 'legendary' },
-            { id: 52, name: 'Night Light', price: 36, icon: '💡', rarity: 'common' },
-            { id: 53, name: 'Origami Crane', price: 39, icon: '🕊️', rarity: 'rare' },
-            { id: 54, name: 'Party Balloon', price: 31, icon: '🎈', rarity: 'common' },
-            { id: 55, name: 'Party Popper', price: 34, icon: '🎉', rarity: 'common' },
-            { id: 56, name: 'Peppermint', price: 28, icon: '🍬', rarity: 'common' },
-            { id: 57, name: 'Phoenix Feather', price: 70, icon: '🪶', rarity: 'legendary' },
-            { id: 58, name: 'Piggy Bank', price: 40, icon: '🐷', rarity: 'rare' },
-            { id: 59, name: 'Pillow', price: 35, icon: '🛏️', rarity: 'common' },
-            { id: 60, name: 'Pine Tree', price: 42, icon: '🌲', rarity: 'rare' },
-            { id: 61, name: 'Pirate Coin', price: 46, icon: '🪙', rarity: 'rare' },
-            { id: 62, name: 'Pixel Heart', price: 38, icon: '💖', rarity: 'common' },
-            { id: 63, name: 'Plush Bear', price: 41, icon: '🧸', rarity: 'rare' },
-            { id: 64, name: 'Potion Vial', price: 44, icon: '🧪', rarity: 'rare' },
-            { id: 65, name: 'Pumpkin Lantern', price: 47, icon: '🎃', rarity: 'rare' },
-            { id: 66, name: 'Rainbow Cloud', price: 52, icon: '🌈', rarity: 'epic' },
-            { id: 67, name: 'Rocket Pop', price: 37, icon: '🍭', rarity: 'common' },
-            { id: 68, name: 'Royal Scepter', price: 74, icon: '🪄', rarity: 'legendary' },
-            { id: 69, name: 'Rubber Duck', price: 29, icon: '🦆', rarity: 'common' },
-            { id: 70, name: 'Rune Stone', price: 49, icon: '🗿', rarity: 'epic' },
-            { id: 71, name: 'Sailor Anchor', price: 45, icon: '⚓', rarity: 'rare' },
-            { id: 72, name: 'Shooting Star', price: 57, icon: '☄️', rarity: 'epic' },
-            { id: 73, name: 'Snow Globe', price: 48, icon: '🌐', rarity: 'rare' },
-            { id: 74, name: 'Snowflake', price: 39, icon: '❄️', rarity: 'common' },
-            { id: 75, name: 'Space Rock', price: 53, icon: '🪨', rarity: 'epic' },
-            { id: 76, name: 'Sparkler', price: 36, icon: '🎇', rarity: 'common' },
-            { id: 77, name: 'Strawberry Cake', price: 43, icon: '🍰', rarity: 'rare' },
-            { id: 78, name: 'Sunflower', price: 40, icon: '🌻', rarity: 'rare' },
-            { id: 79, name: 'Teddy Bear', price: 42, icon: '🧸', rarity: 'rare' },
-            { id: 80, name: 'Telescope', price: 58, icon: '🔭', rarity: 'epic' },
-            { id: 81, name: 'Treasure Chest', price: 66, icon: '🧰', rarity: 'legendary' },
-            { id: 82, name: 'Unicorn Horn', price: 62, icon: '🦄', rarity: 'epic' },
-            { id: 83, name: 'Voodoo Doll', price: 54, icon: '🧷', rarity: 'epic' },
-            { id: 84, name: 'Waffle Cone', price: 34, icon: '🍦', rarity: 'common' },
-            { id: 85, name: 'Wishing Well', price: 59, icon: '⛲', rarity: 'epic' },
-            { id: 86, name: 'Wizard Hat', price: 56, icon: '🧙', rarity: 'epic' },
-            { id: 87, name: 'Wooden Whistle', price: 38, icon: '🪈', rarity: 'common' },
-            { id: 88, name: 'Yarn Ball', price: 33, icon: '🧶', rarity: 'common' },
-            { id: 89, name: 'Zen Garden', price: 51, icon: '🎍', rarity: 'epic' },
-            { id: 90, name: 'Zodiac Coin', price: 47, icon: '🪙', rarity: 'rare' }
-        ];
+        let purchaseId = '';
+        let realGifts = [];
+        let paymentCheckInterval = null;
 
         // Инициализация приложения
         function initApp() {
             tg.expand();
             tg.enableClosingConfirmation();
-            loadCatalog();
-            updateBudgetDisplays();
-        }
-
-        // Переключение темы
-        function switchTheme() {
-            const body = document.body;
-            if (currentTheme === 'default') {
-                body.classList.add('theme-light');
-                currentTheme = 'light';
-            } else if (currentTheme === 'light') {
-                body.classList.remove('theme-light');
-                body.classList.add('theme-dark');
-                currentTheme = 'dark';
-            } else {
-                body.classList.remove('theme-dark');
-                currentTheme = 'default';
-            }
-        }
-
-        // Показать экран
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
             
-            if (screenId === 'catalog-screen') {
-                loadCatalog();
+            // Загружаем статус кнопок
+            loadButtonStatus();
+            
+            // Загружаем данные для админ панели
+            loadAdminData();
+            
+            // Загружаем данные для продажи подарков
+            loadGiftsForSale();
+            
+            // Загружаем реальные данные о подарках
+            loadRealGiftsData();
+        }
+
+        // Загрузка данных для админ панели
+        function loadAdminData() {
+            // Имитация загрузки данных
+            const topUsers = [
+                { name: '@john_doe', purchases: 45, spent: '8,900 TON' },
+                { name: '@alice_smith', purchases: 32, spent: '6,450 TON' },
+                { name: '@bob_wilson', purchases: 28, spent: '5,200 TON' },
+                { name: '@emma_jones', purchases: 25, spent: '4,800 TON' },
+                { name: '@mike_brown', purchases: 22, spent: '4,100 TON' }
+            ];
+            
+            const topUsersContainer = document.getElementById('top-users');
+            topUsersContainer.innerHTML = topUsers.map(user => `
+                <div class="user-item">
+                    <div class="user-info">
+                        <div class="user-name">${user.name}</div>
+                        <div class="user-stats">${user.purchases} покупок</div>
+                    </div>
+                    <div class="user-stats">${user.spent}</div>
+                </div>
+            `).join('');
+        }
+
+        // Загрузка статуса кнопок
+        function loadButtonStatus() {
+            Object.keys(DISABLED_BUTTONS).forEach(buttonId => {
+                updateButtonAppearance(buttonId, DISABLED_BUTTONS[buttonId]);
+            });
+        }
+
+        // Переключение кнопок
+        function toggleButton(buttonType) {
+            DISABLED_BUTTONS[buttonType] = !DISABLED_BUTTONS[buttonType];
+            updateButtonAppearance(buttonType, DISABLED_BUTTONS[buttonType]);
+            
+            // Сохраняем статус (в реальном приложении - отправляем на сервер)
+            tg.sendData(JSON.stringify({
+                action: 'toggle_button',
+                button_type: buttonType,
+                disabled: DISABLED_BUTTONS[buttonType]
+            }));
+            
+            showStatusMessage(`Кнопка "${getButtonName(buttonType)}" ${DISABLED_BUTTONS[buttonType] ? 'отключена' : 'включена'}`, 'success');
+        }
+
+        // Обновление внешнего вида кнопки
+        function updateButtonAppearance(buttonType, disabled) {
+            const button = document.getElementById(`toggle-${buttonType}`);
+            const navButton = document.getElementById(`${buttonType}-btn`);
+            
+            if (button) {
+                button.className = `toggle-btn ${disabled ? 'disabled' : 'enabled'}`;
+                button.textContent = `${getButtonName(buttonType)} ${disabled ? '❌' : '✅'}`;
+            }
+            
+            if (navButton) {
+                if (disabled) {
+                    navButton.classList.add('disabled-btn');
+                    navButton.onclick = () => showDisabledMessage(buttonType);
+                } else {
+                    navButton.classList.remove('disabled-btn');
+                    // Восстанавливаем оригинальный обработчик
+                    switch(buttonType) {
+                        case 'search':
+                            navButton.onclick = () => showScreen('search-screen');
+                            break;
+                        case 'budget':
+                            navButton.onclick = () => showScreen('budget-screen');
+                            break;
+                        case 'sell':
+                            navButton.onclick = () => showScreen('sell-screen');
+                            break;
+                        case 'catalog':
+                            navButton.onclick = () => loadRealGifts();
+                            break;
+                    }
+                }
             }
         }
 
-        // Загрузка каталога
-        function loadCatalog() {
+        // Показать сообщение об отключенной кнопке
+        function showDisabledMessage(buttonType) {
+            const message = `🚧 Кнопка "${getButtonName(buttonType)}" временно отключена на техническом обслуживании. Мы уведомим вас, когда функционал будет доступен снова.`;
+            tg.showPopup({
+                title: 'Технические работы',
+                message: message,
+                buttons: [{ type: 'ok' }]
+            });
+        }
+
+        // Получение читаемого имени кнопки
+        function getButtonName(buttonType) {
+            const names = {
+                'search': 'Поиск подарков',
+                'budget': 'Поиск по бюджету', 
+                'sell': 'Продажа подарков',
+                'catalog': 'Каталог'
+            };
+            return names[buttonType] || buttonType;
+        }
+
+        // Подключение Telegram аккаунта
+        function connectTelegramAccount() {
+            showLoading(true, "Подключаем ваш аккаунт...");
+            
+            setTimeout(() => {
+                showLoading(false);
+                showStatusMessage('✅ Аккаунт успешно подключен! Теперь вы можете оценить свои подарки.', 'success');
+                
+                // Имитация загрузки подарков пользователя
+                loadUserGifts();
+            }, 2000);
+        }
+
+        // Загрузка подарков пользователя
+        function loadUserGifts() {
+            const userGifts = [
+                'Artisan Brick',
+                'Crystal Ball', 
+                'Eternal Rose',
+                'Diamond Ring',
+                'Magic Wand',
+                'Astral Shard',
+                'Bunny Milffin',
+                'Genie Lamp',
+                'Heroic Helmet',
+                'Plush Pepe'
+            ];
+            
+            const select = document.getElementById('gift-select');
+            select.innerHTML = '<option value="">-- Выберите подарок --</option>' +
+                userGifts.map(gift => `<option value="${gift}">${gift}</option>`).join('');
+        }
+
+        // Загрузка подарков для продажи
+        function loadGiftsForSale() {
+            loadUserGifts(); // Используем тот же список
+        }
+
+        // Оценка подарка
+        function evaluateGift() {
+            const giftModel = document.getElementById('gift-model').value;
+            const giftBackdrop = document.getElementById('gift-backdrop').value;
+            const giftSymbol = document.getElementById('gift-symbol').value;
+            const selectedGift = document.getElementById('gift-select').value;
+            
+            if (!giftModel && !selectedGift) {
+                showStatusMessage('❌ Пожалуйста, выберите или введите название подарка', 'error');
+                return;
+            }
+            
+            const giftName = selectedGift || giftModel;
+            
+            showLoading(true, "🔍 Оцениваем подарок на маркетплейсах...");
+            
+            // Имитация оценки подарка
+            setTimeout(() => {
+                showLoading(false);
+                
+                // Генерация случайной оценки
+                const marketPrice = Math.floor(Math.random() * 100) + 20;
+                const ourCommission = marketPrice * 0.05; // 5% комиссия
+                const marketCommission = marketPrice * 0.1; // 10% комиссия маркетплейса
+                const finalPrice = marketPrice - ourCommission - marketCommission;
+                
+                const resultDiv = document.getElementById('evaluation-result');
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `
+                    <div class="evaluation-result">
+                        <div class="evaluation-price">${finalPrice.toFixed(2)} TON</div>
+                        <div class="evaluation-details">
+                            <strong>${giftName}</strong><br>
+                            💰 Рыночная цена: ${marketPrice.toFixed(2)} TON<br>
+                            🏪 Комиссия маркетплейса: ${marketCommission.toFixed(2)} TON (10%)<br>
+                            💼 Наша комиссия: ${ourCommission.toFixed(2)} TON (5%)<br>
+                            🌄 Фон: ${giftBackdrop || 'Любой'}<br>
+                            ✨ Узор: ${giftSymbol || 'Любой'}<br><br>
+                            <button class="action-btn" onclick="confirmSale()" style="width: 100%;">
+                                ✅ Подтвердить продажу
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }, 3000);
+        }
+
+        // Подтверждение продажи
+        function confirmSale() {
+            tg.showPopup({
+                title: '✅ Продажа подтверждена',
+                message: 'Ваш подарок будет продан по оцененной цене. Средства поступят на ваш счет в течение 24 часов.',
+                buttons: [{ type: 'ok' }]
+            });
+        }
+
+        // Загрузка реальных данных о подарках
+        function loadRealGiftsData() {
+            // Генерация имитации реальных данных
+            const giftNames = [
+                "Artisan Brick", "Astral Shard", "B-Day Candle", "Berry Box", "Big Year", 
+                "Bonded Ring", "Bow Tie", "Bunny Milffin", "Candy Cane", "Clover Pin",
+                "Cookie Heart", "Crystal Ball", "Cupid Charm", "Desk Calendar", "Diamond Ring",
+                "Durov's Cap", "Easter Egg", "Electric Skull", "Eternal Candle", "Eternal Rose"
+            ];
+            
+            realGifts = giftNames.map((name, index) => {
+                const basePrice = Math.floor(Math.random() * 50) + 20;
+                const totalPrice = basePrice * 1.05; // +5% комиссия
+                
+                return {
+                    id: `gift_${index + 1}`,
+                    name: name,
+                    base_price: basePrice,
+                    total_price: Math.round(totalPrice * 100) / 100,
+                    image_url: `https://api.portals.io/gifts/${index + 1}/image`,
+                    market: 'Portals',
+                    attributes: {
+                        model: name,
+                        backdrop: ['Любой фон', 'Звездный', 'Городской', 'Природный'][Math.floor(Math.random() * 4)],
+                        symbol: ['Любой узор', 'Звезды', 'Цветы', 'Геометрия'][Math.floor(Math.random() * 4)]
+                    },
+                    is_transferable: true,
+                    rarity: ['common', 'rare', 'epic', 'legendary'][Math.floor(Math.random() * 4)]
+                };
+            });
+        }
+
+        // Загрузка реальных подарков
+        function loadRealGifts() {
+            if (DISABLED_BUTTONS['catalog']) {
+                showDisabledMessage('catalog');
+                return;
+            }
+            showScreen('catalog-screen');
+            displayRealGifts(realGifts);
+        }
+
+        // Отображение реальных подарков
+        function displayRealGifts(gifts) {
             const grid = document.getElementById('catalog-grid');
             grid.innerHTML = '';
             
-            nftGifts.forEach(gift => {
+            gifts.forEach(gift => {
                 const card = document.createElement('div');
                 card.className = 'model-card';
                 card.onclick = () => selectGift(gift);
                 
                 card.innerHTML = `
-                    <div class="model-icon">${gift.icon}</div>
+                    <img src="${gift.image_url}" alt="${gift.name}" class="gift-image" 
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMTAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjEyIj4kTkZUPzwvdGV4dD4KPC9zdmc+'">
                     <div class="model-name">${gift.name}</div>
-                    <div class="model-price">${gift.price} TON</div>
+                    <div class="model-price">${gift.total_price} TON</div>
+                    <div style="font-size: 0.7rem; opacity: 0.6; margin-top: 5px;">
+                        ${getRarityText(gift.rarity)} • ${gift.market}
+                    </div>
                 `;
                 
                 grid.appendChild(card);
@@ -1073,10 +1478,14 @@
                 case 1:
                     content.innerHTML = `
                         <h3 style="text-align: center; margin-bottom: 20px;">🎁 Вы выбрали:</h3>
+                        <img src="${selectedGift.image_url}" alt="${selectedGift.name}" class="gift-image-large"
+                             onerror="this.style.display='none'">
                         <div style="text-align: center; margin-bottom: 30px;">
-                            <div style="font-size: 4rem; margin-bottom: 10px;">${selectedGift.icon}</div>
                             <div style="font-size: 1.5rem; font-weight: 600; margin-bottom: 5px;">${selectedGift.name}</div>
-                            <div style="font-size: 1.2rem; color: var(--accent);">${selectedGift.price} TON</div>
+                            <div style="font-size: 1.2rem; color: var(--accent);">${selectedGift.total_price} TON</div>
+                            <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 5px;">
+                                ${selectedGift.market} • ${getRarityText(selectedGift.rarity)}
+                            </div>
                         </div>
                         <button class="action-btn" onclick="updatePurchaseStep(2)" style="width: 100%;">
                             Далее ➡️
@@ -1088,50 +1497,72 @@
                     content.innerHTML = `
                         <h3 style="text-align: center; margin-bottom: 20px;">👤 Кому отправить подарок?</h3>
                         <input type="text" class="search-input" placeholder="@username или оставьте пустым для себя" id="recipient-input">
+                        <div class="status-message status-info" style="display: none;" id="username-status">
+                            Проверяем username...
+                        </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
                             <button class="action-btn secondary" onclick="updatePurchaseStep(1)">
                                 ⬅️ Назад
                             </button>
-                            <button class="action-btn" onclick="setRecipient()">
-                                Далее ➡️
+                            <button class="action-btn" onclick="validateAndSetRecipient()" id="recipient-btn">
+                                Проверить и продолжить ➡️
                             </button>
                         </div>
                     `;
                     break;
                     
                 case 3:
+                    purchaseId = 'purchase_' + Date.now();
+                    const memo = recipientUsername ? `gift:${selectedGift.id},for:${recipientUsername}` : `gift:${selectedGift.id}`;
+                    
                     content.innerHTML = `
                         <h3 style="text-align: center; margin-bottom: 20px;">💳 Оплата</h3>
                         <div class="payment-info">
                             <div style="margin-bottom: 15px;">
-                                <strong>Подарок:</strong> ${selectedGift.icon} ${selectedGift.name}
+                                <strong>Подарок:</strong> ${selectedGift.name}
                             </div>
                             <div style="margin-bottom: 15px;">
                                 <strong>Получатель:</strong> ${recipientUsername || 'Себе'}
                             </div>
                             <div style="font-size: 1.3rem; font-weight: 600; color: var(--accent); margin-bottom: 20px;">
-                                Сумма: ${selectedGift.price} TON
+                                Сумма: ${selectedGift.total_price} TON
                             </div>
                             
                             <div class="address-box">
-                                Отправьте ${selectedGift.price} TON на адрес:<br>
-                                <strong>EQABC123DEF456GHI789JKL012MNO345PQR678STU</strong>
+                                <strong>Адрес кошелька:</strong><br>
+                                EQABC123DEF456GHI789JKL012MNO345PQR678STU
                             </div>
                             
-                            <button class="copy-btn" onclick="copyAddress()">
-                                📋 Скопировать адрес
+                            <div class="address-box">
+                                <strong>Memo (обязательно):</strong><br>
+                                ${memo}
+                            </div>
+                            
+                            <button class="copy-btn" onclick="copyPaymentDetails()" style="margin-right: 10px;">
+                                📋 Скопировать данные
                             </button>
+                            
+                            <button class="copy-btn" onclick="sharePaymentDetails()">
+                                📤 Поделиться
+                            </button>
+                        </div>
+                        
+                        <div class="status-message status-info" id="payment-status">
+                            ⏳ Ожидаем подтверждения оплаты...
                         </div>
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
                             <button class="action-btn secondary" onclick="updatePurchaseStep(2)">
                                 ⬅️ Назад
                             </button>
-                            <button class="action-btn" onclick="updatePurchaseStep(4)">
-                                Я оплатил ✅
+                            <button class="action-btn" onclick="checkPaymentStatus()" id="check-payment-btn">
+                                🔄 Проверить оплату
                             </button>
                         </div>
                     `;
+                    
+                    // Запускаем проверку оплаты
+                    startPaymentChecking();
                     break;
                     
                 case 4:
@@ -1140,59 +1571,171 @@
                             <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
                             <h3 style="margin-bottom: 15px;">Подарок отправлен!</h3>
                             <p style="margin-bottom: 25px; opacity: 0.8;">
-                                ${selectedGift.icon} <strong>${selectedGift.name}</strong> был успешно отправлен ${recipientUsername ? 'пользователю ' + recipientUsername : 'вам'}!
+                                <strong>${selectedGift.name}</strong> был успешно отправлен ${recipientUsername ? 'пользователю ' + recipientUsername : 'вам'}!
                             </p>
-                            <button class="action-btn" onclick="showScreen('main-screen')" style="width: 100%;">
+                            <div class="status-message status-success">
+                                ✅ Транзакция подтверждена. Подарок доставлен.
+                            </div>
+                            <button class="action-btn" onclick="showScreen('main-screen')" style="width: 100%; margin-top: 20px;">
                                 🏠 На главную
                             </button>
                         </div>
                     `;
+                    
+                    // Останавливаем проверку оплаты
+                    stopPaymentChecking();
                     break;
             }
         }
 
-        // Установка получателя
-        function setRecipient() {
+        // Валидация и установка получателя
+        async function validateAndSetRecipient() {
             const input = document.getElementById('recipient-input');
-            recipientUsername = input.value.trim();
-            updatePurchaseStep(3);
+            const username = input.value.trim();
+            const statusDiv = document.getElementById('username-status');
+            const button = document.getElementById('recipient-btn');
+            
+            // Показываем статус
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'status-message status-info';
+            statusDiv.innerHTML = '🔍 Проверяем username...';
+            button.disabled = true;
+            
+            // Проверяем username
+            const isValid = await validateUsername(username);
+            
+            if (isValid) {
+                recipientUsername = username;
+                statusDiv.className = 'status-message status-success';
+                statusDiv.innerHTML = '✅ Username корректен';
+                setTimeout(() => {
+                    updatePurchaseStep(3);
+                }, 1000);
+            } else {
+                statusDiv.className = 'status-message status-error';
+                statusDiv.innerHTML = '❌ Username не найден или некорректен';
+                button.disabled = false;
+            }
         }
 
-        // Копирование адреса
-        function copyAddress() {
-            navigator.clipboard.writeText('EQABC123DEF456GHI789JKL012MNO345PQR678STU').then(() => {
-                alert('Адрес скопирован в буфер обмена!');
+        // Валидация username
+        async function validateUsername(username) {
+            if (!username) {
+                return true; // Пустой username - подарок себе
+            }
+            
+            if (!username.startsWith('@')) {
+                return false;
+            }
+            
+            // В реальном приложении здесь будет запрос к Telegram API
+            // Для демонстрации используем имитацию
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // Имитация проверки - считаем валидными usernames длиной более 5 символов
+                    resolve(username.length >= 5);
+                }, 1500);
+            });
+        }
+
+        // Копирование данных для оплаты
+        function copyPaymentDetails() {
+            const memo = recipientUsername ? `gift:${selectedGift.id},for:${recipientUsername}` : `gift:${selectedGift.id}`;
+            const text = `Адрес: EQABC123DEF456GHI789JKL012MNO345PQR678STU\nСумма: ${selectedGift.total_price} TON\nMemo: ${memo}`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showStatusMessage('Данные для оплаты скопированы в буфер обмена!', 'success');
+            });
+        }
+
+        // Поделиться данными для оплаты
+        function sharePaymentDetails() {
+            const memo = recipientUsername ? `gift:${selectedGift.id},for:${recipientUsername}` : `gift:${selectedGift.id}`;
+            const text = `Отправьте ${selectedGift.total_price} TON на адрес: EQABC123DEF456GHI789JKL012MNO345PQR678STU с memo: ${memo}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Оплата NFT подарка',
+                    text: text
+                });
+            } else {
+                copyPaymentDetails();
+            }
+        }
+
+        // Запуск проверки оплаты
+        function startPaymentChecking() {
+            paymentCheckInterval = setInterval(checkPaymentStatus, 10000); // Проверка каждые 10 секунд
+        }
+
+        // Остановка проверки оплаты
+        function stopPaymentChecking() {
+            if (paymentCheckInterval) {
+                clearInterval(paymentCheckInterval);
+                paymentCheckInterval = null;
+            }
+        }
+
+        // Проверка статуса оплаты
+        async function checkPaymentStatus() {
+            const statusDiv = document.getElementById('payment-status');
+            const button = document.getElementById('check-payment-btn');
+            
+            statusDiv.className = 'status-message status-info';
+            statusDiv.innerHTML = '🔍 Проверяем статус оплаты...';
+            button.disabled = true;
+            
+            // Имитация проверки оплаты
+            const isPaid = await simulatePaymentCheck();
+            
+            if (isPaid) {
+                statusDiv.className = 'status-message status-success';
+                statusDiv.innerHTML = '✅ Оплата подтверждена! Отправляем подарок...';
+                
+                // Имитация процесса отправки подарка
+                setTimeout(() => {
+                    updatePurchaseStep(4);
+                }, 2000);
+            } else {
+                statusDiv.className = 'status-message status-warning';
+                statusDiv.innerHTML = '⏳ Оплата еще не поступила. Проверьте транзакцию.';
+                button.disabled = false;
+            }
+        }
+
+        // Имитация проверки оплаты
+        async function simulatePaymentCheck() {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // В реальном приложении здесь будет запрос к TON API
+                    // Для демонстрации 30% шанс что оплата прошла
+                    resolve(Math.random() < 0.3);
+                }, 2000);
             });
         }
 
         // Поиск NFT
         function performSearch() {
+            if (DISABLED_BUTTONS['search']) {
+                showDisabledMessage('search');
+                return;
+            }
+
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
             const budget = userBudget;
             
-            showLoading(true);
+            showLoading(true, "🔍 Ищем подарки...");
             
             setTimeout(() => {
-                const results = nftGifts.filter(gift => {
+                const results = realGifts.filter(gift => {
                     const matchesSearch = !searchTerm || gift.name.toLowerCase().includes(searchTerm);
-                    const matchesBudget = gift.price <= budget;
+                    const matchesBudget = gift.total_price <= budget;
                     return matchesSearch && matchesBudget;
                 });
                 
                 displaySearchResults(results);
                 showLoading(false);
             }, 1000);
-        }
-
-        // Очистка поиска
-        function clearSearch() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('backdrop-input').value = '';
-            document.getElementById('symbol-input').value = '';
-            document.getElementById('budget-slider').value = 50;
-            userBudget = 50;
-            updateBudgetDisplays();
-            document.getElementById('search-results').innerHTML = '';
         }
 
         // Отображение результатов поиска
@@ -1216,14 +1759,14 @@
                 card.className = 'result-card';
                 card.innerHTML = `
                     <div class="result-header">
-                        <div class="result-model">${gift.icon} ${gift.name}</div>
-                        <div class="result-price">${gift.price} TON</div>
+                        <div class="result-model">${gift.name}</div>
+                        <div class="result-price">${gift.total_price} TON</div>
                     </div>
                     <div class="result-details">
-                        Редкость: ${getRarityText(gift.rarity)}
+                        ${gift.market} • ${getRarityText(gift.rarity)}
                     </div>
                     <div class="action-buttons">
-                        <button class="action-btn secondary" onclick="showGiftDetails(${gift.id})">
+                        <button class="action-btn secondary" onclick="showGiftDetails('${gift.id}')">
                             ℹ️ Подробнее
                         </button>
                         <button class="action-btn" onclick="selectGift(${JSON.stringify(gift).replace(/"/g, '&quot;')})">
@@ -1238,20 +1781,35 @@
         // Получение текста редкости
         function getRarityText(rarity) {
             const rarityMap = {
-                'common': 'Обычный',
-                'rare': 'Редкий', 
-                'epic': 'Эпический',
-                'legendary': 'Легендарный'
+                'common': '⚪ Обычный',
+                'rare': '🔵 Редкий', 
+                'epic': '💜 Эпический',
+                'legendary': '⭐ Легендарный'
             };
             return rarityMap[rarity] || rarity;
         }
 
         // Детали подарка
         function showGiftDetails(giftId) {
-            const gift = nftGifts.find(g => g.id === giftId);
+            const gift = realGifts.find(g => g.id === giftId);
             if (gift) {
-                alert(`${gift.icon} ${gift.name}\nЦена: ${gift.price} TON\nРедкость: ${getRarityText(gift.rarity)}`);
+                tg.showPopup({
+                    title: `🎁 ${gift.name}`,
+                    message: `💰 Цена: ${gift.total_price} TON\n🏪 Маркет: ${gift.market}\n⭐ Редкость: ${getRarityText(gift.rarity)}\n🎨 Особенности: ${gift.attributes.backdrop}, ${gift.attributes.symbol}`,
+                    buttons: [{ type: 'ok' }]
+                });
             }
+        }
+
+        // Очистка поиска
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('backdrop-input').value = '';
+            document.getElementById('symbol-input').value = '';
+            document.getElementById('budget-slider').value = 50;
+            userBudget = 50;
+            updateBudgetDisplays();
+            document.getElementById('search-results').innerHTML = '';
         }
 
         // Установка бюджета
@@ -1263,62 +1821,63 @@
 
         // Сохранение бюджета
         function saveBudget() {
-            alert(`Бюджет установлен: ${userBudget} TON`);
-            showScreen('main-screen');
+            showStatusMessage(`Бюджет установлен: ${userBudget} TON`, 'success');
+            setTimeout(() => showScreen('main-screen'), 1000);
         }
 
         // Обновление отображения бюджета
         function updateBudgetDisplays() {
             document.getElementById('budget-amount').textContent = userBudget;
             document.getElementById('budget-display').textContent = userBudget;
-            document.getElementById('filter-budget-value').textContent = userBudget;
-            document.getElementById('filter-budget-slider').value = userBudget;
         }
 
-        // Установка сортировки
-        function setSort(sortType) {
-            currentSort = sortType;
-            document.querySelectorAll('.sort-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
-
-        // Расширенный поиск
-        function performAdvancedSearch() {
-            const searchTerm = document.getElementById('filter-search-input').value.toLowerCase();
-            const budget = parseInt(document.getElementById('filter-budget-slider').value);
+        // Показать статус сообщение
+        function showStatusMessage(message, type = 'info') {
+            const tempDiv = document.createElement('div');
+            tempDiv.className = `status-message status-${type}`;
+            tempDiv.textContent = message;
+            tempDiv.style.position = 'fixed';
+            tempDiv.style.top = '20px';
+            tempDiv.style.left = '50%';
+            tempDiv.style.transform = 'translateX(-50%)';
+            tempDiv.style.zIndex = '1000';
+            tempDiv.style.maxWidth = '90%';
             
-            let results = nftGifts.filter(gift => {
-                const matchesSearch = !searchTerm || gift.name.toLowerCase().includes(searchTerm);
-                const matchesBudget = gift.price <= budget;
-                return matchesSearch && matchesBudget;
-            });
+            document.body.appendChild(tempDiv);
             
-            // Сортировка
-            switch(currentSort) {
-                case 'price_asc':
-                    results.sort((a, b) => a.price - b.price);
-                    break;
-                case 'price_desc':
-                    results.sort((a, b) => b.price - a.price);
-                    break;
-                case 'name':
-                    results.sort((a, b) => a.name.localeCompare(b.name));
-                    break;
-                case 'rarity':
-                    const rarityOrder = { 'legendary': 4, 'epic': 3, 'rare': 2, 'common': 1 };
-                    results.sort((a, b) => rarityOrder[b.rarity] - rarityOrder[a.rarity]);
-                    break;
-            }
-            
-            showScreen('search-screen');
-            displaySearchResults(results);
+            setTimeout(() => {
+                tempDiv.remove();
+            }, 3000);
         }
 
         // Показать/скрыть загрузку
-        function showLoading(show) {
+        function showLoading(show, text = "Загружаем данные...") {
             document.getElementById('loading').style.display = show ? 'block' : 'none';
+            document.getElementById('loading-text').textContent = text;
+        }
+
+        // Переключение темы
+        function switchTheme() {
+            const body = document.body;
+            if (currentTheme === 'default') {
+                body.classList.add('theme-light');
+                currentTheme = 'light';
+            } else if (currentTheme === 'light') {
+                body.classList.remove('theme-light');
+                body.classList.add('theme-dark');
+                currentTheme = 'dark';
+            } else {
+                body.classList.remove('theme-dark');
+                currentTheme = 'default';
+            }
+        }
+
+        // Показать экран
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
         }
 
         // Слушатели событий
@@ -1330,10 +1889,6 @@
         document.getElementById('budget-setter').addEventListener('input', function() {
             userBudget = parseInt(this.value);
             document.getElementById('budget-display').textContent = userBudget;
-        });
-
-        document.getElementById('filter-budget-slider').addEventListener('input', function() {
-            document.getElementById('filter-budget-value').textContent = this.value;
         });
 
         // Инициализация при загрузке
