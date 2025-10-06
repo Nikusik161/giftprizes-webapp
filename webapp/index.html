@@ -919,19 +919,19 @@
                 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-value" id="total-users">1,842</div>
+                        <div class="stat-value" id="total-users">0</div>
                         <div class="stat-label">Всего пользователей</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" id="today-online">89</div>
+                        <div class="stat-value" id="today-online">0</div>
                         <div class="stat-label">Сегодня онлайн</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" id="daily-turnover">2,847 TON</div>
+                        <div class="stat-value" id="daily-turnover">0 TON</div>
                         <div class="stat-label">Оборот за день</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" id="gifts-sold">156</div>
+                        <div class="stat-value" id="gifts-sold">0</div>
                         <div class="stat-label">Подарков куплено</div>
                     </div>
                 </div>
@@ -939,37 +939,15 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div>
                         <h4 style="margin-bottom: 10px; color: var(--accent);">🏆 Топ покупателей</h4>
-                        <div class="user-list">
-                            <div class="user-item">
-                                <div class="user-name">@crypto_king</div>
-                                <div class="user-stats">12,450 TON</div>
-                            </div>
-                            <div class="user-item">
-                                <div class="user-name">@nft_lover</div>
-                                <div class="user-stats">9,870 TON</div>
-                            </div>
-                            <div class="user-item">
-                                <div class="user-name">@gift_master</div>
-                                <div class="user-stats">8,120 TON</div>
-                            </div>
+                        <div class="user-list" id="top-buyers">
+                            <!-- Топ покупателей будет загружен -->
                         </div>
                     </div>
                     
                     <div>
                         <h4 style="margin-bottom: 10px; color: var(--accent);">🔥 Популярные подарки</h4>
-                        <div class="gift-list">
-                            <div class="gift-item">
-                                <div class="gift-name">Diamond Ring</div>
-                                <div class="gift-stats">87 продаж</div>
-                            </div>
-                            <div class="gift-item">
-                                <div class="gift-name">Eternal Rose</div>
-                                <div class="gift-stats">65 продаж</div>
-                            </div>
-                            <div class="gift-item">
-                                <div class="gift-name">Magic Potion</div>
-                                <div class="gift-stats">54 продажи</div>
-                            </div>
+                        <div class="gift-list" id="popular-gifts">
+                            <!-- Популярные подарки будут загружены -->
                         </div>
                     </div>
                 </div>
@@ -1012,19 +990,19 @@
                     <h3>📊 Статистика</h3>
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-value" id="admin-total-users">1,842</div>
+                            <div class="stat-value" id="admin-total-users">0</div>
                             <div class="stat-label">Всего пользователей</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value" id="admin-total-sales">589</div>
+                            <div class="stat-value" id="admin-total-sales">0</div>
                             <div class="stat-label">Всего продаж</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value" id="admin-total-revenue">45,672 TON</div>
+                            <div class="stat-value" id="admin-total-revenue">0 TON</div>
                             <div class="stat-label">Общий доход</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value" id="admin-active-users">89</div>
+                            <div class="stat-value" id="admin-active-users">0</div>
                             <div class="stat-label">Активных сегодня</div>
                         </div>
                     </div>
@@ -1032,7 +1010,7 @@
 
                 <div class="admin-section">
                     <h3>🏆 Топ покупателей</h3>
-                    <div class="user-list" id="top-users">
+                    <div class="user-list" id="admin-top-users">
                         <!-- Список топ пользователей -->
                     </div>
                 </div>
@@ -1059,11 +1037,11 @@
                     <h3>📈 Финансы</h3>
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-value" id="admin-today-revenue">2,345 TON</div>
+                            <div class="stat-value" id="admin-today-revenue">0 TON</div>
                             <div class="stat-label">Доход за сегодня</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value" id="admin-week-revenue">15,678 TON</div>
+                            <div class="stat-value" id="admin-week-revenue">0 TON</div>
                             <div class="stat-label">Доход за неделю</div>
                         </div>
                     </div>
@@ -1262,6 +1240,28 @@
         let realGifts = [];
         let paymentCheckInterval = null;
 
+        // Реальная статистика (изначально нули)
+        let realStats = {
+            totalUsers: 0,
+            todayOnline: 0,
+            dailyTurnover: 0,
+            giftsSold: 0,
+            totalSales: 0,
+            totalRevenue: 0,
+            todayRevenue: 0,
+            weekRevenue: 0
+        };
+
+        // Топ покупателей
+        let topBuyers = [
+            { username: '@Serafim4ik1', spent: 0, purchases: 0 },
+            { username: '@crypto_lover', spent: 0, purchases: 0 },
+            { username: '@nft_collector', spent: 0, purchases: 0 }
+        ];
+
+        // Популярные подарки
+        let popularGifts = [];
+
         // Инициализация приложения
         function initApp() {
             tg.expand();
@@ -1270,71 +1270,118 @@
             // Загружаем статус кнопок
             loadButtonStatus();
             
-            // Загружаем данные для админ панели
-            loadAdminData();
+            // Загружаем реальные данные о подарках
+            loadRealGiftsData();
             
             // Загружаем данные для продажи подарков
             loadGiftsForSale();
             
-            // Загружаем реальные данные о подарках
-            loadRealGiftsData();
+            // Загружаем реальную статистику
+            loadRealStats();
             
-            // Инициализируем живую статистику
-            setTimeout(updateLiveStats, 1000);
+            // Обновляем статистику каждые 10 секунд
+            setInterval(loadRealStats, 10000);
         }
 
-        // Функция для анимированного обновления статистики
-        function updateLiveStats() {
-            // Обновляем цифры с анимацией
-            const stats = {
-                'total-users': Math.floor(Math.random() * 2000) + 1500,
-                'today-online': Math.floor(Math.random() * 50) + 50,
-                'daily-turnover': Math.floor(Math.random() * 5000) + 2000,
-                'gifts-sold': Math.floor(Math.random() * 200) + 100
-            };
+        // Загрузка реальной статистики
+        async function loadRealStats() {
+            try {
+                // В реальном приложении здесь будет запрос к вашему API
+                // Для демонстрации имитируем получение данных
+                
+                // Получаем данные из localStorage (в реальном приложении - с сервера)
+                const savedStats = JSON.parse(localStorage.getItem('giftPrises_stats')) || realStats;
+                const savedBuyers = JSON.parse(localStorage.getItem('giftPrises_topBuyers')) || topBuyers;
+                const savedPopular = JSON.parse(localStorage.getItem('giftPrises_popularGifts')) || [];
+                
+                // Обновляем статистику
+                realStats = { ...realStats, ...savedStats };
+                topBuyers = savedBuyers;
+                popularGifts = savedPopular;
+                
+                // Обновляем отображение
+                updateStatsDisplay();
+                updateTopBuyersDisplay();
+                updatePopularGiftsDisplay();
+                
+            } catch (error) {
+                console.error('Ошибка загрузки статистики:', error);
+            }
+        }
+
+        // Обновление отображения статистики
+        function updateStatsDisplay() {
+            // Главная страница
+            animateValue(document.getElementById('total-users'), parseInt(document.getElementById('total-users').textContent) || 0, realStats.totalUsers, 1000);
+            animateValue(document.getElementById('today-online'), parseInt(document.getElementById('today-online').textContent) || 0, realStats.todayOnline, 1000);
+            animateValue(document.getElementById('gifts-sold'), parseInt(document.getElementById('gifts-sold').textContent) || 0, realStats.giftsSold, 1000);
             
-            Object.keys(stats).forEach(statId => {
-                const element = document.getElementById(statId);
-                if (element) {
-                    const currentValue = parseInt(element.textContent.replace(/[^0-9]/g, ''));
-                    animateValue(element, currentValue, stats[statId], 1000);
-                }
-            });
+            // Обновляем оборот
+            const turnoverElement = document.getElementById('daily-turnover');
+            turnoverElement.textContent = realStats.dailyTurnover + ' TON';
             
-            // Обновляем админ статистику
-            const adminStats = {
-                'admin-total-users': stats['total-users'],
-                'admin-active-users': stats['today-online'],
-                'admin-today-revenue': Math.floor(Math.random() * 3000) + 2000 + ' TON',
-                'admin-week-revenue': Math.floor(Math.random() * 20000) + 15000 + ' TON'
-            };
+            // Админ панель
+            animateValue(document.getElementById('admin-total-users'), parseInt(document.getElementById('admin-total-users').textContent) || 0, realStats.totalUsers, 1000);
+            animateValue(document.getElementById('admin-total-sales'), parseInt(document.getElementById('admin-total-sales').textContent) || 0, realStats.totalSales, 1000);
+            animateValue(document.getElementById('admin-active-users'), parseInt(document.getElementById('admin-active-users').textContent) || 0, realStats.todayOnline, 1000);
             
-            Object.keys(adminStats).forEach(statId => {
-                const element = document.getElementById(statId);
-                if (element) {
-                    if (statId.includes('revenue')) {
-                        element.textContent = adminStats[statId];
-                    } else {
-                        const currentValue = parseInt(element.textContent.replace(/[^0-9]/g, ''));
-                        animateValue(element, currentValue, parseInt(adminStats[statId]), 1000);
-                    }
-                }
-            });
+            document.getElementById('admin-total-revenue').textContent = realStats.totalRevenue + ' TON';
+            document.getElementById('admin-today-revenue').textContent = realStats.todayRevenue + ' TON';
+            document.getElementById('admin-week-revenue').textContent = realStats.weekRevenue + ' TON';
+        }
+
+        // Обновление топа покупателей
+        function updateTopBuyersDisplay() {
+            const topBuyersContainer = document.getElementById('top-buyers');
+            const adminTopUsersContainer = document.getElementById('admin-top-users');
+            
+            // Сортируем по потраченной сумме (по убыванию)
+            const sortedBuyers = [...topBuyers].sort((a, b) => b.spent - a.spent);
+            
+            const buyersHTML = sortedBuyers.map(buyer => `
+                <div class="user-item">
+                    <div class="user-name">${buyer.username}</div>
+                    <div class="user-stats">${buyer.spent} TON</div>
+                </div>
+            `).join('');
+            
+            topBuyersContainer.innerHTML = buyersHTML;
+            adminTopUsersContainer.innerHTML = buyersHTML;
+        }
+
+        // Обновление популярных подарков
+        function updatePopularGiftsDisplay() {
+            const popularGiftsContainer = document.getElementById('popular-gifts');
+            
+            if (popularGifts.length === 0) {
+                popularGiftsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 10px; opacity: 0.7;">
+                        Пока нет продаж
+                    </div>
+                `;
+                return;
+            }
+            
+            const giftsHTML = popularGifts.map(gift => `
+                <div class="gift-item">
+                    <div class="gift-name">${gift.name}</div>
+                    <div class="gift-stats">${gift.sales} продаж</div>
+                </div>
+            `).join('');
+            
+            popularGiftsContainer.innerHTML = giftsHTML;
         }
 
         // Функция анимации чисел
         function animateValue(element, start, end, duration) {
+            if (start === end) return;
+            
             let startTimestamp = null;
             const step = (timestamp) => {
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
                 const value = Math.floor(progress * (end - start) + start);
-                
-                if (element.id.includes('turnover') || element.id.includes('revenue')) {
-                    element.textContent = value.toLocaleString() + ' TON';
-                } else {
-                    element.textContent = value.toLocaleString();
-                }
+                element.textContent = value.toLocaleString();
                 
                 if (progress < 1) {
                     window.requestAnimationFrame(step);
@@ -1343,27 +1390,67 @@
             window.requestAnimationFrame(step);
         }
 
+        // Симуляция активности пользователей (для демонстрации)
+        function simulateUserActivity() {
+            // Увеличиваем количество онлайн пользователей
+            realStats.todayOnline = Math.floor(Math.random() * 50) + 10;
+            
+            // Сохраняем в localStorage
+            localStorage.setItem('giftPrises_stats', JSON.stringify(realStats));
+            
+            // Обновляем отображение
+            updateStatsDisplay();
+        }
+
+        // Функция для регистрации покупки (вызывается при успешной покупке)
+        function registerPurchase(gift, buyerUsername, amount) {
+            // Обновляем статистику
+            realStats.giftsSold++;
+            realStats.totalSales++;
+            realStats.dailyTurnover += amount;
+            realStats.totalRevenue += amount;
+            realStats.todayRevenue += amount;
+            realStats.weekRevenue += amount;
+            
+            // Обновляем топ покупателей
+            const buyerIndex = topBuyers.findIndex(b => b.username === buyerUsername);
+            if (buyerIndex !== -1) {
+                topBuyers[buyerIndex].spent += amount;
+                topBuyers[buyerIndex].purchases++;
+            } else {
+                // Добавляем нового покупателя
+                topBuyers.push({
+                    username: buyerUsername,
+                    spent: amount,
+                    purchases: 1
+                });
+            }
+            
+            // Обновляем популярные подарки
+            const giftIndex = popularGifts.findIndex(g => g.name === gift.name);
+            if (giftIndex !== -1) {
+                popularGifts[giftIndex].sales++;
+            } else {
+                popularGifts.push({
+                    name: gift.name,
+                    sales: 1
+                });
+            }
+            
+            // Сохраняем в localStorage
+            localStorage.setItem('giftPrises_stats', JSON.stringify(realStats));
+            localStorage.setItem('giftPrises_topBuyers', JSON.stringify(topBuyers));
+            localStorage.setItem('giftPrises_popularGifts', JSON.stringify(popularGifts));
+            
+            // Обновляем отображение
+            updateStatsDisplay();
+            updateTopBuyersDisplay();
+            updatePopularGiftsDisplay();
+        }
+
         // Загрузка данных для админ панели
         function loadAdminData() {
-            // Имитация загрузки данных
-            const topUsers = [
-                { name: '@john_doe', purchases: 45, spent: '8,900 TON' },
-                { name: '@alice_smith', purchases: 32, spent: '6,450 TON' },
-                { name: '@bob_wilson', purchases: 28, spent: '5,200 TON' },
-                { name: '@emma_jones', purchases: 25, spent: '4,800 TON' },
-                { name: '@mike_brown', purchases: 22, spent: '4,100 TON' }
-            ];
-            
-            const topUsersContainer = document.getElementById('top-users');
-            topUsersContainer.innerHTML = topUsers.map(user => `
-                <div class="user-item">
-                    <div class="user-info">
-                        <div class="user-name">${user.name}</div>
-                        <div class="user-stats">${user.purchases} покупок</div>
-                    </div>
-                    <div class="user-stats">${user.spent}</div>
-                </div>
-            `).join('');
+            // Данные уже загружаются в loadRealStats()
         }
 
         // Загрузка статуса кнопок
@@ -1378,7 +1465,7 @@
             DISABLED_BUTTONS[buttonType] = !DISABLED_BUTTONS[buttonType];
             updateButtonAppearance(buttonType, DISABLED_BUTTONS[buttonType]);
             
-            // Сохраняем статус (в реальном приложении - отправляем на сервер)
+            // Сохраняем статус
             tg.sendData(JSON.stringify({
                 action: 'toggle_button',
                 button_type: buttonType,
@@ -1508,8 +1595,8 @@
             ];
             
             realGifts = giftNames.map((name, index) => {
-                const basePrice = Math.floor(Math.random() * 80) + 20; // Увеличили диапазон цен
-                const totalPrice = basePrice * 1.05; // +5% комиссия
+                const basePrice = Math.floor(Math.random() * 80) + 20;
+                const totalPrice = basePrice * 1.05;
                 
                 return {
                     id: `gift_${index + 1}`,
@@ -1525,11 +1612,9 @@
                     },
                     is_transferable: true,
                     rarity: ['common', 'rare', 'epic', 'legendary'][Math.floor(Math.random() * 4)],
-                    sales_count: Math.floor(Math.random() * 100) + 1 // Количество продаж
+                    sales_count: Math.floor(Math.random() * 100) + 1
                 };
             });
-            
-            console.log(`Загружено ${realGifts.length} подарков`);
         }
 
         // Загрузка реальных подарков
@@ -1582,14 +1667,12 @@
             
             showLoading(true, "🔍 Оцениваем подарок на маркетплейсах...");
             
-            // Имитация оценки подарка
             setTimeout(() => {
                 showLoading(false);
                 
-                // Генерация случайной оценки
                 const marketPrice = Math.floor(Math.random() * 100) + 20;
-                const ourCommission = marketPrice * 0.05; // 5% комиссия
-                const marketCommission = marketPrice * 0.1; // 10% комиссия маркетплейса
+                const ourCommission = marketPrice * 0.05;
+                const marketCommission = marketPrice * 0.1;
                 const finalPrice = marketPrice - ourCommission - marketCommission;
                 
                 const resultDiv = document.getElementById('evaluation-result');
@@ -1633,7 +1716,6 @@
         function updatePurchaseStep(step) {
             currentPurchaseStep = step;
             
-            // Обновляем индикатор шагов
             document.querySelectorAll('.step').forEach((stepEl, index) => {
                 if (index + 1 <= step) {
                     stepEl.classList.add('active');
@@ -1642,7 +1724,6 @@
                 }
             });
             
-            // Обновляем контент
             const content = document.getElementById('purchase-content');
             switch(step) {
                 case 1:
@@ -1731,11 +1812,14 @@
                         </div>
                     `;
                     
-                    // Запускаем проверку оплаты
                     startPaymentChecking();
                     break;
                     
                 case 4:
+                    // Регистрируем покупку
+                    const buyerUsername = recipientUsername || '@current_user';
+                    registerPurchase(selectedGift, buyerUsername, selectedGift.total_price);
+                    
                     content.innerHTML = `
                         <div style="text-align: center; padding: 30px 0;">
                             <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
@@ -1752,7 +1836,6 @@
                         </div>
                     `;
                     
-                    // Останавливаем проверку оплаты
                     stopPaymentChecking();
                     break;
             }
@@ -1765,13 +1848,11 @@
             const statusDiv = document.getElementById('username-status');
             const button = document.getElementById('recipient-btn');
             
-            // Показываем статус
             statusDiv.style.display = 'block';
             statusDiv.className = 'status-message status-info';
             statusDiv.innerHTML = '🔍 Проверяем username...';
             button.disabled = true;
             
-            // Проверяем username
             const isValid = await validateUsername(username);
             
             if (isValid) {
@@ -1791,18 +1872,15 @@
         // Валидация username
         async function validateUsername(username) {
             if (!username) {
-                return true; // Пустой username - подарок себе
+                return true;
             }
             
             if (!username.startsWith('@')) {
                 return false;
             }
             
-            // В реальном приложении здесь будет запрос к Telegram API
-            // Для демонстрации используем имитацию
             return new Promise((resolve) => {
                 setTimeout(() => {
-                    // Имитация проверки - считаем валидными usernames длиной более 5 символов
                     resolve(username.length >= 5);
                 }, 1500);
             });
@@ -1835,7 +1913,7 @@
 
         // Запуск проверки оплаты
         function startPaymentChecking() {
-            paymentCheckInterval = setInterval(checkPaymentStatus, 10000); // Проверка каждые 10 секунд
+            paymentCheckInterval = setInterval(checkPaymentStatus, 10000);
         }
 
         // Остановка проверки оплаты
@@ -1855,14 +1933,12 @@
             statusDiv.innerHTML = '🔍 Проверяем статус оплаты...';
             button.disabled = true;
             
-            // Имитация проверки оплаты
             const isPaid = await simulatePaymentCheck();
             
             if (isPaid) {
                 statusDiv.className = 'status-message status-success';
                 statusDiv.innerHTML = '✅ Оплата подтверждена! Отправляем подарок...';
                 
-                // Имитация процесса отправки подарка
                 setTimeout(() => {
                     updatePurchaseStep(4);
                 }, 2000);
@@ -1877,8 +1953,6 @@
         async function simulatePaymentCheck() {
             return new Promise((resolve) => {
                 setTimeout(() => {
-                    // В реальном приложении здесь будет запрос к TON API
-                    // Для демонстрации 30% шанс что оплата прошла
                     resolve(Math.random() < 0.3);
                 }, 2000);
             });
@@ -2061,11 +2135,11 @@
             document.getElementById('budget-display').textContent = userBudget;
         });
 
-        // Запуск обновления статистики каждые 30 секунд
-        setInterval(updateLiveStats, 30000);
-
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', initApp);
+
+        // Симуляция активности пользователей (для демонстрации)
+        setInterval(simulateUserActivity, 30000);
     </script>
 </body>
 </html>
