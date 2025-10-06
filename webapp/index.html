@@ -78,17 +78,18 @@
             color: var(--text);
             cursor: pointer;
             backdrop-filter: blur(10px);
-            transition: var(--transition);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
             animation: pulse 2s infinite;
+            transform-origin: center;
         }
 
         .theme-switcher:hover {
             transform: rotate(180deg) scale(1.1);
-            animation: none;
+            animation: rotate 1s ease-in-out;
         }
 
         .logo {
@@ -781,6 +782,82 @@
             border: 3px solid rgba(255,255,255,0.2);
         }
 
+        /* Пакеты подарков */
+        .package-card {
+            background: linear-gradient(135deg, var(--card-bg), rgba(255,255,255,0.15));
+            border-radius: 16px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .package-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .package-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .package-price {
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .package-gifts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .package-gift-item {
+            text-align: center;
+            background: rgba(255,255,255,0.05);
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .package-gift-image {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 5px;
+        }
+
+        .package-gift-name {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .package-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 10px;
+        }
+
         /* Анимации */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -836,8 +913,9 @@
         }
 
         @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(90deg) scale(1.1); }
+            100% { transform: rotate(180deg) scale(1.1); }
         }
 
         @keyframes zoomIn {
@@ -889,8 +967,8 @@
                 
                 <div class="nav-card" onclick="showScreen('search-screen')" id="search-btn">
                     <div class="nav-icon">🔍</div>
-                    <div class="nav-title">Поиск</div>
-                    <div class="nav-desc">Найди идеальный подарок</div>
+                    <div class="nav-title">Умный поиск</div>
+                    <div class="nav-desc">Найди идеальные подарки</div>
                 </div>
                 
                 <div class="nav-card" onclick="showScreen('budget-screen')" id="budget-btn">
@@ -956,7 +1034,7 @@
             <div class="features">
                 <div class="feature">
                     <span class="feature-icon">⚡</span>
-                    Мгновенная доставка NFT подарков в Telegram
+                    Умный подбор NFT подарков по бюджету
                 </div>
                 <div class="feature">
                     <span class="feature-icon">🎨</span>
@@ -964,7 +1042,7 @@
                 </div>
                 <div class="feature">
                     <span class="feature-icon">💫</span>
-                    Продажа и оценка ваших NFT подарков
+                    Пакеты подарков для максимальной выгоды
                 </div>
                 <div class="feature">
                     <span class="feature-icon">🛡️</span>
@@ -1129,18 +1207,23 @@
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             
-            <h2 style="text-align: center; margin-bottom: 20px;">🔍 Поиск NFT подарков</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">🔍 Умный поиск NFT подарков</h2>
             
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="🎭 Введите название модели..." id="search-input">
-                <input type="text" class="search-input" placeholder="🌄 Введите фон (опционально)..." id="backdrop-input">
-                <input type="text" class="search-input" placeholder="✨ Введите узор (опционально)..." id="symbol-input">
                 
-                <div class="budget-value">💰 Бюджет: <span id="budget-amount">50</span> TON</div>
-                <input type="range" class="budget-slider" min="10" max="200" value="50" id="budget-slider">
+                <div class="budget-value">💰 Бюджет: <span id="budget-amount">500</span> TON</div>
+                <input type="range" class="budget-slider" min="1" max="100000" value="500" id="budget-slider">
                 
-                <button class="action-btn" onclick="performSearch()" style="width: 100%;">
-                    🔍 Найти NFT подарки
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 15px 0;">
+                    <button class="action-btn secondary" onclick="setBudget(100)">100 TON</button>
+                    <button class="action-btn secondary" onclick="setBudget(500)">500 TON</button>
+                    <button class="action-btn secondary" onclick="setBudget(1000)">1K TON</button>
+                    <button class="action-btn secondary" onclick="setBudget(5000)">5K TON</button>
+                </div>
+                
+                <button class="action-btn" onclick="performSmartSearch()" style="width: 100%;">
+                    🧠 Найти умные предложения
                 </button>
 
                 <button class="action-btn secondary" onclick="clearSearch()" style="width: 100%; margin-top: 10px;">
@@ -1163,14 +1246,17 @@
             
             <div class="search-container">
                 <div class="budget-value" style="font-size: 2rem; color: var(--accent);">
-                    <span id="budget-display">50</span> TON
+                    <span id="budget-display">500</span> TON
                 </div>
-                <input type="range" class="budget-slider" min="10" max="200" value="50" id="budget-setter">
+                <input type="range" class="budget-slider" min="1" max="100000" value="500" id="budget-setter">
                 
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px;">
-                    <button class="action-btn secondary" onclick="setBudget(30)">30 TON</button>
-                    <button class="action-btn secondary" onclick="setBudget(50)">50 TON</button>
                     <button class="action-btn secondary" onclick="setBudget(100)">100 TON</button>
+                    <button class="action-btn secondary" onclick="setBudget(500)">500 TON</button>
+                    <button class="action-btn secondary" onclick="setBudget(1000)">1K TON</button>
+                    <button class="action-btn secondary" onclick="setBudget(5000)">5K TON</button>
+                    <button class="action-btn secondary" onclick="setBudget(10000)">10K TON</button>
+                    <button class="action-btn secondary" onclick="setBudget(50000)">50K TON</button>
                 </div>
                 
                 <button class="action-btn" onclick="saveBudget()" style="width: 100%; margin-top: 20px;">
@@ -1220,168 +1306,6 @@
     </div>
 
     <script>
-        class GiftPrisesAPI {
-    constructor() {
-        this.baseURL = window.location.origin;
-    }
-    
-    async request(endpoint, data = {}) {
-        try {
-            const response = await fetch(`${this.baseURL}/api/${endpoint}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            return await response.json();
-        } catch (error) {
-            console.error('API Request failed:', error);
-            return this.getFallbackResponse(endpoint);
-        }
-    }
-    
-    getFallbackResponse(endpoint) {
-        // Fallback данные для оффлайн режима
-        const fallbackData = {
-            'search': this.generateFallbackGifts(10),
-            'gifts': this.generateFallbackGifts(20),
-            'stats': {
-                totalUsers: 1234,
-                todayOnline: 89,
-                dailyTurnover: 4567.89,
-                giftsSold: 567
-            }
-        };
-        
-        return { success: true, data: fallbackData[endpoint] || {} };
-    }
-    
-    generateFallbackGifts(count) {
-        const giftNames = [
-            "Artisan Brick", "Astral Shard", "B-Day Candle", "Berry Box", "Big Year",
-            "Bonded Ring", "Bow Tie", "Bunny Milffin", "Candy Cane", "Clover Pin"
-        ];
-        
-        return Array.from({length: count}, (_, i) => ({
-            id: `fallback_${i}`,
-            name: giftNames[i % giftNames.length],
-            price: 20 + (i * 5),
-            total_price: 20 + (i * 5) * 1.05,
-            image_url: null,
-            market: ['Portals', 'GetGems', 'TON Diamonds'][i % 3],
-            rarity: ['common', 'rare', 'epic', 'legendary'][i % 4],
-            attributes: {
-                backdrop: ['Звездный', 'Городской', 'Природный'][i % 3],
-                symbol: ['Звезды', 'Цветы', 'Геометрия'][i % 3]
-            }
-        }));
-    }
-    
-    // Основные методы API
-    async searchGifts(filters) {
-        return await this.request('search', filters);
-    }
-    
-    async getAllGifts() {
-        return await this.request('gifts');
-    }
-    
-    async getStats() {
-        return await this.request('stats');
-    }
-    
-    async purchaseGift(giftId, recipient) {
-        return await this.request('purchase', { giftId, recipient });
-    }
-    
-    async checkPayment(purchaseId) {
-        return await this.request('check-payment', { purchaseId });
-    }
-}
-
-// Инициализация API
-const api = new GiftPrisesAPI();
-
-// Интеграция с существующим кодом
-async function loadRealGiftsData() {
-    showLoading(true, "Загружаем актуальные подарки...");
-    
-    try {
-        const response = await api.getAllGifts();
-        if (response.success) {
-            window.realGifts = response.data;
-            displayRealGifts(window.realGifts);
-        }
-    } catch (error) {
-        console.error('Failed to load gifts:', error);
-        showStatusMessage('Используем локальные данные', 'warning');
-    } finally {
-        showLoading(false);
-    }
-}
-
-async function performSearch() {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
-    const budget = window.userBudget || 50;
-    
-    showLoading(true, "Ищем подарки...");
-    
-    try {
-        const response = await api.searchGifts({
-            search_term: searchTerm,
-            max_price: budget,
-            min_price: 10
-        });
-        
-        if (response.success) {
-            displaySearchResults(response.data);
-        }
-    } catch (error) {
-        console.error('Search failed:', error);
-        // Используем локальную фильтрацию как fallback
-        const results = window.realGifts.filter(gift => {
-            const matchesSearch = !searchTerm || gift.name.toLowerCase().includes(searchTerm);
-            const matchesBudget = gift.total_price <= budget;
-            return matchesSearch && matchesBudget;
-        });
-        displaySearchResults(results);
-    } finally {
-        showLoading(false);
-    }
-}
-
-// Обновляем существующие функции
-function initApp() {
-    tg.expand();
-    tg.enableClosingConfirmation();
-    
-    // Загружаем данные
-    loadRealGiftsData();
-    loadRealStats();
-    
-    // Обновляем статистику каждые 30 секунд
-    setInterval(loadRealStats, 30000);
-}
-
-async function loadRealStats() {
-    try {
-        const response = await api.getStats();
-        if (response.success) {
-            window.realStats = response.data;
-            updateStatsDisplay();
-        }
-    } catch (error) {
-        console.error('Failed to load stats:', error);
-        // Используем локальные данные
-        simulateUserActivity();
-    }
-}
         // Конфигурация
         const DISABLED_BUTTONS = {
             'search': false,
@@ -1394,7 +1318,7 @@ async function loadRealStats() {
         let tg = window.Telegram.WebApp;
         let currentTheme = 'default';
         let selectedGift = null;
-        let userBudget = 50;
+        let userBudget = 500;
         let currentSort = 'price_asc';
         let currentPurchaseStep = 1;
         let recipientUsername = '';
@@ -1402,7 +1326,7 @@ async function loadRealStats() {
         let realGifts = [];
         let paymentCheckInterval = null;
 
-        // Реальная статистика (изначально нули)
+        // Реальная статистика
         let realStats = {
             totalUsers: 0,
             todayOnline: 0,
@@ -1415,14 +1339,693 @@ async function loadRealStats() {
         };
 
         // Топ покупателей
-        let topBuyers = [
-            { username: '@Serafim4ik1', spent: 0, purchases: 0 },
-            { username: '@crypto_lover', spent: 0, purchases: 0 },
-            { username: '@nft_collector', spent: 0, purchases: 0 }
-        ];
+        let topBuyers = [];
 
         // Популярные подарки
         let popularGifts = [];
+
+        // Система статистики
+        class StatisticsManager {
+            constructor() {
+                this.userId = tg.initDataUnsafe.user?.id || `user_${Date.now()}`;
+                this.username = tg.initDataUnsafe.user?.username || 'Аноним';
+                this.registerActivity();
+            }
+            
+            registerActivity() {
+                const activityData = {
+                    action: 'user_activity',
+                    user_id: this.userId,
+                    username: this.username
+                };
+                
+                tg.sendData(JSON.stringify(activityData));
+                
+                const userKey = `user_${this.userId}`;
+                const userData = {
+                    id: this.userId,
+                    username: this.username,
+                    lastSeen: Date.now()
+                };
+                localStorage.setItem(userKey, JSON.stringify(userData));
+                
+                this.updateOnlineStatus();
+            }
+            
+            updateOnlineStatus() {
+                const onlineKey = 'online_users';
+                let onlineUsers = JSON.parse(localStorage.getItem(onlineKey)) || {};
+                
+                onlineUsers[this.userId] = Date.now();
+                
+                const now = Date.now();
+                Object.keys(onlineUsers).forEach(userId => {
+                    if (now - onlineUsers[userId] > 5 * 60 * 1000) {
+                        delete onlineUsers[userId];
+                    }
+                });
+                
+                localStorage.setItem(onlineKey, JSON.stringify(onlineUsers));
+            }
+            
+            registerPurchase(gift, amount) {
+                const purchaseData = {
+                    action: 'purchase',
+                    user_id: this.userId,
+                    username: this.username,
+                    gift_id: gift.id,
+                    gift_name: gift.name,
+                    amount: amount,
+                    timestamp: Date.now()
+                };
+                
+                tg.sendData(JSON.stringify(purchaseData));
+                this.savePurchaseLocally(purchaseData);
+            }
+            
+            savePurchaseLocally(purchaseData) {
+                const purchasesKey = 'purchases';
+                let purchases = JSON.parse(localStorage.getItem(purchasesKey)) || [];
+                purchases.push(purchaseData);
+                localStorage.setItem(purchasesKey, JSON.stringify(purchases));
+                
+                this.updatePopularGifts(purchaseData.gift_name);
+            }
+            
+            updatePopularGifts(giftName) {
+                const popularKey = 'popular_gifts';
+                let popularGifts = JSON.parse(localStorage.getItem(popularKey)) || {};
+                
+                if (!popularGifts[giftName]) {
+                    popularGifts[giftName] = 0;
+                }
+                popularGifts[giftName]++;
+                
+                localStorage.setItem(popularKey, JSON.stringify(popularGifts));
+            }
+            
+            getStatistics() {
+                const usersKey = 'users';
+                const onlineKey = 'online_users';
+                const purchasesKey = 'purchases';
+                
+                let users = JSON.parse(localStorage.getItem(usersKey)) || {};
+                let onlineUsers = JSON.parse(localStorage.getItem(onlineKey)) || {};
+                let purchases = JSON.parse(localStorage.getItem(purchasesKey)) || [];
+                
+                const totalUsers = Object.keys(users).length;
+                const now = Date.now();
+                const todayOnline = Object.values(onlineUsers).filter(timestamp => 
+                    now - timestamp < 5 * 60 * 1000
+                ).length;
+                
+                const today = new Date().toDateString();
+                const dailyTurnover = purchases
+                    .filter(p => new Date(p.timestamp).toDateString() === today)
+                    .reduce((sum, p) => sum + p.amount, 0);
+                
+                const giftsSold = purchases.length;
+                
+                return {
+                    totalUsers: Math.max(totalUsers, Object.keys(onlineUsers).length),
+                    todayOnline: todayOnline,
+                    dailyTurnover: Math.round(dailyTurnover * 100) / 100,
+                    giftsSold: giftsSold,
+                    totalRevenue: Math.round(purchases.reduce((sum, p) => sum + p.amount, 0) * 100) / 100
+                };
+            }
+            
+            getTopBuyers() {
+                const purchasesKey = 'purchases';
+                let purchases = JSON.parse(localStorage.getItem(purchasesKey)) || [];
+                
+                const buyerStats = {};
+                
+                purchases.forEach(purchase => {
+                    if (!buyerStats[purchase.user_id]) {
+                        buyerStats[purchase.user_id] = {
+                            username: purchase.username,
+                            spent: 0,
+                            purchases: 0
+                        };
+                    }
+                    
+                    buyerStats[purchase.user_id].spent += purchase.amount;
+                    buyerStats[purchase.user_id].purchases++;
+                });
+                
+                return Object.values(buyerStats)
+                    .sort((a, b) => b.spent - a.spent)
+                    .slice(0, 10);
+            }
+            
+            getPopularGifts() {
+                const popularKey = 'popular_gifts';
+                let popularGifts = JSON.parse(localStorage.getItem(popularKey)) || {};
+                
+                return Object.entries(popularGifts)
+                    .map(([name, sales]) => ({ name, sales }))
+                    .sort((a, b) => b.sales - a.sales)
+                    .slice(0, 10);
+            }
+        }
+
+        // Инициализируем менеджер статистики
+        const statsManager = new StatisticsManager();
+
+        // API для работы с подарками
+        class GiftPrisesAPI {
+            constructor() {
+                this.baseURL = window.location.origin;
+            }
+            
+            async request(endpoint, data = {}) {
+                try {
+                    const response = await fetch(`${this.baseURL}/api/${endpoint}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    return await response.json();
+                } catch (error) {
+                    console.error('API Request failed:', error);
+                    return this.getFallbackResponse(endpoint);
+                }
+            }
+            
+            getFallbackResponse(endpoint) {
+                const fallbackData = {
+                    'search': this.generateFallbackGifts(10),
+                    'gifts': this.generateFallbackGifts(20),
+                    'stats': {
+                        totalUsers: 1234,
+                        todayOnline: 89,
+                        dailyTurnover: 4567.89,
+                        giftsSold: 567
+                    }
+                };
+                
+                return { success: true, data: fallbackData[endpoint] || {} };
+            }
+            
+            generateFallbackGifts(count) {
+                const giftNames = [
+                    "Artisan Brick", "Astral Shard", "B-Day Candle", "Berry Box", "Big Year",
+                    "Bonded Ring", "Bow Tie", "Bunny Milffin", "Candy Cane", "Clover Pin"
+                ];
+                
+                return Array.from({length: count}, (_, i) => ({
+                    id: `fallback_${i}`,
+                    name: giftNames[i % giftNames.length],
+                    price: 20 + (i * 5),
+                    total_price: 20 + (i * 5) * 1.05,
+                    image_url: null,
+                    market: ['Portals', 'GetGems', 'TON Diamonds'][i % 3],
+                    rarity: ['common', 'rare', 'epic', 'legendary'][i % 4],
+                    attributes: {
+                        backdrop: ['Звездный', 'Городской', 'Природный'][i % 3],
+                        symbol: ['Звезды', 'Цветы', 'Геометрия'][i % 3]
+                    }
+                }));
+            }
+            
+            async searchGifts(filters) {
+                return await this.request('search', filters);
+            }
+            
+            async getAllGifts() {
+                return await this.request('gifts');
+            }
+            
+            async getStats() {
+                return await this.request('stats');
+            }
+            
+            async purchaseGift(giftId, recipient) {
+                return await this.request('purchase', { giftId, recipient });
+            }
+            
+            async checkPayment(purchaseId) {
+                return await this.request('check-payment', { purchaseId });
+            }
+        }
+
+        const api = new GiftPrisesAPI();
+
+        // Умный поиск подарков
+        async function performSmartSearch() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const budget = userBudget;
+            
+            showLoading(true, "🧠 Ищем умные предложения...");
+            
+            try {
+                const response = await api.searchGifts({
+                    search_term: searchTerm,
+                    max_price: budget,
+                    min_price: 1
+                });
+                
+                let gifts = response.success ? response.data : [];
+                
+                // Если нет реальных данных, используем fallback
+                if (gifts.length === 0) {
+                    gifts = generateSmartGifts(budget, searchTerm);
+                }
+                
+                // Сортируем и фильтруем подарки
+                const sortedGifts = sortGiftsByValue(gifts);
+                
+                // Генерируем умные предложения
+                const smartOffers = generateSmartOffers(sortedGifts, budget);
+                
+                displaySmartResults(smartOffers);
+                
+            } catch (error) {
+                console.error('Search failed:', error);
+                const gifts = generateSmartGifts(budget, searchTerm);
+                const sortedGifts = sortGiftsByValue(gifts);
+                const smartOffers = generateSmartOffers(sortedGifts, budget);
+                displaySmartResults(smartOffers);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Генерация умных подарков
+        function generateSmartGifts(budget, searchTerm = '') {
+            const allGiftNames = [
+                "Artisan Brick", "Astral Shard", "B-Day Candle", "Berry Box", "Big Year",
+                "Bonded Ring", "Bow Tie", "Bunny Milffin", "Candy Cane", "Clover Pin",
+                "Cookie Heart", "Crystal Ball", "Cupid Charm", "Desk Calendar", "Diamond Ring",
+                "Durov's Cap", "Easter Egg", "Electric Skull", "Eternal Candle", "Eternal Rose"
+            ];
+            
+            // Фильтруем по поисковому запросу
+            const filteredNames = searchTerm ? 
+                allGiftNames.filter(name => name.toLowerCase().includes(searchTerm)) : 
+                allGiftNames;
+            
+            return filteredNames.map((name, index) => {
+                // Генерируем реалистичные цены в зависимости от бюджета
+                let basePrice;
+                if (budget <= 100) {
+                    basePrice = Math.random() * 80 + 20;
+                } else if (budget <= 1000) {
+                    basePrice = Math.random() * 400 + 100;
+                } else if (budget <= 10000) {
+                    basePrice = Math.random() * 4000 + 1000;
+                } else {
+                    basePrice = Math.random() * 40000 + 10000;
+                }
+                
+                const totalPrice = basePrice * 1.05;
+                
+                return {
+                    id: `gift_${index}`,
+                    name: name,
+                    price: basePrice,
+                    total_price: Math.round(totalPrice * 100) / 100,
+                    image_url: `https://api.portals.io/gifts/${index}/image`,
+                    market: ['Portals', 'GetGems', 'TON Diamonds'][index % 3],
+                    attributes: {
+                        model: name,
+                        backdrop: ['Звездный', 'Городской', 'Природный', 'Абстрактный'][index % 4],
+                        symbol: ['Звезды', 'Цветы', 'Геометрия', 'Полосы'][index % 4]
+                    },
+                    is_transferable: true,
+                    rarity: ['common', 'rare', 'epic', 'legendary'][index % 4],
+                    sales_count: Math.floor(Math.random() * 100) + 1,
+                    price_trend: Math.random() > 0.5 ? 'up' : 'down',
+                    liquidity: Math.random() * 100
+                };
+            });
+        }
+
+        // Сортировка подарков по ценности
+        function sortGiftsByValue(gifts) {
+            return gifts.sort((a, b) => {
+                // Оцениваем ценность подарка (чем выше - тем лучше)
+                const valueA = calculateGiftValue(a);
+                const valueB = calculateGiftValue(b);
+                return valueB - valueA;
+            });
+        }
+
+        // Расчет ценности подарка
+        function calculateGiftValue(gift) {
+            let value = 0;
+            
+            // Редкость
+            const rarityMultiplier = {
+                'common': 1,
+                'rare': 1.5,
+                'epic': 2,
+                'legendary': 3
+            };
+            
+            value += rarityMultiplier[gift.rarity] * 10;
+            
+            // Ликвидность
+            value += gift.liquidity * 0.5;
+            
+            // Тренд цены
+            if (gift.price_trend === 'up') value += 15;
+            
+            // Популярность
+            value += Math.log(gift.sales_count + 1) * 5;
+            
+            // Соотношение цена/качество (чем дешевле относительно редкости - тем лучше)
+            const priceQuality = rarityMultiplier[gift.rarity] / (gift.total_price / 100);
+            value += priceQuality * 20;
+            
+            return value;
+        }
+
+        // Генерация умных предложений
+        function generateSmartOffers(gifts, budget) {
+            const offers = [];
+            
+            // 1. Одиночные подарки (лучшие по ценности)
+            const singleGifts = gifts
+                .filter(g => g.total_price <= budget)
+                .slice(0, 3);
+            
+            singleGifts.forEach(gift => {
+                offers.push({
+                    type: 'single',
+                    title: `🎁 ${gift.name}`,
+                    gifts: [gift],
+                    total_price: gift.total_price,
+                    savings: 0,
+                    value_score: calculateGiftValue(gift),
+                    description: getGiftDescription(gift)
+                });
+            });
+            
+            // 2. Пакеты подарков (для больших бюджетов)
+            if (budget >= 1000) {
+                const packages = generateGiftPackages(gifts, budget);
+                offers.push(...packages);
+            }
+            
+            // 3. Лучшее предложение (самое выгодное)
+            if (offers.length > 0) {
+                const bestOffer = offers.reduce((best, current) => 
+                    (current.value_score / current.total_price) > (best.value_score / best.total_price) ? current : best
+                );
+                bestOffer.type = 'best';
+                bestOffer.title = `🏆 ЛУЧШЕЕ: ${bestOffer.title}`;
+            }
+            
+            return offers.sort((a, b) => (b.value_score / b.total_price) - (a.value_score / a.total_price));
+        }
+
+        // Генерация пакетов подарков
+        function generateGiftPackages(gifts, budget) {
+            const packages = [];
+            const availableGifts = gifts.filter(g => g.total_price <= budget * 0.3);
+            
+            if (availableGifts.length < 3) return packages;
+            
+            // Пакет "Разнообразие" - разные типы подарков
+            const diversityPackage = [];
+            let diversityPrice = 0;
+            const usedTypes = new Set();
+            
+            availableGifts.sort(() => Math.random() - 0.5).forEach(gift => {
+                if (diversityPackage.length < 5 && diversityPrice + gift.total_price <= budget * 0.8) {
+                    if (!usedTypes.has(gift.rarity)) {
+                        diversityPackage.push(gift);
+                        diversityPrice += gift.total_price;
+                        usedTypes.add(gift.rarity);
+                    }
+                }
+            });
+            
+            if (diversityPackage.length >= 3) {
+                packages.push({
+                    type: 'package',
+                    title: '🎨 Пакет "Разнообразие"',
+                    gifts: diversityPackage,
+                    total_price: Math.round(diversityPrice * 100) / 100,
+                    savings: Math.round((diversityPrice * 0.1) * 100) / 100,
+                    value_score: diversityPackage.reduce((sum, g) => sum + calculateGiftValue(g), 0),
+                    description: `Набор из ${diversityPackage.length} уникальных подарков разных типов`
+                });
+            }
+            
+            // Пакет "Инвестиционный" - подарки с растущей ценой
+            const investmentGifts = availableGifts
+                .filter(g => g.price_trend === 'up' && g.liquidity > 50)
+                .slice(0, 4);
+                
+            if (investmentGifts.length >= 2) {
+                const investmentPrice = investmentGifts.reduce((sum, g) => sum + g.total_price, 0);
+                packages.push({
+                    type: 'package',
+                    title: '📈 Пакет "Инвестиционный"',
+                    gifts: investmentGifts,
+                    total_price: Math.round(investmentPrice * 100) / 100,
+                    savings: Math.round((investmentPrice * 0.15) * 100) / 100,
+                    value_score: investmentGifts.reduce((sum, g) => sum + calculateGiftValue(g), 0),
+                    description: `Подарки с растущей стоимостью и высокой ликвидностью`
+                });
+            }
+            
+            return packages;
+        }
+
+        // Описание подарка
+        function getGiftDescription(gift) {
+            const descriptions = {
+                'common': 'Хороший выбор для начала коллекции',
+                'rare': 'Популярный подарок с стабильной ценой',
+                'epic': 'Эксклюзивный подарок с потенциалом роста',
+                'legendary': 'Редкий коллекционный экземпляр'
+            };
+            
+            const trend = gift.price_trend === 'up' ? '📈 Растет в цене' : '📉 Стабильная цена';
+            const liquidity = gift.liquidity > 70 ? '🚀 Высокая ликвидность' : '💧 Средняя ликвидность';
+            
+            return `${descriptions[gift.rarity]}. ${trend}. ${liquidity}`;
+        }
+
+        // Отображение умных результатов
+        function displaySmartResults(offers) {
+            const container = document.getElementById('search-results');
+            container.innerHTML = '';
+            
+            if (offers.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; opacity: 0.7;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">😔</div>
+                        <h3>Ничего не найдено</h3>
+                        <p>Попробуйте изменить бюджет или параметры поиска</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            offers.forEach((offer, index) => {
+                const card = document.createElement('div');
+                card.className = offer.type === 'package' ? 'package-card' : 'result-card';
+                
+                if (offer.type === 'package') {
+                    card.innerHTML = `
+                        <div class="package-badge">ПАКЕТ</div>
+                        <div class="package-header">
+                            <div class="package-title">${offer.title}</div>
+                            <div class="package-price">${offer.total_price} TON</div>
+                        </div>
+                        <div class="result-details">${offer.description}</div>
+                        
+                        <div class="package-gifts">
+                            ${offer.gifts.map(gift => `
+                                <div class="package-gift-item">
+                                    <img src="${gift.image_url}" alt="${gift.name}" class="package-gift-image"
+                                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iNiIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIi8+Cjx0ZXh0IHg9IjIwIiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiPj7inaQ8L3RleHQ+Cjwvc3ZnPg=='">
+                                    <div class="package-gift-name">${gift.name}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="package-stats">
+                            <span>🎯 Ценность: ${Math.round(offer.value_score)}</span>
+                            <span>💰 Экономия: ${offer.savings} TON</span>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn secondary" onclick="showPackageDetails(${index})">
+                                ℹ️ Подробнее
+                            </button>
+                            <button class="action-btn" onclick="selectPackage(${index})">
+                                🎁 Выбрать пакет
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    const gift = offer.gifts[0];
+                    card.innerHTML = `
+                        <div class="result-header">
+                            <div class="result-model">${offer.title}</div>
+                            <div class="result-price">${offer.total_price} TON</div>
+                        </div>
+                        <div class="result-details">
+                            ${offer.description}<br>
+                            🎯 Ценность: ${Math.round(offer.value_score)} | ${gift.market}
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn secondary" onclick="showGiftDetails('${gift.id}')">
+                                ℹ️ Подробнее
+                            </button>
+                            <button class="action-btn" onclick="selectGift(${JSON.stringify(gift).replace(/"/g, '&quot;')})">
+                                🎁 Выбрать
+                            </button>
+                        </div>
+                    `;
+                }
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Показать детали пакета
+        function showPackageDetails(packageIndex) {
+            // В реальном приложении можно показать модальное окно с деталями
+            showStatusMessage('Детальная информация о пакете подарков', 'info');
+        }
+
+        // Выбор пакета
+        function selectPackage(packageIndex) {
+            showStatusMessage('Функция выбора пакета в разработке', 'info');
+        }
+
+        // Инициализация приложения
+        function initApp() {
+            tg.expand();
+            tg.enableClosingConfirmation();
+            
+            document.body.classList.add('theme-transition');
+            
+            loadButtonStatus();
+            loadRealGiftsData();
+            loadGiftsForSale();
+            loadRealStats();
+            
+            setInterval(loadRealStats, 10000);
+            setInterval(() => statsManager.updateOnlineStatus(), 60000);
+        }
+
+        // Остальные функции остаются без изменений
+        function loadRealStats() {
+            const stats = statsManager.getStatistics();
+            const topBuyers = statsManager.getTopBuyers();
+            const popularGifts = statsManager.getPopularGifts();
+            
+            realStats = { ...realStats, ...stats };
+            window.topBuyers = topBuyers;
+            window.popularGifts = popularGifts;
+            
+            updateStatsDisplay();
+            updateTopBuyersDisplay();
+            updatePopularGiftsDisplay();
+        }
+
+        function updateStatsDisplay() {
+            animateValue(document.getElementById('total-users'), parseInt(document.getElementById('total-users').textContent) || 0, realStats.totalUsers, 1000);
+            animateValue(document.getElementById('today-online'), parseInt(document.getElementById('today-online').textContent) || 0, realStats.todayOnline, 1000);
+            animateValue(document.getElementById('gifts-sold'), parseInt(document.getElementById('gifts-sold').textContent) || 0, realStats.giftsSold, 1000);
+            
+            const turnoverElement = document.getElementById('daily-turnover');
+            turnoverElement.textContent = realStats.dailyTurnover + ' TON';
+            
+            animateValue(document.getElementById('admin-total-users'), parseInt(document.getElementById('admin-total-users').textContent) || 0, realStats.totalUsers, 1000);
+            animateValue(document.getElementById('admin-total-sales'), parseInt(document.getElementById('admin-total-sales').textContent) || 0, realStats.totalSales, 1000);
+            animateValue(document.getElementById('admin-active-users'), parseInt(document.getElementById('admin-active-users').textContent) || 0, realStats.todayOnline, 1000);
+            
+            document.getElementById('admin-total-revenue').textContent = realStats.totalRevenue + ' TON';
+            document.getElementById('admin-today-revenue').textContent = realStats.todayRevenue + ' TON';
+            document.getElementById('admin-week-revenue').textContent = realStats.weekRevenue + ' TON';
+        }
+
+        function updateTopBuyersDisplay() {
+            const topBuyersContainer = document.getElementById('top-buyers');
+            const adminTopUsersContainer = document.getElementById('admin-top-users');
+            
+            const sortedBuyers = [...topBuyers].sort((a, b) => b.spent - a.spent);
+            
+            const buyersHTML = sortedBuyers.map(buyer => `
+                <div class="user-item">
+                    <div class="user-name">${buyer.username}</div>
+                    <div class="user-stats">${buyer.spent} TON</div>
+                </div>
+            `).join('');
+            
+            topBuyersContainer.innerHTML = buyersHTML;
+            adminTopUsersContainer.innerHTML = buyersHTML;
+        }
+
+        function updatePopularGiftsDisplay() {
+            const popularGiftsContainer = document.getElementById('popular-gifts');
+            
+            if (popularGifts.length === 0) {
+                popularGiftsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 10px; opacity: 0.7;">
+                        Пока нет продаж
+                    </div>
+                `;
+                return;
+            }
+            
+            const giftsHTML = popularGifts.map(gift => `
+                <div class="gift-item">
+                    <div class="gift-name">${gift.name}</div>
+                    <div class="gift-stats">${gift.sales} продаж</div>
+                </div>
+            `).join('');
+            
+            popularGiftsContainer.innerHTML = giftsHTML;
+        }
+
+        function animateValue(element, start, end, duration) {
+            if (start === end) return;
+            
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                element.textContent = value.toLocaleString();
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function registerPurchase(gift, buyerUsername, amount) {
+            statsManager.registerPurchase(gift, amount);
+            
+            realStats.giftsSold++;
+            realStats.totalSales++;
+            realStats.dailyTurnover += amount;
+            realStats.totalRevenue += amount;
+            realStats.todayRevenue += amount;
+            realStats.weekRevenue += amount;
+            
+            updateStatsDisplay();
+            updateTopBuyersDisplay();
+            updatePopularGiftsDisplay();
+        }
 
         // Инициализация приложения
         function initApp() {
@@ -2289,19 +2892,22 @@ async function loadRealStats() {
         // Слушатели событий
         document.getElementById('budget-slider').addEventListener('input', function() {
             userBudget = parseInt(this.value);
-            document.getElementById('budget-amount').textContent = userBudget;
+            document.getElementById('budget-amount').textContent = userBudget.toLocaleString();
         });
 
         document.getElementById('budget-setter').addEventListener('input', function() {
             userBudget = parseInt(this.value);
-            document.getElementById('budget-display').textContent = userBudget;
+            document.getElementById('budget-display').textContent = userBudget.toLocaleString();
         });
 
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', initApp);
 
-        // Симуляция активности пользователей (для демонстрации)
-        setInterval(simulateUserActivity, 30000);
+        // Для демонстрации - симуляция активности
+        setInterval(() => {
+            realStats.todayOnline = Math.floor(Math.random() * 50) + 10;
+            updateStatsDisplay();
+        }, 30000);
     </script>
 </body>
 </html>
