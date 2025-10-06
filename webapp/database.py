@@ -21,7 +21,8 @@ class StatisticsDB:
                 first_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 total_spent REAL DEFAULT 0,
-                total_purchases INTEGER DEFAULT 0
+                total_purchases INTEGER DEFAULT 0,
+                wallet_address TEXT
             )
         ''')
         
@@ -41,6 +42,10 @@ class StatisticsDB:
                 gift_name TEXT,
                 gift_id TEXT,
                 amount REAL,
+                recipient_username TEXT,
+                wallet_address TEXT,
+                status TEXT DEFAULT 'pending',
+                purchase_id TEXT UNIQUE,
                 timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users (user_id)
             )
@@ -67,6 +72,23 @@ class StatisticsDB:
                 total_revenue REAL DEFAULT 0
             )
         ''')
+        
+        # Таблица настроек кнопок
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS button_settings (
+                button_id TEXT PRIMARY KEY,
+                enabled BOOLEAN DEFAULT TRUE,
+                last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        
+        # Инициализация настроек кнопок
+        buttons = ['search', 'budget', 'sell', 'catalog']
+        for button in buttons:
+            cursor.execute('''
+                INSERT OR IGNORE INTO button_settings (button_id, enabled)
+                VALUES (?, ?)
+            ''', (button, True))
         
         conn.commit()
         conn.close()
@@ -97,26 +119,27 @@ class StatisticsDB:
         conn.commit()
         conn.close()
     
-    def register_purchase(self, user_id, username, gift_id, gift_name, amount):
+    def register_purchase(self, user_id, username, gift_id, gift_name, amount, recipient_username, wallet_address):
         """Регистрирует покупку"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
         today = datetime.now().strftime('%Y-%m-%d')
+        purchase_id = f"purchase_{int(time.time())}_{user_id}"
         
         # Обновляем пользователя
         cursor.execute('''
-            INSERT OR REPLACE INTO users (user_id, username, last_seen, total_spent, total_purchases)
+            INSERT OR REPLACE INTO users (user_id, username, last_seen, total_spent, total_purchases, wallet_address)
             VALUES (?, ?, CURRENT_TIMESTAMP, 
                     COALESCE((SELECT total_spent FROM users WHERE user_id = ?), 0) + ?,
-                    COALESCE((SELECT total_purchases FROM users WHERE user_id = ?), 0) + 1)
-        ''', (user_id, username, user_id, amount, user_id, 1))
+                    COALESCE((SELECT total_purchases FROM users WHERE user_id = ?), 0) + 1, ?)
+        ''', (user_id, username, user_id, amount, user_id, 1, wallet_address))
         
         # Добавляем покупку
         cursor.execute('''
-            INSERT INTO purchases (user_id, gift_name, gift_id, amount)
-            VALUES (?, ?, ?, ?)
-        ''', (user_id, gift_name, gift_id, amount))
+            INSERT INTO purchases (user_id, gift_name, gift_id, amount, recipient_username, wallet_address, purchase_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (user_id, gift_name, gift_id, amount, recipient_username, wallet_address, purchase_id))
         
         # Обновляем популярные подарки
         cursor.execute('''
@@ -134,6 +157,19 @@ class StatisticsDB:
                     COALESCE((SELECT gifts_sold FROM daily_stats WHERE date = ?), 0) + 1,
                     COALESCE((SELECT total_revenue FROM daily_stats WHERE date = ?), 0) + ?)
         ''', (today, today, amount, today, amount))
+        
+        conn.commit()
+        conn.close()
+        return purchase_id
+    
+    def update_purchase_status(self, purchase_id, status):
+        """Обновляет статус покупки"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            UPDATE purchases SET status = ? WHERE purchase_id = ?
+        ''', (status, purchase_id))
         
         conn.commit()
         conn.close()
@@ -165,7 +201,7 @@ class StatisticsDB:
             'dailyTurnover': round(stats[2], 2),
             'giftsSold': stats[3],
             'totalRevenue': round(stats[4], 2),
-            'todayRevenue': round(stats[2], 2),  # Оборот за сегодня
+            'todayRevenue': round(stats[2], 2),
             'weekRevenue': round(stats[6], 2),
             'totalSales': stats[3]
         }
@@ -218,6 +254,33 @@ class StatisticsDB:
         
         conn.close()
         return gifts
+    
+    def get_button_status(self, button_id):
+        """Получает статус кнопки"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT enabled FROM button_settings WHERE button_id = ?
+        ''', (button_id,))
+        
+        result = cursor.fetchone()
+        conn.close()
+        
+        return result[0] if result else True
+    
+    def set_button_status(self, button_id, enabled):
+        """Устанавливает статус кнопки"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            INSERT OR REPLACE INTO button_settings (button_id, enabled)
+            VALUES (?, ?)
+        ''', (button_id, enabled))
+        
+        conn.commit()
+        conn.close()
 
 # Глобальный экземпляр базы данных
 stats_db = StatisticsDB()
