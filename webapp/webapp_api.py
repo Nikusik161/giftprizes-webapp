@@ -9,14 +9,17 @@ import os
 from PIL import Image
 import io
 import base64
+import hashlib
 
 class WebAppAPI:
     def __init__(self):
         self.base_url = "https://api.portals.io/v1"
-        self.api_key = "21f9189d0d17b066bcc4151af3213133a36442598aef4ac977d33618d3ca536a"
+        self.api_key = "21f9189b0d17b066bcc4151af3213133a36442598aef4ac977d33618d3ca536a"
         self.cache = {}
         self.cache_timeout = 300
         self.images_cache = {}
+        self.my_commission = 0.08  # 8% комиссия
+        self.market_commission = 0.05  # 5% комиссия маркетплейса
         
     async def fetch_gifts_data(self, filters=None):
         """Получение данных о подарках с маркетплейса"""
@@ -56,11 +59,19 @@ class WebAppAPI:
         for gift in gifts:
             image_url = await self._get_gift_image(gift)
             
+            # Рассчитываем финальную цену с комиссиями
+            base_price = float(gift.get('price', 0))
+            market_fee = base_price * self.market_commission
+            my_fee = base_price * self.my_commission
+            total_price = base_price + market_fee + my_fee
+            
             processed.append({
                 'id': gift.get('id', f"gift_{hash(gift.get('attributes', {}).get('model', 'unknown'))}"),
                 'name': gift.get('attributes', {}).get('model', 'Unknown Gift'),
-                'price': float(gift.get('price', 0)),
-                'total_price': round(float(gift.get('price', 0)) * 1.05, 2),
+                'base_price': base_price,
+                'market_fee': round(market_fee, 2),
+                'my_fee': round(my_fee, 2),
+                'total_price': round(total_price, 2),
                 'image_url': image_url,
                 'market': 'Portals',
                 'attributes': gift.get('attributes', {}),
@@ -142,18 +153,24 @@ class WebAppAPI:
             "Big Year": 67.8,
             "Bonded Ring": 89.9,
             "Bow Tie": 22.1,
-            "Bunny Milffin": 5492.0,  # Реальная цена
+            "Bunny Milffin": 5492.0,
             "Candy Cane": 15.6,
             "Clover Pin": 28.9
         }
         
         gifts = []
         for name, base_price in gift_data.items():
+            market_fee = base_price * self.market_commission
+            my_fee = base_price * self.my_commission
+            total_price = base_price + market_fee + my_fee
+            
             gifts.append({
                 'id': f"real_{hash(name)}",
                 'name': name,
-                'price': base_price,
-                'total_price': round(base_price * 1.05, 2),
+                'base_price': base_price,
+                'market_fee': round(market_fee, 2),
+                'my_fee': round(my_fee, 2),
+                'total_price': round(total_price, 2),
                 'image_url': self._generate_placeholder(name),
                 'market': 'Portals',
                 'attributes': {'model': name},
@@ -192,4 +209,268 @@ class WebAppAPI:
                 return gift
         return None
 
+    async def get_gift_packages(self, budget):
+        """Создает пакеты подарков по бюджету"""
+        all_gifts = await self.fetch_gifts_data()
+        
+        # Фильтруем доступные подарки
+        available_gifts = [g for g in all_gifts if g['total_price'] <= budget]
+        
+        packages = []
+        
+        # Один дорогой подарок
+        expensive_gifts = sorted(available_gifts, key=lambda x: x['total_price'], reverse=True)[:3]
+        for gift in expensive_gifts:
+            if gift['total_price'] >= budget * 0.8:  # Подарок за 80%+ бюджета
+                packages.append({
+                    'type': 'single_premium',
+                    'gifts': [gift],
+                    'total_price': gift['total_price'],
+                    'description': f'Премиум подарок {gift["name"]}',
+                    'savings': 0
+                })
+        
+        # Пакет из нескольких подарков
+        if budget >= 50:  # Минимальный бюджет для пакета
+            package_gifts = []
+            current_total = 0
+            
+            # Сортируем по цене (от дешевых к дорогим)
+            sorted_gifts = sorted(available_gifts, key=lambda x: x['total_price'])
+            
+            for gift in sorted_gifts:
+                if current_total + gift['total_price'] <= budget:
+                    package_gifts.append(gift)
+                    current_total += gift['total_price']
+                else:
+                    break
+            
+            if len(package_gifts) >= 2:
+                individual_price = sum(g['total_price'] for g in package_gifts)
+                package_price = individual_price * 0.9  # 10% скидка
+                
+                packages.append({
+                    'type': 'multi_package',
+                    'gifts': package_gifts,
+                    'total_price': round(package_price, 2),
+                    'description': f'Пакет из {len(package_gifts)} подарков',
+                    'savings': round(individual_price - package_price, 2)
+                })
+        
+        # Подарки с лучшим соотношением цена/качество
+        value_gifts = sorted(available_gifts, 
+                           key=lambda x: x['sales_count'] / x['total_price'] if x['total_price'] > 0 else 0, 
+                           reverse=True)[:5]
+        
+        if len(value_gifts) >= 3:
+            value_package = value_gifts[:3]
+            package_price = sum(g['total_price'] for g in value_package) * 0.85  # 15% скидка
+            
+            packages.append({
+                'type': 'value_package',
+                'gifts': value_package,
+                'total_price': round(package_price, 2),
+                'description': 'Лучшие по продаваемости',
+                'savings': round(sum(g['total_price'] for g in value_package) - package_price, 2)
+            })
+        
+        return packages
+
+    async def check_payment(self, wallet_address, amount, memo):
+        """Проверяет оплату через TON API"""
+        try:
+            # Здесь будет интеграция с TON API для проверки транзакций
+            # Пока используем имитацию
+            
+            # Имитация проверки платежа
+            await asyncio.sleep(2)
+            
+            # В реальной реализации здесь будет запрос к TON API
+            # Для демонстрации 70% шанс успешной оплаты
+            import random
+            payment_found = random.random() < 0.7
+            
+            if payment_found:
+                return {
+                    'success': True,
+                    'message': 'Оплата подтверждена',
+                    'transaction_hash': f'tx_{hashlib.md5(f"{wallet_address}{amount}{memo}".encode()).hexdigest()}'
+                }
+            else:
+                return {
+                    'success': False,
+                    'message': 'Оплата не найдена. Проверьте транзакцию или подождите несколько минут'
+                }
+                
+        except Exception as e:
+            return {
+                'success': False,
+                'message': f'Ошибка проверки оплаты: {str(e)}'
+            }
+
+    async def purchase_gift(self, gift_id, recipient_username, user_wallet):
+        """Покупка подарка на маркетплейсе"""
+        try:
+            # Получаем информацию о подарке
+            gifts = await self.fetch_gifts_data()
+            gift = next((g for g in gifts if g['id'] == gift_id), None)
+            
+            if not gift:
+                return {
+                    'success': False,
+                    'message': 'Подарок не найден'
+                }
+            
+            # Имитация покупки на маркетплейсе
+            await asyncio.sleep(3)
+            
+            # В реальной реализации здесь будет:
+            # 1. Покупка подарка через API маркетплейса
+            # 2. Перевод подарка на аккаунт бота
+            # 3. Отправка подарка получателю
+            
+            import random
+            purchase_success = random.random() < 0.8  # 80% шанс успеха
+            
+            if purchase_success:
+                return {
+                    'success': True,
+                    'message': f'Подарок {gift["name"]} успешно приобретен и отправлен пользователю {recipient_username}',
+                    'gift_name': gift['name'],
+                    'final_image_url': gift['image_url'],
+                    'transaction_id': f'purchase_{int(time.time())}'
+                }
+            else:
+                # Если подарок уже купили, предлагаем альтернативу
+                similar_gifts = [g for g in gifts if g['name'] == gift['name'] and g['id'] != gift_id]
+                if similar_gifts:
+                    alternative_gift = similar_gifts[0]
+                    return {
+                        'success': True,
+                        'message': f'Исходный подарок был продан. Мы нашли аналогичный {alternative_gift["name"]} и отправили его пользователю {recipient_username}',
+                        'gift_name': alternative_gift['name'],
+                        'final_image_url': alternative_gift['image_url'],
+                        'transaction_id': f'purchase_alt_{int(time.time())}',
+                        'is_alternative': True
+                    }
+                else:
+                    return {
+                        'success': False,
+                        'message': 'К сожалению, этот подарок уже продан, и аналогичных не найдено. Средства будут возвращены в течение 24 часов.'
+                    }
+                    
+        except Exception as e:
+            return {
+                'success': False,
+                'message': f'Ошибка при покупке подарка: {str(e)}'
+            }
+
 webapp_api = WebAppAPI()
+
+# API endpoints
+from database import stats_db
+
+async def register_activity_endpoint(data):
+    """Endpoint для регистрации активности пользователя"""
+    try:
+        user_id = data.get('user_id')
+        username = data.get('username')
+        
+        if user_id:
+            stats_db.register_user_activity(user_id, username)
+            return {'success': True, 'message': 'Activity registered'}
+        else:
+            return {'success': False, 'error': 'User ID required'}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+async def register_purchase_endpoint(data):
+    """Endpoint для регистрации покупки"""
+    try:
+        user_id = data.get('user_id')
+        username = data.get('username')
+        gift_id = data.get('gift_id')
+        gift_name = data.get('gift_name')
+        amount = data.get('amount')
+        
+        if all([user_id, gift_id, gift_name, amount]):
+            stats_db.register_purchase(user_id, username, gift_id, gift_name, amount)
+            return {'success': True, 'message': 'Purchase registered'}
+        else:
+            return {'success': False, 'error': 'Missing required fields'}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+async def get_statistics_endpoint():
+    """Endpoint для получения статистики"""
+    try:
+        stats = stats_db.get_statistics()
+        return {'success': True, 'data': stats}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+async def get_top_buyers_endpoint():
+    """Endpoint для получения топа покупателей"""
+    try:
+        buyers = stats_db.get_top_buyers()
+        return {'success': True, 'data': buyers}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+async def get_popular_gifts_endpoint():
+    """Endpoint для получения популярных подарков"""
+    try:
+        gifts = stats_db.get_popular_gifts()
+        return {'success': True, 'data': gifts}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+async def search_gifts_endpoint(data):
+    """Endpoint для поиска подарков"""
+    try:
+        search_term = data.get('search_term')
+        max_price = data.get('max_price')
+        min_price = data.get('min_price')
+        
+        gifts = await webapp_api.search_gifts(
+            search_term=search_term,
+            max_price=max_price,
+            min_price=min_price
+        )
+        
+        return {'success': True, 'data': gifts}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+async def get_gift_packages_endpoint(data):
+    """Endpoint для получения пакетов подарков"""
+    try:
+        budget = data.get('budget', 100)
+        packages = await webapp_api.get_gift_packages(budget)
+        return {'success': True, 'data': packages}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+async def check_payment_endpoint(data):
+    """Endpoint для проверки оплаты"""
+    try:
+        wallet_address = data.get('wallet_address')
+        amount = data.get('amount')
+        memo = data.get('memo')
+        
+        result = await webapp_api.check_payment(wallet_address, amount, memo)
+        return result
+    except Exception as e:
+        return {'success': False, 'message': f'Ошибка проверки оплаты: {str(e)}'}
+
+async def purchase_gift_endpoint(data):
+    """Endpoint для покупки подарка"""
+    try:
+        gift_id = data.get('gift_id')
+        recipient_username = data.get('recipient_username')
+        user_wallet = data.get('user_wallet')
+        
+        result = await webapp_api.purchase_gift(gift_id, recipient_username, user_wallet)
+        return result
+    except Exception as e:
+        return {'success': False, 'message': f'Ошибка покупки: {str(e)}'}
