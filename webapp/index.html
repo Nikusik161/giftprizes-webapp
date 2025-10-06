@@ -435,6 +435,165 @@
             margin: 0 auto 20px;
         }
 
+        /* Filters */
+        .filters {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-group {
+            margin-bottom: 15px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .sort-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .sort-btn {
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: var(--card-bg);
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sort-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Purchase Flow */
+        .purchase-flow {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: var(--card-bg);
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            transition: var(--transition);
+        }
+
+        .step.active .step-circle {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .payment-info {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .address-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            word-break: break-all;
+            font-family: monospace;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Features */
+        .features {
+            margin: 30px 0;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
         /* Анимации */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -553,10 +712,10 @@
                     <div class="nav-desc">Установи лимит</div>
                 </div>
                 
-                <div class="nav-card" onclick="showRandomGift()">
-                    <div class="nav-icon">🎲</div>
-                    <div class="nav-title">Случайный</div>
-                    <div class="nav-desc">Подарок-сюрприз</div>
+                <div class="nav-card" onclick="showScreen('filters-screen')">
+                    <div class="nav-icon">🎯</div>
+                    <div class="nav-title">Фильтры</div>
+                    <div class="nav-desc">Расширенный поиск</div>
                 </div>
             </div>
 
@@ -572,6 +731,10 @@
                 <div class="feature">
                     <span class="feature-icon">💫</span>
                     Подарки для себя и друзей с автоматической доставкой
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🛡️</span>
+                    Безопасные сделки через TON блокчейн
                 </div>
             </div>
 
@@ -649,6 +812,75 @@
             </div>
         </div>
 
+        <!-- Экран фильтров -->
+        <div class="screen" id="filters-screen">
+            <button class="back-button" onclick="showScreen('main-screen')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            
+            <h2 style="text-align: center; margin-bottom: 20px; animation: textShine 3s infinite;">🎯 Расширенные фильтры</h2>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label class="filter-label">🔍 Поиск по названию</label>
+                    <input type="text" class="search-input" placeholder="Введите название..." id="filter-search-input">
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">💰 Бюджет: <span id="filter-budget-value">50</span> TON</label>
+                    <input type="range" class="budget-slider" min="1" max="200" value="50" id="filter-budget-slider">
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">📊 Сортировка</label>
+                    <div class="sort-buttons">
+                        <button class="sort-btn active" onclick="setSort('price_asc')">Сначала дешевые</button>
+                        <button class="sort-btn" onclick="setSort('price_desc')">Сначала дорогие</button>
+                        <button class="sort-btn" onclick="setSort('rarity')">По редкости</button>
+                        <button class="sort-btn" onclick="setSort('name')">По названию</button>
+                    </div>
+                </div>
+                
+                <button class="action-btn" onclick="performAdvancedSearch()" style="width: 100%;">
+                    🚀 Применить фильтры
+                </button>
+            </div>
+        </div>
+
+        <!-- Экран покупки -->
+        <div class="screen" id="purchase-screen">
+            <button class="back-button" onclick="showScreen('main-screen')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            
+            <h2 style="text-align: center; margin-bottom: 20px; animation: textShine 3s infinite;">💳 Оформление покупки</h2>
+            
+            <div class="purchase-flow">
+                <div class="step-indicator">
+                    <div class="step active" id="step1">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">Выбор</div>
+                    </div>
+                    <div class="step" id="step2">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Получатель</div>
+                    </div>
+                    <div class="step" id="step3">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Оплата</div>
+                    </div>
+                    <div class="step" id="step4">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Готово</div>
+                    </div>
+                </div>
+
+                <div id="purchase-content">
+                    <!-- Контент покупки будет обновляться -->
+                </div>
+            </div>
+        </div>
+
         <div class="loading" id="loading">
             <div class="spinner"></div>
             <p>Загружаем NFT подарки...</p>
@@ -660,6 +892,10 @@
         let currentTheme = 'default';
         let selectedModel = null;
         let userBudget = 50;
+        let currentSort = 'price_asc';
+        let currentPurchaseStep = 1;
+        let selectedGift = null;
+        let recipientUsername = '';
         
         // Все NFT подарки с эмодзи и ценами
         const nftGifts = [
@@ -696,364 +932,412 @@
             { id: 31, name: 'Holiday Drink', price: 34, icon: '🍹', rarity: 'common' },
             { id: 32, name: 'Homemade Cake', price: 37, icon: '🎂', rarity: 'common' },
             { id: 33, name: 'Hypno Lollipop', price: 39, icon: '🍭', rarity: 'rare' },
-            { id: 34, name: 'Input Key', price: 45, icon: '🔑', rarity: 'rare' },
-            { id: 35, name: 'Ion Gem', price: 53, icon: '💎', rarity: 'epic' },
-            { id: 36, name: 'Ionic Dryer', price: 48, icon: '💨', rarity: 'rare' },
-            { id: 37, name: 'Jack-in-the-Box', price: 44, icon: '🎁', rarity: 'rare' },
-            { id: 38, name: 'Jelly Bunny', price: 36, icon: '🐇', rarity: 'common' },
-            { id: 39, name: 'Jester Hat', price: 41, icon: '🎭', rarity: 'rare' },
-            { id: 40, name: 'Jingle Bells', price: 33, icon: '🔔', rarity: 'common' },
-            { id: 41, name: 'Jolly Chimp', price: 47, icon: '🐵', rarity: 'rare' },
-            { id: 42, name: 'Joyful Bundle', price: 59, icon: '🎀', rarity: 'epic' },
-            { id: 43, name: 'Kissed Frog', price: 42, icon: '🐸', rarity: 'rare' },
-            { id: 44, name: 'Light Sword', price: 61, icon: '⚔️', rarity: 'legendary' },
-            { id: 45, name: 'Lol Pop', price: 35, icon: '🍭', rarity: 'common' },
-            { id: 46, name: 'Loot Bag', price: 50, icon: '💰', rarity: 'epic' },
-            { id: 47, name: 'Love Candle', price: 38, icon: '🕯️', rarity: 'common' },
-            { id: 48, name: 'Love Potion', price: 46, icon: '🧪', rarity: 'rare' },
-            { id: 49, name: 'Low Rider', price: 52, icon: '🛹', rarity: 'epic' },
-            { id: 50, name: 'Lunar Snake', price: 44, icon: '🐍', rarity: 'rare' },
-            { id: 51, name: 'Lush Bouquet', price: 49, icon: '💐', rarity: 'epic' },
-            { id: 52, name: 'Mad Pumpkin', price: 41, icon: '🎃', rarity: 'rare' },
-            { id: 53, name: 'Magic Potion', price: 55, icon: '🧪', rarity: 'epic' },
-            { id: 54, name: 'Mighty Arm', price: 57, icon: '💪', rarity: 'epic' },
-            { id: 55, name: 'Mini Oscar', price: 65, icon: '🏆', rarity: 'legendary' },
-            { id: 56, name: 'Moon Pandante', price: 53, icon: '🐼', rarity: 'epic' },
-            { id: 57, name: 'Nail Bracelet', price: 39, icon: '📿', rarity: 'common' },
-            { id: 58, name: 'Neko Helmet', price: 47, icon: '🐱', rarity: 'rare' },
-            { id: 59, name: 'Party Sparkler', price: 43, icon: '🎆', rarity: 'rare' },
-            { id: 60, name: 'Perfume Bottle', price: 45, icon: '🧴', rarity: 'rare' },
-            { id: 61, name: 'Pet Snake', price: 48, icon: '🐍', rarity: 'rare' },
-            { id: 62, name: 'Plush Pepe', price: 70, icon: '🐸', rarity: 'legendary' },
-            { id: 63, name: 'Precious Peach', price: 42, icon: '🍑', rarity: 'rare' },
-            { id: 64, name: 'Record Player', price: 54, icon: '💿', rarity: 'epic' },
-            { id: 65, name: 'Restless Jar', price: 46, icon: '🫙', rarity: 'rare' },
-            { id: 66, name: 'Sakura Flower', price: 44, icon: '🌸', rarity: 'rare' },
-            { id: 67, name: 'Santa Hat', price: 40, icon: '🎅', rarity: 'common' },
-            { id: 68, name: 'Scared Cat', price: 38, icon: '🐱', rarity: 'common' },
-            { id: 69, name: 'Sharp Tongue', price: 49, icon: '👅', rarity: 'rare' },
-            { id: 70, name: 'Signet Ring', price: 51, icon: '💍', rarity: 'epic' },
-            { id: 71, name: 'Skull Flower', price: 47, icon: '💀', rarity: 'rare' },
-            { id: 72, name: 'Sky Stilettos', price: 56, icon: '👠', rarity: 'epic' },
-            { id: 73, name: 'Sleigh Bell', price: 39, icon: '🔔', rarity: 'common' },
-            { id: 74, name: 'Snake Box', price: 45, icon: '🐍', rarity: 'rare' },
-            { id: 75, name: 'Snoop Cigar', price: 58, icon: '🚬', rarity: 'epic' },
-            { id: 76, name: 'Snoop Dogg', price: 80, icon: '🐕', rarity: 'legendary' },
-            { id: 77, name: 'Snow Globe', price: 43, icon: '🔮', rarity: 'rare' },
-            { id: 78, name: 'Snow Mittens', price: 36, icon: '🧤', rarity: 'common' },
-            { id: 79, name: 'Spiced Wine', price: 44, icon: '🍷', rarity: 'rare' },
-            { id: 80, name: 'Spy Agaric', price: 48, icon: '🍄', rarity: 'rare' },
-            { id: 81, name: 'Star Notepad', price: 37, icon: '📝', rarity: 'common' },
-            { id: 82, name: 'Stellar Rocket', price: 62, icon: '🚀', rarity: 'legendary' },
-            { id: 83, name: 'Swag Bag', price: 52, icon: '🛍️', rarity: 'epic' },
-            { id: 84, name: 'Swiss Watch', price: 67, icon: '⌚', rarity: 'legendary' },
-            { id: 85, name: 'Tama Gadget', price: 49, icon: '📱', rarity: 'rare' },
-            { id: 86, name: 'Top Hat', price: 46, icon: '🎩', rarity: 'rare' },
-            { id: 87, name: 'Toy Bear', price: 39, icon: '🧸', rarity: 'common' },
-            { id: 88, name: 'Trapped Heart', price: 51, icon: '💔', rarity: 'epic' },
-            { id: 89, name: 'Valentine Box', price: 44, icon: '💝', rarity: 'rare' },
-            { id: 90, name: 'Vintage Cigar', price: 53, icon: '🚬', rarity: 'epic' },
-            { id: 91, name: 'Voodoo Doll', price: 57, icon: '🪆', rarity: 'epic' },
-            { id: 92, name: 'Westside Sign', price: 59, icon: '🪧', rarity: 'epic' },
-            { id: 93, name: 'Whip Cupcake', price: 41, icon: '🧁', rarity: 'rare' },
-            { id: 94, name: 'Winter Weath', price: 45, icon: '❄️', rarity: 'rare' },
-            { id: 95, name: 'Witch Hat', price: 47, icon: '🧙', rarity: 'rare' },
-            { id: 96, name: 'Xmas Strocking', price: 42, icon: '🧦', rarity: 'common' }
+            { id: 34, name: 'Ice Crystal', price: 44, icon: '❄️', rarity: 'rare' },
+            { id: 35, name: 'Infinite Cube', price: 72, icon: '🧊', rarity: 'legendary' },
+            { id: 36, name: 'Jelly Bean', price: 26, icon: '🍬', rarity: 'common' },
+            { id: 37, name: 'Jeweled Crown', price: 78, icon: '👑', rarity: 'legendary' },
+            { id: 38, name: 'Kawaii Donut', price: 33, icon: '🍩', rarity: 'common' },
+            { id: 39, name: 'Key Chain', price: 35, icon: '🔑', rarity: 'common' },
+            { id: 40, name: 'Leprechaun Hat', price: 45, icon: '🎩', rarity: 'rare' },
+            { id: 41, name: 'Lucky Horseshoe', price: 41, icon: '🍀', rarity: 'rare' },
+            { id: 42, name: 'Magic Wand', price: 53, icon: '🪄', rarity: 'epic' },
+            { id: 43, name: 'Marshmallow', price: 30, icon: '🍡', rarity: 'common' },
+            { id: 44, name: 'Mighty Hammer', price: 59, icon: '🔨', rarity: 'epic' },
+            { id: 45, name: 'Mini Rocket', price: 61, icon: '🚀', rarity: 'epic' },
+            { id: 46, name: 'Mochi', price: 32, icon: '🍡', rarity: 'common' },
+            { id: 47, name: 'Moon Charm', price: 48, icon: '🌙', rarity: 'rare' },
+            { id: 48, name: 'Mushroom Lamp', price: 43, icon: '🍄', rarity: 'rare' },
+            { id: 49, name: 'Music Box', price: 50, icon: '🎵', rarity: 'epic' },
+            { id: 50, name: 'Mystery Box', price: 55, icon: '🎁', rarity: 'epic' },
+            { id: 51, name: 'Mystic Orb', price: 65, icon: '🔮', rarity: 'legendary' },
+            { id: 52, name: 'Night Light', price: 36, icon: '💡', rarity: 'common' },
+            { id: 53, name: 'Origami Crane', price: 39, icon: '🕊️', rarity: 'rare' },
+            { id: 54, name: 'Party Balloon', price: 31, icon: '🎈', rarity: 'common' },
+            { id: 55, name: 'Party Popper', price: 34, icon: '🎉', rarity: 'common' },
+            { id: 56, name: 'Peppermint', price: 28, icon: '🍬', rarity: 'common' },
+            { id: 57, name: 'Phoenix Feather', price: 70, icon: '🪶', rarity: 'legendary' },
+            { id: 58, name: 'Piggy Bank', price: 40, icon: '🐷', rarity: 'rare' },
+            { id: 59, name: 'Pillow', price: 35, icon: '🛏️', rarity: 'common' },
+            { id: 60, name: 'Pine Tree', price: 42, icon: '🌲', rarity: 'rare' },
+            { id: 61, name: 'Pirate Coin', price: 46, icon: '🪙', rarity: 'rare' },
+            { id: 62, name: 'Pixel Heart', price: 38, icon: '💖', rarity: 'common' },
+            { id: 63, name: 'Plush Bear', price: 41, icon: '🧸', rarity: 'rare' },
+            { id: 64, name: 'Potion Vial', price: 44, icon: '🧪', rarity: 'rare' },
+            { id: 65, name: 'Pumpkin Lantern', price: 47, icon: '🎃', rarity: 'rare' },
+            { id: 66, name: 'Rainbow Cloud', price: 52, icon: '🌈', rarity: 'epic' },
+            { id: 67, name: 'Rocket Pop', price: 37, icon: '🍭', rarity: 'common' },
+            { id: 68, name: 'Royal Scepter', price: 74, icon: '🪄', rarity: 'legendary' },
+            { id: 69, name: 'Rubber Duck', price: 29, icon: '🦆', rarity: 'common' },
+            { id: 70, name: 'Rune Stone', price: 49, icon: '🗿', rarity: 'epic' },
+            { id: 71, name: 'Sailor Anchor', price: 45, icon: '⚓', rarity: 'rare' },
+            { id: 72, name: 'Shooting Star', price: 57, icon: '☄️', rarity: 'epic' },
+            { id: 73, name: 'Snow Globe', price: 48, icon: '🌐', rarity: 'rare' },
+            { id: 74, name: 'Snowflake', price: 39, icon: '❄️', rarity: 'common' },
+            { id: 75, name: 'Space Rock', price: 53, icon: '🪨', rarity: 'epic' },
+            { id: 76, name: 'Sparkler', price: 36, icon: '🎇', rarity: 'common' },
+            { id: 77, name: 'Strawberry Cake', price: 43, icon: '🍰', rarity: 'rare' },
+            { id: 78, name: 'Sunflower', price: 40, icon: '🌻', rarity: 'rare' },
+            { id: 79, name: 'Teddy Bear', price: 42, icon: '🧸', rarity: 'rare' },
+            { id: 80, name: 'Telescope', price: 58, icon: '🔭', rarity: 'epic' },
+            { id: 81, name: 'Treasure Chest', price: 66, icon: '🧰', rarity: 'legendary' },
+            { id: 82, name: 'Unicorn Horn', price: 62, icon: '🦄', rarity: 'epic' },
+            { id: 83, name: 'Voodoo Doll', price: 54, icon: '🧷', rarity: 'epic' },
+            { id: 84, name: 'Waffle Cone', price: 34, icon: '🍦', rarity: 'common' },
+            { id: 85, name: 'Wishing Well', price: 59, icon: '⛲', rarity: 'epic' },
+            { id: 86, name: 'Wizard Hat', price: 56, icon: '🧙', rarity: 'epic' },
+            { id: 87, name: 'Wooden Whistle', price: 38, icon: '🪈', rarity: 'common' },
+            { id: 88, name: 'Yarn Ball', price: 33, icon: '🧶', rarity: 'common' },
+            { id: 89, name: 'Zen Garden', price: 51, icon: '🎍', rarity: 'epic' },
+            { id: 90, name: 'Zodiac Coin', price: 47, icon: '🪙', rarity: 'rare' }
         ];
 
-        // Инициализация
-        tg.expand();
-        tg.ready();
-        
-        // Загрузка темы
-        const savedTheme = localStorage.getItem('giftprizes-theme');
-        if (savedTheme) {
-            document.body.className = savedTheme;
-            currentTheme = savedTheme;
+        // Инициализация приложения
+        function initApp() {
+            tg.expand();
+            tg.enableClosingConfirmation();
+            loadCatalog();
+            updateBudgetDisplays();
         }
 
-        // Загрузка данных
-        const savedBudget = localStorage.getItem('giftprizes-budget');
-        if (savedBudget) {
-            userBudget = parseInt(savedBudget);
-            document.getElementById('budget-slider').value = userBudget;
-            document.getElementById('budget-setter').value = userBudget;
-            updateBudgetDisplay();
-        }
-
+        // Переключение темы
         function switchTheme() {
-            const themes = ['default', 'theme-light', 'theme-dark'];
-            const currentIndex = themes.indexOf(currentTheme);
-            const nextIndex = (currentIndex + 1) % themes.length;
-            currentTheme = themes[nextIndex];
-            
-            document.body.className = currentTheme;
-            localStorage.setItem('giftprizes-theme', currentTheme);
-            
-            // Анимация переключения
-            document.body.style.opacity = '0.7';
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 200);
+            const body = document.body;
+            if (currentTheme === 'default') {
+                body.classList.add('theme-light');
+                currentTheme = 'light';
+            } else if (currentTheme === 'light') {
+                body.classList.remove('theme-light');
+                body.classList.add('theme-dark');
+                currentTheme = 'dark';
+            } else {
+                body.classList.remove('theme-dark');
+                currentTheme = 'default';
+            }
         }
 
+        // Показать экран
         function showScreen(screenId) {
-            // Скрыть все экраны
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
-            
-            // Показать выбранный экран
             document.getElementById(screenId).classList.add('active');
             
-            // Загрузить данные если нужно
             if (screenId === 'catalog-screen') {
                 loadCatalog();
             }
         }
 
+        // Загрузка каталога
         function loadCatalog() {
-            const container = document.getElementById('catalog-grid');
-            container.innerHTML = '';
+            const grid = document.getElementById('catalog-grid');
+            grid.innerHTML = '';
             
-            nftGifts.forEach((gift, index) => {
+            nftGifts.forEach(gift => {
                 const card = document.createElement('div');
                 card.className = 'model-card';
-                card.style.animationDelay = `${index * 0.05}s`;
                 card.onclick = () => selectGift(gift);
-                
-                // Цвет рамки в зависимости от редкости
-                let borderColor = 'transparent';
-                if (gift.rarity === 'epic') borderColor = '#9b59b6';
-                if (gift.rarity === 'legendary') borderColor = '#f39c12';
-                if (gift.rarity === 'rare') borderColor = '#3498db';
-                
-                card.style.borderColor = borderColor;
                 
                 card.innerHTML = `
                     <div class="model-icon">${gift.icon}</div>
                     <div class="model-name">${gift.name}</div>
                     <div class="model-price">${gift.price} TON</div>
-                    <div style="font-size: 0.7rem; margin-top: 5px; opacity: 0.6;">
-                        ${gift.rarity === 'legendary' ? '⭐ Легендарный' : 
-                          gift.rarity === 'epic' ? '💜 Эпический' : 
-                          gift.rarity === 'rare' ? '🔵 Редкий' : '⚪ Обычный'}
-                    </div>
                 `;
                 
-                container.appendChild(card);
+                grid.appendChild(card);
             });
         }
 
+        // Выбор подарка
         function selectGift(gift) {
-            selectedModel = gift;
-            
-            // Анимация выбора
-            const cards = document.querySelectorAll('.model-card');
-            cards.forEach(card => card.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
-            
-            // Показать попап с информацией
-            tg.showPopup({
-                title: `🎁 ${gift.icon} ${gift.name}`,
-                message: `💰 Цена: ${gift.price} TON\n⭐ Редкость: ${getRarityName(gift.rarity)}\n\nХотите приобрести этот NFT подарок?`,
-                buttons: [
-                    { id: 'buy_self', type: 'default', text: '🛍️ Купить для себя' },
-                    { id: 'buy_friend', type: 'ok', text: '👥 Подарить другу' },
-                    { type: 'cancel' }
-                ]
-            });
+            selectedGift = gift;
+            showScreen('purchase-screen');
+            updatePurchaseStep(1);
+        }
 
-            tg.onEvent('popupButtonClicked', (event) => {
-                if (event.button_id === 'buy_self') {
-                    initiatePurchase(gift, 'self');
-                } else if (event.button_id === 'buy_friend') {
-                    initiatePurchase(gift, 'friend');
+        // Обновление шага покупки
+        function updatePurchaseStep(step) {
+            currentPurchaseStep = step;
+            
+            // Обновляем индикатор шагов
+            document.querySelectorAll('.step').forEach((stepEl, index) => {
+                if (index + 1 <= step) {
+                    stepEl.classList.add('active');
+                } else {
+                    stepEl.classList.remove('active');
                 }
             });
+            
+            // Обновляем контент
+            const content = document.getElementById('purchase-content');
+            switch(step) {
+                case 1:
+                    content.innerHTML = `
+                        <h3 style="text-align: center; margin-bottom: 20px;">🎁 Вы выбрали:</h3>
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <div style="font-size: 4rem; margin-bottom: 10px;">${selectedGift.icon}</div>
+                            <div style="font-size: 1.5rem; font-weight: 600; margin-bottom: 5px;">${selectedGift.name}</div>
+                            <div style="font-size: 1.2rem; color: var(--accent);">${selectedGift.price} TON</div>
+                        </div>
+                        <button class="action-btn" onclick="updatePurchaseStep(2)" style="width: 100%;">
+                            Далее ➡️
+                        </button>
+                    `;
+                    break;
+                    
+                case 2:
+                    content.innerHTML = `
+                        <h3 style="text-align: center; margin-bottom: 20px;">👤 Кому отправить подарок?</h3>
+                        <input type="text" class="search-input" placeholder="@username или оставьте пустым для себя" id="recipient-input">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+                            <button class="action-btn secondary" onclick="updatePurchaseStep(1)">
+                                ⬅️ Назад
+                            </button>
+                            <button class="action-btn" onclick="setRecipient()">
+                                Далее ➡️
+                            </button>
+                        </div>
+                    `;
+                    break;
+                    
+                case 3:
+                    content.innerHTML = `
+                        <h3 style="text-align: center; margin-bottom: 20px;">💳 Оплата</h3>
+                        <div class="payment-info">
+                            <div style="margin-bottom: 15px;">
+                                <strong>Подарок:</strong> ${selectedGift.icon} ${selectedGift.name}
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <strong>Получатель:</strong> ${recipientUsername || 'Себе'}
+                            </div>
+                            <div style="font-size: 1.3rem; font-weight: 600; color: var(--accent); margin-bottom: 20px;">
+                                Сумма: ${selectedGift.price} TON
+                            </div>
+                            
+                            <div class="address-box">
+                                Отправьте ${selectedGift.price} TON на адрес:<br>
+                                <strong>EQABC123DEF456GHI789JKL012MNO345PQR678STU</strong>
+                            </div>
+                            
+                            <button class="copy-btn" onclick="copyAddress()">
+                                📋 Скопировать адрес
+                            </button>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+                            <button class="action-btn secondary" onclick="updatePurchaseStep(2)">
+                                ⬅️ Назад
+                            </button>
+                            <button class="action-btn" onclick="updatePurchaseStep(4)">
+                                Я оплатил ✅
+                            </button>
+                        </div>
+                    `;
+                    break;
+                    
+                case 4:
+                    content.innerHTML = `
+                        <div style="text-align: center; padding: 30px 0;">
+                            <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
+                            <h3 style="margin-bottom: 15px;">Подарок отправлен!</h3>
+                            <p style="margin-bottom: 25px; opacity: 0.8;">
+                                ${selectedGift.icon} <strong>${selectedGift.name}</strong> был успешно отправлен ${recipientUsername ? 'пользователю ' + recipientUsername : 'вам'}!
+                            </p>
+                            <button class="action-btn" onclick="showScreen('main-screen')" style="width: 100%;">
+                                🏠 На главную
+                            </button>
+                        </div>
+                    `;
+                    break;
+            }
         }
 
-        function getRarityName(rarity) {
-            const names = {
-                'common': '⚪ Обычный',
-                'rare': '🔵 Редкий', 
-                'epic': '💜 Эпический',
-                'legendary': '⭐ Легендарный'
-            };
-            return names[rarity] || rarity;
+        // Установка получателя
+        function setRecipient() {
+            const input = document.getElementById('recipient-input');
+            recipientUsername = input.value.trim();
+            updatePurchaseStep(3);
         }
 
-        function updateBudgetDisplay() {
-            document.getElementById('budget-amount').textContent = userBudget;
-            document.getElementById('budget-display').textContent = userBudget;
-        }
-
-        function setBudget(amount) {
-            userBudget = amount;
-            document.getElementById('budget-slider').value = amount;
-            document.getElementById('budget-setter').value = amount;
-            updateBudgetDisplay();
-        }
-
-        function saveBudget() {
-            localStorage.setItem('giftprizes-budget', userBudget);
-            tg.showPopup({
-                title: '✅ Бюджет сохранен',
-                message: `Установлен бюджет: ${userBudget} TON`,
-                buttons: [{ type: 'ok' }]
+        // Копирование адреса
+        function copyAddress() {
+            navigator.clipboard.writeText('EQABC123DEF456GHI789JKL012MNO345PQR678STU').then(() => {
+                alert('Адрес скопирован в буфер обмена!');
             });
         }
 
+        // Поиск NFT
         function performSearch() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const backdropTerm = document.getElementById('backdrop-input').value.toLowerCase();
-            const symbolTerm = document.getElementById('symbol-input').value.toLowerCase();
-            const resultsContainer = document.getElementById('search-results');
+            const budget = userBudget;
             
-            showLoading();
+            showLoading(true);
             
-            // Имитация поиска с анимацией
             setTimeout(() => {
-                hideLoading();
-                
-                const filteredGifts = nftGifts.filter(gift => {
-                    const nameMatch = gift.name.toLowerCase().includes(searchTerm);
-                    const priceMatch = gift.price <= userBudget;
-                    return nameMatch && priceMatch;
+                const results = nftGifts.filter(gift => {
+                    const matchesSearch = !searchTerm || gift.name.toLowerCase().includes(searchTerm);
+                    const matchesBudget = gift.price <= budget;
+                    return matchesSearch && matchesBudget;
                 });
                 
-                resultsContainer.innerHTML = '';
-                
-                if (filteredGifts.length === 0) {
-                    resultsContainer.innerHTML = `
-                        <div class="result-card" style="text-align: center; animation: bounce 2s infinite;">
-                            <div class="model-icon">😕</div>
-                            <div style="margin-top: 10px;">Не найдено NFT подарков по вашему запросу</div>
-                            <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">Попробуйте изменить критерии поиска</div>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                filteredGifts.forEach((gift, index) => {
-                    const resultCard = document.createElement('div');
-                    resultCard.className = 'result-card';
-                    resultCard.style.animationDelay = `${index * 0.1}s`;
-                    resultCard.innerHTML = `
-                        <div class="result-header">
-                            <div class="result-model">${gift.icon} ${gift.name}</div>
-                            <div class="result-price">${gift.price} TON</div>
-                        </div>
-                        <div class="result-details">
-                            ⭐ ${getRarityName(gift.rarity)}
-                            ${backdropTerm ? `• 🌄 ${backdropTerm}` : ''}
-                            ${symbolTerm ? `• ✨ ${symbolTerm}` : ''}
-                        </div>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="selectGift(${JSON.stringify(gift).replace(/"/g, '&quot;')})">
-                                🛍️ Выбрать
-                            </button>
-                            <button class="action-btn secondary" onclick="showGiftDetails(${gift.id})">
-                                ℹ️ Подробнее
-                            </button>
-                        </div>
-                    `;
-                    resultsContainer.appendChild(resultCard);
-                });
-            }, 1500);
+                displaySearchResults(results);
+                showLoading(false);
+            }, 1000);
         }
 
+        // Очистка поиска
         function clearSearch() {
             document.getElementById('search-input').value = '';
             document.getElementById('backdrop-input').value = '';
             document.getElementById('symbol-input').value = '';
+            document.getElementById('budget-slider').value = 50;
+            userBudget = 50;
+            updateBudgetDisplays();
             document.getElementById('search-results').innerHTML = '';
+        }
+
+        // Отображение результатов поиска
+        function displaySearchResults(results) {
+            const container = document.getElementById('search-results');
+            container.innerHTML = '';
             
-            // Анимация очистки
-            const inputs = document.querySelectorAll('.search-input');
-            inputs.forEach(input => {
-                input.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    input.style.transform = 'scale(1)';
-                }, 300);
+            if (results.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; opacity: 0.7;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">😔</div>
+                        <h3>Ничего не найдено</h3>
+                        <p>Попробуйте изменить параметры поиска</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            results.forEach(gift => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-header">
+                        <div class="result-model">${gift.icon} ${gift.name}</div>
+                        <div class="result-price">${gift.price} TON</div>
+                    </div>
+                    <div class="result-details">
+                        Редкость: ${getRarityText(gift.rarity)}
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn secondary" onclick="showGiftDetails(${gift.id})">
+                            ℹ️ Подробнее
+                        </button>
+                        <button class="action-btn" onclick="selectGift(${JSON.stringify(gift).replace(/"/g, '&quot;')})">
+                            🎁 Выбрать
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
             });
         }
 
+        // Получение текста редкости
+        function getRarityText(rarity) {
+            const rarityMap = {
+                'common': 'Обычный',
+                'rare': 'Редкий', 
+                'epic': 'Эпический',
+                'legendary': 'Легендарный'
+            };
+            return rarityMap[rarity] || rarity;
+        }
+
+        // Детали подарка
         function showGiftDetails(giftId) {
             const gift = nftGifts.find(g => g.id === giftId);
             if (gift) {
-                tg.showPopup({
-                    title: `ℹ️ ${gift.icon} ${gift.name}`,
-                    message: `💰 Цена: ${gift.price} TON\n⭐ Редкость: ${getRarityName(gift.rarity)}\n🎁 Уникальный NFT подарок\n\nЭтот подарок будет доставлен мгновенно после покупки!`,
-                    buttons: [{ type: 'ok' }]
-                });
+                alert(`${gift.icon} ${gift.name}\nЦена: ${gift.price} TON\nРедкость: ${getRarityText(gift.rarity)}`);
             }
         }
 
-        function showRandomGift() {
-            const randomGift = nftGifts[Math.floor(Math.random() * nftGifts.length)];
-            selectGift(randomGift);
+        // Установка бюджета
+        function setBudget(amount) {
+            userBudget = amount;
+            document.getElementById('budget-setter').value = amount;
+            updateBudgetDisplays();
         }
 
-        function initiatePurchase(gift, type) {
-            const totalPrice = gift.price * 1.05; // +5% комиссия
+        // Сохранение бюджета
+        function saveBudget() {
+            alert(`Бюджет установлен: ${userBudget} TON`);
+            showScreen('main-screen');
+        }
+
+        // Обновление отображения бюджета
+        function updateBudgetDisplays() {
+            document.getElementById('budget-amount').textContent = userBudget;
+            document.getElementById('budget-display').textContent = userBudget;
+            document.getElementById('filter-budget-value').textContent = userBudget;
+            document.getElementById('filter-budget-slider').value = userBudget;
+        }
+
+        // Установка сортировки
+        function setSort(sortType) {
+            currentSort = sortType;
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Расширенный поиск
+        function performAdvancedSearch() {
+            const searchTerm = document.getElementById('filter-search-input').value.toLowerCase();
+            const budget = parseInt(document.getElementById('filter-budget-slider').value);
             
-            if (type === 'self') {
-                tg.showPopup({
-                    title: '💳 Покупка для себя',
-                    message: `🎁 Подарок: ${gift.icon} ${gift.name}\n💰 Цена: ${gift.price} TON\n⚡ Комиссия: ${(gift.price * 0.05).toFixed(2)} TON\n💎 Итого: ${totalPrice.toFixed(2)} TON\n\nПродолжить покупку NFT?`,
-                    buttons: [
-                        { id: 'confirm', type: 'default', text: '✅ Подтвердить' },
-                        { type: 'cancel' }
-                    ]
-                });
-            } else {
-                tg.showPopup({
-                    title: '👥 Подарок для друга',
-                    message: `🎁 ${gift.icon} ${gift.name}\n💰 ${gift.price} TON\n\nВведите @username друга:`,
-                    buttons: [
-                        { id: 'confirm_friend', type: 'default', text: '📝 Ввести username' },
-                        { type: 'cancel' }
-                    ]
-                });
+            let results = nftGifts.filter(gift => {
+                const matchesSearch = !searchTerm || gift.name.toLowerCase().includes(searchTerm);
+                const matchesBudget = gift.price <= budget;
+                return matchesSearch && matchesBudget;
+            });
+            
+            // Сортировка
+            switch(currentSort) {
+                case 'price_asc':
+                    results.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price_desc':
+                    results.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    results.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'rarity':
+                    const rarityOrder = { 'legendary': 4, 'epic': 3, 'rare': 2, 'common': 1 };
+                    results.sort((a, b) => rarityOrder[b.rarity] - rarityOrder[a.rarity]);
+                    break;
             }
+            
+            showScreen('search-screen');
+            displaySearchResults(results);
         }
 
-        function showLoading() {
-            document.getElementById('loading').style.display = 'block';
+        // Показать/скрыть загрузку
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
         }
 
-        function hideLoading() {
-            document.getElementById('loading').style.display = 'none';
-        }
-
-        // Инициализация слайдеров
+        // Слушатели событий
         document.getElementById('budget-slider').addEventListener('input', function() {
-            userBudget = this.value;
-            updateBudgetDisplay();
+            userBudget = parseInt(this.value);
+            document.getElementById('budget-amount').textContent = userBudget;
         });
 
         document.getElementById('budget-setter').addEventListener('input', function() {
-            userBudget = this.value;
-            updateBudgetDisplay();
+            userBudget = parseInt(this.value);
+            document.getElementById('budget-display').textContent = userBudget;
         });
 
-        // Загрузка при старте
-        document.addEventListener('DOMContentLoaded', () => {
-            loadCatalog();
-            updateBudgetDisplay();
-            
-            // Запуск фоновых анимаций
-            setInterval(() => {
-                const randomIcon = document.querySelector('.model-icon:nth-child(' + (Math.floor(Math.random() * 10) + 1) + ')');
-                if (randomIcon) {
-                    randomIcon.style.animation = 'bounce 0.5s ease';
-                    setTimeout(() => {
-                        randomIcon.style.animation = 'bounce 2s infinite, rotate 4s linear infinite';
-                    }, 500);
-                }
-            }, 3000);
+        document.getElementById('filter-budget-slider').addEventListener('input', function() {
+            document.getElementById('filter-budget-value').textContent = this.value;
         });
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
