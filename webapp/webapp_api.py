@@ -8,7 +8,7 @@ from datetime import datetime
 class WebAppAPI:
     def __init__(self):
         self.base_url = "https://api.portals.io/v1"
-        self.api_key = "YOUR_PORTALS_API_KEY"  # Замените на ваш ключ
+        self.api_key = "21f9189d0d17b066bcc4151af3213133a36442598aef4ac977d33618d3ca536a"  # Замените на ваш ключ
         self.cache = {}
         self.cache_timeout = 300  # 5 минут
         
