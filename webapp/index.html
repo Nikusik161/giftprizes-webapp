@@ -1220,6 +1220,168 @@
     </div>
 
     <script>
+        class GiftPrisesAPI {
+    constructor() {
+        this.baseURL = window.location.origin;
+    }
+    
+    async request(endpoint, data = {}) {
+        try {
+            const response = await fetch(`${this.baseURL}/api/${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('API Request failed:', error);
+            return this.getFallbackResponse(endpoint);
+        }
+    }
+    
+    getFallbackResponse(endpoint) {
+        // Fallback данные для оффлайн режима
+        const fallbackData = {
+            'search': this.generateFallbackGifts(10),
+            'gifts': this.generateFallbackGifts(20),
+            'stats': {
+                totalUsers: 1234,
+                todayOnline: 89,
+                dailyTurnover: 4567.89,
+                giftsSold: 567
+            }
+        };
+        
+        return { success: true, data: fallbackData[endpoint] || {} };
+    }
+    
+    generateFallbackGifts(count) {
+        const giftNames = [
+            "Artisan Brick", "Astral Shard", "B-Day Candle", "Berry Box", "Big Year",
+            "Bonded Ring", "Bow Tie", "Bunny Milffin", "Candy Cane", "Clover Pin"
+        ];
+        
+        return Array.from({length: count}, (_, i) => ({
+            id: `fallback_${i}`,
+            name: giftNames[i % giftNames.length],
+            price: 20 + (i * 5),
+            total_price: 20 + (i * 5) * 1.05,
+            image_url: null,
+            market: ['Portals', 'GetGems', 'TON Diamonds'][i % 3],
+            rarity: ['common', 'rare', 'epic', 'legendary'][i % 4],
+            attributes: {
+                backdrop: ['Звездный', 'Городской', 'Природный'][i % 3],
+                symbol: ['Звезды', 'Цветы', 'Геометрия'][i % 3]
+            }
+        }));
+    }
+    
+    // Основные методы API
+    async searchGifts(filters) {
+        return await this.request('search', filters);
+    }
+    
+    async getAllGifts() {
+        return await this.request('gifts');
+    }
+    
+    async getStats() {
+        return await this.request('stats');
+    }
+    
+    async purchaseGift(giftId, recipient) {
+        return await this.request('purchase', { giftId, recipient });
+    }
+    
+    async checkPayment(purchaseId) {
+        return await this.request('check-payment', { purchaseId });
+    }
+}
+
+// Инициализация API
+const api = new GiftPrisesAPI();
+
+// Интеграция с существующим кодом
+async function loadRealGiftsData() {
+    showLoading(true, "Загружаем актуальные подарки...");
+    
+    try {
+        const response = await api.getAllGifts();
+        if (response.success) {
+            window.realGifts = response.data;
+            displayRealGifts(window.realGifts);
+        }
+    } catch (error) {
+        console.error('Failed to load gifts:', error);
+        showStatusMessage('Используем локальные данные', 'warning');
+    } finally {
+        showLoading(false);
+    }
+}
+
+async function performSearch() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const budget = window.userBudget || 50;
+    
+    showLoading(true, "Ищем подарки...");
+    
+    try {
+        const response = await api.searchGifts({
+            search_term: searchTerm,
+            max_price: budget,
+            min_price: 10
+        });
+        
+        if (response.success) {
+            displaySearchResults(response.data);
+        }
+    } catch (error) {
+        console.error('Search failed:', error);
+        // Используем локальную фильтрацию как fallback
+        const results = window.realGifts.filter(gift => {
+            const matchesSearch = !searchTerm || gift.name.toLowerCase().includes(searchTerm);
+            const matchesBudget = gift.total_price <= budget;
+            return matchesSearch && matchesBudget;
+        });
+        displaySearchResults(results);
+    } finally {
+        showLoading(false);
+    }
+}
+
+// Обновляем существующие функции
+function initApp() {
+    tg.expand();
+    tg.enableClosingConfirmation();
+    
+    // Загружаем данные
+    loadRealGiftsData();
+    loadRealStats();
+    
+    // Обновляем статистику каждые 30 секунд
+    setInterval(loadRealStats, 30000);
+}
+
+async function loadRealStats() {
+    try {
+        const response = await api.getStats();
+        if (response.success) {
+            window.realStats = response.data;
+            updateStatsDisplay();
+        }
+    } catch (error) {
+        console.error('Failed to load stats:', error);
+        // Используем локальные данные
+        simulateUserActivity();
+    }
+}
         // Конфигурация
         const DISABLED_BUTTONS = {
             'search': false,
