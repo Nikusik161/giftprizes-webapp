@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GiftPrises - Магазин подарков</title>
+    <title>GiftPrises - NFT Подарки</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -24,7 +24,7 @@
             --accent: #ec4899;
             --text: #1f2937;
             --bg: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
-            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-bg: rgba(255, 255, 255, 0.95);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
@@ -34,7 +34,7 @@
             --accent: #ec4899;
             --text: #f3f4f6;
             --bg: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-bg: rgba(255, 255, 255, 0.08);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
@@ -57,7 +57,6 @@
             max-width: 100%;
             margin: 0 auto;
             padding: 20px;
-            animation: fadeIn 0.8s ease-out;
         }
 
         /* Header */
@@ -83,16 +82,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
         }
 
         .theme-switcher:hover {
             transform: rotate(180deg) scale(1.1);
+            animation: none;
         }
 
         .logo {
             font-size: 4rem;
             margin-bottom: 10px;
-            animation: bounce 2s infinite;
+            display: inline-block;
+            animation: bounce 2s infinite, glow 3s infinite alternate;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
         }
 
         .title {
@@ -103,12 +107,14 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: textShine 3s ease-in-out infinite;
         }
 
         .subtitle {
             font-size: 1.1rem;
             opacity: 0.8;
             margin-bottom: 30px;
+            animation: fadeIn 2s ease-out;
         }
 
         /* Navigation Grid */
@@ -130,7 +136,13 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            animation: slideUp 0.6s ease-out;
         }
+
+        .nav-card:nth-child(1) { animation-delay: 0.1s; }
+        .nav-card:nth-child(2) { animation-delay: 0.2s; }
+        .nav-card:nth-child(3) { animation-delay: 0.3s; }
+        .nav-card:nth-child(4) { animation-delay: 0.4s; }
 
         .nav-card::before {
             content: '';
@@ -139,7 +151,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: left 0.6s;
         }
 
@@ -156,7 +168,13 @@
             font-size: 2.5rem;
             margin-bottom: 12px;
             display: block;
+            animation: float 3s ease-in-out infinite;
         }
+
+        .nav-card:nth-child(1) .nav-icon { animation-delay: 0s; }
+        .nav-card:nth-child(2) .nav-icon { animation-delay: 0.5s; }
+        .nav-card:nth-child(3) .nav-icon { animation-delay: 1s; }
+        .nav-card:nth-child(4) .nav-icon { animation-delay: 1.5s; }
 
         .nav-title {
             font-size: 1.1rem;
@@ -169,61 +187,235 @@
             opacity: 0.7;
         }
 
-        /* Features */
-        .features {
+        /* Screens */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .back-button {
+            background: var(--card-bg);
+            border: none;
+            color: var(--text);
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        /* Models Grid */
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .model-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            animation: zoomIn 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .model-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .model-card.selected {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, var(--card-bg), rgba(255,255,255,0.15));
+            animation: pulse 2s infinite;
+        }
+
+        .model-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: bounce 2s infinite, rotate 4s linear infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+
+        .model-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .model-price {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            animation: glow 2s infinite alternate;
+        }
+
+        /* Search Screen */
+        .search-container {
             background: var(--card-bg);
             border-radius: 20px;
             padding: 25px;
             backdrop-filter: blur(10px);
-            margin-bottom: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
             animation: slideUp 0.6s ease-out;
         }
 
-        .feature {
-            display: flex;
-            align-items: center;
-            margin: 18px 0;
-            font-size: 0.95rem;
-            animation: fadeIn 0.8s ease-out;
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            animation: slideInRight 0.5s ease-out;
         }
 
-        .feature-icon {
-            font-size: 1.3rem;
-            margin-right: 15px;
-            min-width: 30px;
-            color: var(--accent);
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(240, 147, 251, 0.3);
         }
 
-        /* Footer */
-        .footer {
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.6);
+            animation: pulse 2s infinite;
+        }
+
+        .theme-light .search-input::placeholder {
+            color: rgba(0,0,0,0.6);
+        }
+
+        .budget-slider {
+            width: 100%;
+            margin: 20px 0;
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        .budget-value {
             text-align: center;
-            margin-top: 30px;
-            font-size: 0.8rem;
-            opacity: 0.6;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 10px 0;
+            animation: countUp 1s ease-out;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Results */
+        .results-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: var(--transition);
+            animation: slideUp 0.5s ease-out;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
+        .result-card:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .result-model {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .result-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            animation: glow 2s infinite alternate;
+        }
+
+        .result-details {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            animation: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .action-btn.secondary {
+            background: var(--card-bg);
+            color: var(--text);
         }
 
         /* Loading */
@@ -243,14 +435,78 @@
             margin: 0 auto 20px;
         }
 
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) scale(1); }
+            40% { transform: translateY(-10px) scale(1.1); }
+            60% { transform: translateY(-5px) scale(1.05); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3)); }
+            to { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6)); }
+        }
+
+        @keyframes textShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
         /* Responsive */
         @media (max-width: 480px) {
-            .nav-grid {
+            .nav-grid, .models-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -265,100 +521,266 @@
     </style>
 </head>
 <body>
+    <!-- Главный экран -->
     <div class="container">
-        <div class="header">
-            <button class="theme-switcher" onclick="switchTheme()">
-                <i class="fas fa-palette"></i>
+        <div class="screen active" id="main-screen">
+            <div class="header">
+                <button class="theme-switcher" onclick="switchTheme()">
+                    <i class="fas fa-palette"></i>
+                </button>
+                
+                <div class="logo">🎁</div>
+                <h1 class="title">GiftPrises</h1>
+                <p class="subtitle">Твой мир уникальных NFT подарков</p>
+            </div>
+
+            <div class="nav-grid">
+                <div class="nav-card" onclick="showScreen('catalog-screen')">
+                    <div class="nav-icon">📚</div>
+                    <div class="nav-title">Каталог NFT</div>
+                    <div class="nav-desc">Все 80+ подарков</div>
+                </div>
+                
+                <div class="nav-card" onclick="showScreen('search-screen')">
+                    <div class="nav-icon">🔍</div>
+                    <div class="nav-title">Поиск</div>
+                    <div class="nav-desc">Найди идеальный подарок</div>
+                </div>
+                
+                <div class="nav-card" onclick="showScreen('budget-screen')">
+                    <div class="nav-icon">💰</div>
+                    <div class="nav-title">Бюджет</div>
+                    <div class="nav-desc">Установи лимит</div>
+                </div>
+                
+                <div class="nav-card" onclick="showRandomGift()">
+                    <div class="nav-icon">🎲</div>
+                    <div class="nav-title">Случайный</div>
+                    <div class="nav-desc">Подарок-сюрприз</div>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">⚡</span>
+                    Мгновенная доставка NFT подарков в Telegram
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🎨</span>
+                    80+ уникальных анимированных NFT подарков
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">💫</span>
+                    Подарки для себя и друзей с автоматической доставкой
+                </div>
+            </div>
+
+            <div class="footer">
+                Powered by Telegram WebApp • GiftPrises 2024
+            </div>
+        </div>
+
+        <!-- Экран каталога -->
+        <div class="screen" id="catalog-screen">
+            <button class="back-button" onclick="showScreen('main-screen')">
+                <i class="fas fa-arrow-left"></i> Назад
             </button>
             
-            <div class="logo">🎁</div>
-            <h1 class="title">GiftPrises</h1>
-            <p class="subtitle">Твой мир уникальных подарков</p>
-        </div>
-
-        <div class="nav-grid">
-            <div class="nav-card" onclick="openCategory('models')">
-                <div class="nav-icon">🎭</div>
-                <div class="nav-title">Модели</div>
-                <div class="nav-desc">Выбери дизайн</div>
-            </div>
+            <h2 style="text-align: center; margin-bottom: 20px; animation: textShine 3s infinite;">📚 Каталог NFT Подарков</h2>
             
-            <div class="nav-card" onclick="openCategory('backdrops')">
-                <div class="nav-icon">🌄</div>
-                <div class="nav-title">Фоны</div>
-                <div class="nav-desc">Настрой окружение</div>
-            </div>
-            
-            <div class="nav-card" onclick="openCategory('symbols')">
-                <div class="nav-icon">✨</div>
-                <div class="nav-title">Узоры</div>
-                <div class="nav-desc">Добавь детали</div>
-            </div>
-            
-            <div class="nav-card" onclick="openCategory('budget')">
-                <div class="nav-icon">💰</div>
-                <div class="nav-title">Бюджет</div>
-                <div class="nav-desc">Установи лимит</div>
-            </div>
-            
-            <div class="nav-card" onclick="searchGifts()">
-                <div class="nav-icon">🔍</div>
-                <div class="nav-title">Поиск</div>
-                <div class="nav-desc">Найди подарки</div>
-            </div>
-            
-            <div class="nav-card" onclick="showCatalog()">
-                <div class="nav-icon">📚</div>
-                <div class="nav-title">Каталог</div>
-                <div class="nav-desc">Все модели</div>
+            <div class="models-grid" id="catalog-grid">
+                <!-- Каталог моделей -->
             </div>
         </div>
 
-        <div class="features">
-            <div class="feature">
-                <span class="feature-icon">⚡</span>
-                Мгновенная доставка подарков в Telegram
+        <!-- Экран поиска -->
+        <div class="screen" id="search-screen">
+            <button class="back-button" onclick="showScreen('main-screen')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            
+            <h2 style="text-align: center; margin-bottom: 20px; animation: textShine 3s infinite;">🔍 Поиск NFT подарков</h2>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="🎭 Введите название модели..." id="search-input">
+                <input type="text" class="search-input" placeholder="🌄 Введите фон (опционально)..." id="backdrop-input">
+                <input type="text" class="search-input" placeholder="✨ Введите узор (опционально)..." id="symbol-input">
+                
+                <div class="budget-value">💰 Бюджет: <span id="budget-amount">50</span> TON</div>
+                <input type="range" class="budget-slider" min="10" max="200" value="50" id="budget-slider">
+                
+                <button class="action-btn" onclick="performSearch()" style="width: 100%;">
+                    🔍 Найти NFT подарки
+                </button>
+
+                <button class="action-btn secondary" onclick="clearSearch()" style="width: 100%; margin-top: 10px;">
+                    🗑️ Очистить поиск
+                </button>
             </div>
-            <div class="feature">
-                <span class="feature-icon">🎨</span>
-                Тысячи уникальных комбинаций моделей, фонов и узоров
+
+            <div class="results-grid" id="search-results">
+                <!-- Результаты поиска -->
             </div>
-            <div class="feature">
-                <span class="feature-icon">💫</span>
-                Подарки для себя и друзей с автоматической доставкой
-            </div>
-            <div class="feature">
-                <span class="feature-icon">🛡️</span>
-                Безопасные платежи через TON blockchain
+        </div>
+
+        <!-- Экран бюджета -->
+        <div class="screen" id="budget-screen">
+            <button class="back-button" onclick="showScreen('main-screen')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            
+            <h2 style="text-align: center; margin-bottom: 20px; animation: textShine 3s infinite;">💰 Установи бюджет</h2>
+            
+            <div class="search-container">
+                <div class="budget-value" style="font-size: 2rem; color: var(--accent);">
+                    <span id="budget-display">50</span> TON
+                </div>
+                <input type="range" class="budget-slider" min="10" max="200" value="50" id="budget-setter">
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px;">
+                    <button class="action-btn secondary" onclick="setBudget(30)">30 TON</button>
+                    <button class="action-btn secondary" onclick="setBudget(50)">50 TON</button>
+                    <button class="action-btn secondary" onclick="setBudget(100)">100 TON</button>
+                </div>
+                
+                <button class="action-btn" onclick="saveBudget()" style="width: 100%; margin-top: 20px;">
+                    💾 Сохранить бюджет
+                </button>
             </div>
         </div>
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Загружаем...</p>
-        </div>
-
-        <div class="footer">
-            Powered by Telegram WebApp • GiftPrises 2025
+            <p>Загружаем NFT подарки...</p>
         </div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         let currentTheme = 'default';
+        let selectedModel = null;
+        let userBudget = 50;
         
-        // Инициализация WebApp
+        // Все NFT подарки с эмодзи и ценами
+        const nftGifts = [
+            { id: 1, name: 'Artisan Brick', price: 45, icon: '🧱', rarity: 'rare' },
+            { id: 2, name: 'Astral Shard', price: 38, icon: '💎', rarity: 'epic' },
+            { id: 3, name: 'B-Day Candle', price: 42, icon: '🎂', rarity: 'common' },
+            { id: 4, name: 'Berry Box', price: 35, icon: '🍓', rarity: 'common' },
+            { id: 5, name: 'Big Year', price: 48, icon: '📅', rarity: 'rare' },
+            { id: 6, name: 'Bonded Ring', price: 55, icon: '💍', rarity: 'epic' },
+            { id: 7, name: 'Bow Tie', price: 32, icon: '🎀', rarity: 'common' },
+            { id: 8, name: 'Bunny Milffin', price: 40, icon: '🐰', rarity: 'rare' },
+            { id: 9, name: 'Candy Cane', price: 28, icon: '🍬', rarity: 'common' },
+            { id: 10, name: 'Clover Pin', price: 36, icon: '🍀', rarity: 'rare' },
+            { id: 11, name: 'Cookie Heart', price: 33, icon: '🍪', rarity: 'common' },
+            { id: 12, name: 'Crystal Ball', price: 52, icon: '🔮', rarity: 'epic' },
+            { id: 13, name: 'Cupid Charm', price: 44, icon: '🏹', rarity: 'rare' },
+            { id: 14, name: 'Desk Calendar', price: 37, icon: '📆', rarity: 'common' },
+            { id: 15, name: 'Diamond Ring', price: 68, icon: '💎', rarity: 'legendary' },
+            { id: 16, name: 'Durov\'s Cap', price: 75, icon: '👒', rarity: 'legendary' },
+            { id: 17, name: 'Easter Egg', price: 39, icon: '🥚', rarity: 'rare' },
+            { id: 18, name: 'Electric Skull', price: 58, icon: '💀', rarity: 'epic' },
+            { id: 19, name: 'Eternal Candle', price: 47, icon: '🕯️', rarity: 'rare' },
+            { id: 20, name: 'Eternal Rose', price: 49, icon: '🌹', rarity: 'epic' },
+            { id: 21, name: 'Evil Eye', price: 41, icon: '👁️', rarity: 'rare' },
+            { id: 22, name: 'Flying Broom', price: 43, icon: '🧹', rarity: 'rare' },
+            { id: 23, name: 'Fresh Socks', price: 29, icon: '🧦', rarity: 'common' },
+            { id: 24, name: 'Gem Signet', price: 51, icon: '💍', rarity: 'epic' },
+            { id: 25, name: 'Genie Lamp', price: 63, icon: '🪔', rarity: 'legendary' },
+            { id: 26, name: 'Ginger Cookie', price: 31, icon: '🍪', rarity: 'common' },
+            { id: 27, name: 'Hanging Star', price: 46, icon: '⭐', rarity: 'rare' },
+            { id: 28, name: 'Heart Locket', price: 38, icon: '🔒', rarity: 'common' },
+            { id: 29, name: 'Heroic Helmet', price: 56, icon: '⛑️', rarity: 'epic' },
+            { id: 30, name: 'Hex Pot', price: 42, icon: '🧪', rarity: 'rare' },
+            { id: 31, name: 'Holiday Drink', price: 34, icon: '🍹', rarity: 'common' },
+            { id: 32, name: 'Homemade Cake', price: 37, icon: '🎂', rarity: 'common' },
+            { id: 33, name: 'Hypno Lollipop', price: 39, icon: '🍭', rarity: 'rare' },
+            { id: 34, name: 'Input Key', price: 45, icon: '🔑', rarity: 'rare' },
+            { id: 35, name: 'Ion Gem', price: 53, icon: '💎', rarity: 'epic' },
+            { id: 36, name: 'Ionic Dryer', price: 48, icon: '💨', rarity: 'rare' },
+            { id: 37, name: 'Jack-in-the-Box', price: 44, icon: '🎁', rarity: 'rare' },
+            { id: 38, name: 'Jelly Bunny', price: 36, icon: '🐇', rarity: 'common' },
+            { id: 39, name: 'Jester Hat', price: 41, icon: '🎭', rarity: 'rare' },
+            { id: 40, name: 'Jingle Bells', price: 33, icon: '🔔', rarity: 'common' },
+            { id: 41, name: 'Jolly Chimp', price: 47, icon: '🐵', rarity: 'rare' },
+            { id: 42, name: 'Joyful Bundle', price: 59, icon: '🎀', rarity: 'epic' },
+            { id: 43, name: 'Kissed Frog', price: 42, icon: '🐸', rarity: 'rare' },
+            { id: 44, name: 'Light Sword', price: 61, icon: '⚔️', rarity: 'legendary' },
+            { id: 45, name: 'Lol Pop', price: 35, icon: '🍭', rarity: 'common' },
+            { id: 46, name: 'Loot Bag', price: 50, icon: '💰', rarity: 'epic' },
+            { id: 47, name: 'Love Candle', price: 38, icon: '🕯️', rarity: 'common' },
+            { id: 48, name: 'Love Potion', price: 46, icon: '🧪', rarity: 'rare' },
+            { id: 49, name: 'Low Rider', price: 52, icon: '🛹', rarity: 'epic' },
+            { id: 50, name: 'Lunar Snake', price: 44, icon: '🐍', rarity: 'rare' },
+            { id: 51, name: 'Lush Bouquet', price: 49, icon: '💐', rarity: 'epic' },
+            { id: 52, name: 'Mad Pumpkin', price: 41, icon: '🎃', rarity: 'rare' },
+            { id: 53, name: 'Magic Potion', price: 55, icon: '🧪', rarity: 'epic' },
+            { id: 54, name: 'Mighty Arm', price: 57, icon: '💪', rarity: 'epic' },
+            { id: 55, name: 'Mini Oscar', price: 65, icon: '🏆', rarity: 'legendary' },
+            { id: 56, name: 'Moon Pandante', price: 53, icon: '🐼', rarity: 'epic' },
+            { id: 57, name: 'Nail Bracelet', price: 39, icon: '📿', rarity: 'common' },
+            { id: 58, name: 'Neko Helmet', price: 47, icon: '🐱', rarity: 'rare' },
+            { id: 59, name: 'Party Sparkler', price: 43, icon: '🎆', rarity: 'rare' },
+            { id: 60, name: 'Perfume Bottle', price: 45, icon: '🧴', rarity: 'rare' },
+            { id: 61, name: 'Pet Snake', price: 48, icon: '🐍', rarity: 'rare' },
+            { id: 62, name: 'Plush Pepe', price: 70, icon: '🐸', rarity: 'legendary' },
+            { id: 63, name: 'Precious Peach', price: 42, icon: '🍑', rarity: 'rare' },
+            { id: 64, name: 'Record Player', price: 54, icon: '💿', rarity: 'epic' },
+            { id: 65, name: 'Restless Jar', price: 46, icon: '🫙', rarity: 'rare' },
+            { id: 66, name: 'Sakura Flower', price: 44, icon: '🌸', rarity: 'rare' },
+            { id: 67, name: 'Santa Hat', price: 40, icon: '🎅', rarity: 'common' },
+            { id: 68, name: 'Scared Cat', price: 38, icon: '🐱', rarity: 'common' },
+            { id: 69, name: 'Sharp Tongue', price: 49, icon: '👅', rarity: 'rare' },
+            { id: 70, name: 'Signet Ring', price: 51, icon: '💍', rarity: 'epic' },
+            { id: 71, name: 'Skull Flower', price: 47, icon: '💀', rarity: 'rare' },
+            { id: 72, name: 'Sky Stilettos', price: 56, icon: '👠', rarity: 'epic' },
+            { id: 73, name: 'Sleigh Bell', price: 39, icon: '🔔', rarity: 'common' },
+            { id: 74, name: 'Snake Box', price: 45, icon: '🐍', rarity: 'rare' },
+            { id: 75, name: 'Snoop Cigar', price: 58, icon: '🚬', rarity: 'epic' },
+            { id: 76, name: 'Snoop Dogg', price: 80, icon: '🐕', rarity: 'legendary' },
+            { id: 77, name: 'Snow Globe', price: 43, icon: '🔮', rarity: 'rare' },
+            { id: 78, name: 'Snow Mittens', price: 36, icon: '🧤', rarity: 'common' },
+            { id: 79, name: 'Spiced Wine', price: 44, icon: '🍷', rarity: 'rare' },
+            { id: 80, name: 'Spy Agaric', price: 48, icon: '🍄', rarity: 'rare' },
+            { id: 81, name: 'Star Notepad', price: 37, icon: '📝', rarity: 'common' },
+            { id: 82, name: 'Stellar Rocket', price: 62, icon: '🚀', rarity: 'legendary' },
+            { id: 83, name: 'Swag Bag', price: 52, icon: '🛍️', rarity: 'epic' },
+            { id: 84, name: 'Swiss Watch', price: 67, icon: '⌚', rarity: 'legendary' },
+            { id: 85, name: 'Tama Gadget', price: 49, icon: '📱', rarity: 'rare' },
+            { id: 86, name: 'Top Hat', price: 46, icon: '🎩', rarity: 'rare' },
+            { id: 87, name: 'Toy Bear', price: 39, icon: '🧸', rarity: 'common' },
+            { id: 88, name: 'Trapped Heart', price: 51, icon: '💔', rarity: 'epic' },
+            { id: 89, name: 'Valentine Box', price: 44, icon: '💝', rarity: 'rare' },
+            { id: 90, name: 'Vintage Cigar', price: 53, icon: '🚬', rarity: 'epic' },
+            { id: 91, name: 'Voodoo Doll', price: 57, icon: '🪆', rarity: 'epic' },
+            { id: 92, name: 'Westside Sign', price: 59, icon: '🪧', rarity: 'epic' },
+            { id: 93, name: 'Whip Cupcake', price: 41, icon: '🧁', rarity: 'rare' },
+            { id: 94, name: 'Winter Weath', price: 45, icon: '❄️', rarity: 'rare' },
+            { id: 95, name: 'Witch Hat', price: 47, icon: '🧙', rarity: 'rare' },
+            { id: 96, name: 'Xmas Strocking', price: 42, icon: '🧦', rarity: 'common' }
+        ];
+
+        // Инициализация
         tg.expand();
         tg.ready();
-        tg.MainButton.setText('GiftPrises').show();
         
-        // Загрузка темы из localStorage
+        // Загрузка темы
         const savedTheme = localStorage.getItem('giftprizes-theme');
         if (savedTheme) {
             document.body.className = savedTheme;
             currentTheme = savedTheme;
         }
-        
+
+        // Загрузка данных
+        const savedBudget = localStorage.getItem('giftprizes-budget');
+        if (savedBudget) {
+            userBudget = parseInt(savedBudget);
+            document.getElementById('budget-slider').value = userBudget;
+            document.getElementById('budget-setter').value = userBudget;
+            updateBudgetDisplay();
+        }
+
         function switchTheme() {
             const themes = ['default', 'theme-light', 'theme-dark'];
             const currentIndex = themes.indexOf(currentTheme);
@@ -374,75 +796,263 @@
                 document.body.style.opacity = '1';
             }, 200);
         }
-        
+
+        function showScreen(screenId) {
+            // Скрыть все экраны
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Показать выбранный экран
+            document.getElementById(screenId).classList.add('active');
+            
+            // Загрузить данные если нужно
+            if (screenId === 'catalog-screen') {
+                loadCatalog();
+            }
+        }
+
+        function loadCatalog() {
+            const container = document.getElementById('catalog-grid');
+            container.innerHTML = '';
+            
+            nftGifts.forEach((gift, index) => {
+                const card = document.createElement('div');
+                card.className = 'model-card';
+                card.style.animationDelay = `${index * 0.05}s`;
+                card.onclick = () => selectGift(gift);
+                
+                // Цвет рамки в зависимости от редкости
+                let borderColor = 'transparent';
+                if (gift.rarity === 'epic') borderColor = '#9b59b6';
+                if (gift.rarity === 'legendary') borderColor = '#f39c12';
+                if (gift.rarity === 'rare') borderColor = '#3498db';
+                
+                card.style.borderColor = borderColor;
+                
+                card.innerHTML = `
+                    <div class="model-icon">${gift.icon}</div>
+                    <div class="model-name">${gift.name}</div>
+                    <div class="model-price">${gift.price} TON</div>
+                    <div style="font-size: 0.7rem; margin-top: 5px; opacity: 0.6;">
+                        ${gift.rarity === 'legendary' ? '⭐ Легендарный' : 
+                          gift.rarity === 'epic' ? '💜 Эпический' : 
+                          gift.rarity === 'rare' ? '🔵 Редкий' : '⚪ Обычный'}
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function selectGift(gift) {
+            selectedModel = gift;
+            
+            // Анимация выбора
+            const cards = document.querySelectorAll('.model-card');
+            cards.forEach(card => card.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            
+            // Показать попап с информацией
+            tg.showPopup({
+                title: `🎁 ${gift.icon} ${gift.name}`,
+                message: `💰 Цена: ${gift.price} TON\n⭐ Редкость: ${getRarityName(gift.rarity)}\n\nХотите приобрести этот NFT подарок?`,
+                buttons: [
+                    { id: 'buy_self', type: 'default', text: '🛍️ Купить для себя' },
+                    { id: 'buy_friend', type: 'ok', text: '👥 Подарить другу' },
+                    { type: 'cancel' }
+                ]
+            });
+
+            tg.onEvent('popupButtonClicked', (event) => {
+                if (event.button_id === 'buy_self') {
+                    initiatePurchase(gift, 'self');
+                } else if (event.button_id === 'buy_friend') {
+                    initiatePurchase(gift, 'friend');
+                }
+            });
+        }
+
+        function getRarityName(rarity) {
+            const names = {
+                'common': '⚪ Обычный',
+                'rare': '🔵 Редкий', 
+                'epic': '💜 Эпический',
+                'legendary': '⭐ Легендарный'
+            };
+            return names[rarity] || rarity;
+        }
+
+        function updateBudgetDisplay() {
+            document.getElementById('budget-amount').textContent = userBudget;
+            document.getElementById('budget-display').textContent = userBudget;
+        }
+
+        function setBudget(amount) {
+            userBudget = amount;
+            document.getElementById('budget-slider').value = amount;
+            document.getElementById('budget-setter').value = amount;
+            updateBudgetDisplay();
+        }
+
+        function saveBudget() {
+            localStorage.setItem('giftprizes-budget', userBudget);
+            tg.showPopup({
+                title: '✅ Бюджет сохранен',
+                message: `Установлен бюджет: ${userBudget} TON`,
+                buttons: [{ type: 'ok' }]
+            });
+        }
+
+        function performSearch() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const backdropTerm = document.getElementById('backdrop-input').value.toLowerCase();
+            const symbolTerm = document.getElementById('symbol-input').value.toLowerCase();
+            const resultsContainer = document.getElementById('search-results');
+            
+            showLoading();
+            
+            // Имитация поиска с анимацией
+            setTimeout(() => {
+                hideLoading();
+                
+                const filteredGifts = nftGifts.filter(gift => {
+                    const nameMatch = gift.name.toLowerCase().includes(searchTerm);
+                    const priceMatch = gift.price <= userBudget;
+                    return nameMatch && priceMatch;
+                });
+                
+                resultsContainer.innerHTML = '';
+                
+                if (filteredGifts.length === 0) {
+                    resultsContainer.innerHTML = `
+                        <div class="result-card" style="text-align: center; animation: bounce 2s infinite;">
+                            <div class="model-icon">😕</div>
+                            <div style="margin-top: 10px;">Не найдено NFT подарков по вашему запросу</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">Попробуйте изменить критерии поиска</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                filteredGifts.forEach((gift, index) => {
+                    const resultCard = document.createElement('div');
+                    resultCard.className = 'result-card';
+                    resultCard.style.animationDelay = `${index * 0.1}s`;
+                    resultCard.innerHTML = `
+                        <div class="result-header">
+                            <div class="result-model">${gift.icon} ${gift.name}</div>
+                            <div class="result-price">${gift.price} TON</div>
+                        </div>
+                        <div class="result-details">
+                            ⭐ ${getRarityName(gift.rarity)}
+                            ${backdropTerm ? `• 🌄 ${backdropTerm}` : ''}
+                            ${symbolTerm ? `• ✨ ${symbolTerm}` : ''}
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="selectGift(${JSON.stringify(gift).replace(/"/g, '&quot;')})">
+                                🛍️ Выбрать
+                            </button>
+                            <button class="action-btn secondary" onclick="showGiftDetails(${gift.id})">
+                                ℹ️ Подробнее
+                            </button>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(resultCard);
+                });
+            }, 1500);
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('backdrop-input').value = '';
+            document.getElementById('symbol-input').value = '';
+            document.getElementById('search-results').innerHTML = '';
+            
+            // Анимация очистки
+            const inputs = document.querySelectorAll('.search-input');
+            inputs.forEach(input => {
+                input.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    input.style.transform = 'scale(1)';
+                }, 300);
+            });
+        }
+
+        function showGiftDetails(giftId) {
+            const gift = nftGifts.find(g => g.id === giftId);
+            if (gift) {
+                tg.showPopup({
+                    title: `ℹ️ ${gift.icon} ${gift.name}`,
+                    message: `💰 Цена: ${gift.price} TON\n⭐ Редкость: ${getRarityName(gift.rarity)}\n🎁 Уникальный NFT подарок\n\nЭтот подарок будет доставлен мгновенно после покупки!`,
+                    buttons: [{ type: 'ok' }]
+                });
+            }
+        }
+
+        function showRandomGift() {
+            const randomGift = nftGifts[Math.floor(Math.random() * nftGifts.length)];
+            selectGift(randomGift);
+        }
+
+        function initiatePurchase(gift, type) {
+            const totalPrice = gift.price * 1.05; // +5% комиссия
+            
+            if (type === 'self') {
+                tg.showPopup({
+                    title: '💳 Покупка для себя',
+                    message: `🎁 Подарок: ${gift.icon} ${gift.name}\n💰 Цена: ${gift.price} TON\n⚡ Комиссия: ${(gift.price * 0.05).toFixed(2)} TON\n💎 Итого: ${totalPrice.toFixed(2)} TON\n\nПродолжить покупку NFT?`,
+                    buttons: [
+                        { id: 'confirm', type: 'default', text: '✅ Подтвердить' },
+                        { type: 'cancel' }
+                    ]
+                });
+            } else {
+                tg.showPopup({
+                    title: '👥 Подарок для друга',
+                    message: `🎁 ${gift.icon} ${gift.name}\n💰 ${gift.price} TON\n\nВведите @username друга:`,
+                    buttons: [
+                        { id: 'confirm_friend', type: 'default', text: '📝 Ввести username' },
+                        { type: 'cancel' }
+                    ]
+                });
+            }
+        }
+
         function showLoading() {
             document.getElementById('loading').style.display = 'block';
         }
-        
+
         function hideLoading() {
             document.getElementById('loading').style.display = 'none';
         }
-        
-        function openCategory(category) {
-            showLoading();
-            
-            // Анимация перехода
-            document.querySelector('.container').style.animation = 'fadeOut 0.5s forwards';
-            
-            setTimeout(() => {
-                sendToBot('open_category', { category: category });
-            }, 300);
-        }
-        
-        function searchGifts() {
-            showLoading();
-            sendToBot('search_gifts', { method: 'webapp' });
-        }
-        
-        function showCatalog() {
-            showLoading();
-            sendToBot('show_catalog', { view: 'full' });
-        }
-        
-        function sendToBot(action, data = {}) {
-            const message = {
-                action: action,
-                source: 'webapp',
-                timestamp: Date.now(),
-                theme: currentTheme,
-                ...data
-            };
-            
-            tg.sendData(JSON.stringify(message));
-            
-            // Показываем подтверждение
-            tg.showPopup({
-                title: '🎯 Отлично!',
-                message: 'Команда отправлена в бота\n\nЗакройте окно чтобы увидеть результат',
-                buttons: [{ type: 'close' }]
-            });
-            
-            // Закрываем WebApp через 2 секунды
-            setTimeout(() => {
-                tg.close();
-            }, 2000);
-        }
-        
-        // Обработка нажатия основной кнопки
-        tg.MainButton.onClick(() => {
-            tg.showPopup({
-                title: '👋 Добро пожаловать!',
-                message: 'Используйте карточки выше для навигации по магазину подарков\n\n🎨 Нажмите на палитру для смены темы',
-                buttons: [{ type: 'ok' }]
-            });
+
+        // Инициализация слайдеров
+        document.getElementById('budget-slider').addEventListener('input', function() {
+            userBudget = this.value;
+            updateBudgetDisplay();
         });
-        
-        // Добавляем анимацию при загрузке
+
+        document.getElementById('budget-setter').addEventListener('input', function() {
+            userBudget = this.value;
+            updateBudgetDisplay();
+        });
+
+        // Загрузка при старте
         document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.nav-card');
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-            });
+            loadCatalog();
+            updateBudgetDisplay();
+            
+            // Запуск фоновых анимаций
+            setInterval(() => {
+                const randomIcon = document.querySelector('.model-icon:nth-child(' + (Math.floor(Math.random() * 10) + 1) + ')');
+                if (randomIcon) {
+                    randomIcon.style.animation = 'bounce 0.5s ease';
+                    setTimeout(() => {
+                        randomIcon.style.animation = 'bounce 2s infinite, rotate 4s linear infinite';
+                    }, 500);
+                }
+            }, 3000);
         });
     </script>
 </body>
