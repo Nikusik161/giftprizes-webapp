@@ -1,3 +1,4 @@
+# main.py
 from aiohttp import web
 import asyncio
 import os
@@ -89,7 +90,6 @@ def init_app():
     app.router.add_get('/index.html', handle_index)
     app.router.add_post('/api/{endpoint:.*}', handle_api)
     app.router.add_get('/api/{endpoint:.*}', handle_api)
-    app.router.add_static('/static/', path='./static/')
     
     return app
 
