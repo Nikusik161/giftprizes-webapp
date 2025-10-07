@@ -33,6 +33,20 @@
             --text-secondary: rgba(0, 0, 0, 0.7);
         }
 
+        [data-theme="light-purple"] {
+            --primary: #a78bfa;
+            --secondary: #c4b5fd;
+            --accent: #8b5cf6;
+            --text: #1f2937;
+            --bg: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 100%);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 8px 32px rgba(168, 85, 247, 0.1);
+            --text-secondary: rgba(0, 0, 0, 0.7);
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
         [data-theme="dark"] {
             --primary: #6366f1;
             --secondary: #8b5cf6;
@@ -42,20 +56,6 @@
             --card-bg: rgba(255, 255, 255, 0.08);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             --text-secondary: rgba(255, 255, 255, 0.7);
-        }
-
-        [data-theme="purple"] {
-            --primary: #a78bfa;
-            --secondary: #7c3aed;
-            --accent: #c084fc;
-            --text: #1f2937;
-            --bg: linear-gradient(135deg, #e9d5ff 0%, #a78bfa 100%);
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --shadow: 0 8px 32px rgba(167, 139, 250, 0.2);
-            --text-secondary: rgba(55, 65, 81, 0.8);
-            --success: #10b981;
-            --error: #ef4444;
-            --warning: #f59e0b;
         }
 
         * {
@@ -758,125 +758,121 @@
             font-size: 0.9rem;
         }
 
-        /* Admin User List */
-        .admin-user-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 10px;
-        }
-
-        .admin-user-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .admin-user-item:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateX(5px);
-        }
-
-        .admin-user-item.active {
-            background: rgba(102, 126, 234, 0.3);
-            border: 1px solid var(--primary);
-        }
-
-        .user-search-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .user-search-input {
-            width: 100%;
-            padding: 12px 45px 12px 15px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.1);
-            color: var(--text);
-            font-size: 1rem;
-        }
-
-        .user-search-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-        }
-
-        .user-detail-stats {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .user-detail-section {
-            margin-bottom: 20px;
-        }
-
-        .user-detail-section h4 {
-            margin-bottom: 10px;
-            color: var(--accent);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 5px;
-        }
-
-        .user-purchase-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 6px;
-            margin-bottom: 5px;
-        }
-
-        .purchase-status.completed {
-            color: var(--success);
-        }
-
-        .purchase-status.cancelled {
-            color: var(--error);
-        }
-
-        .purchase-status.pending {
-            color: var(--warning);
+        /* User Statistics */
+        .user-stats-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
         }
 
         .user-stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .user-stat-card {
             background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 15px;
             text-align: center;
+            transition: var(--transition);
+        }
+
+        .user-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .user-stat-value {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--accent);
             margin-bottom: 5px;
         }
 
         .user-stat-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             opacity: 0.7;
+        }
+
+        .user-purchases-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .user-purchase-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: var(--transition);
+        }
+
+        .user-purchase-item:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+
+        .purchase-status {
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .purchase-status.completed {
+            background: rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+
+        .purchase-status.cancelled {
+            background: rgba(239, 68, 68, 0.3);
+            color: var(--error);
+        }
+
+        .purchase-status.pending {
+            background: rgba(245, 158, 11, 0.3);
+            color: var(--warning);
+        }
+
+        /* Alert Items */
+        .alert-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .alert-item.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            color: var(--success);
+        }
+
+        .alert-item.warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            color: var(--warning);
+        }
+
+        .alert-item.info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            color: #3b82f6;
+        }
+
+        .alert-item i {
+            margin-right: 10px;
+            font-size: 1.1rem;
         }
 
         /* Анимации */
@@ -946,7 +942,7 @@
 
         /* Responsive */
         @media (max-width: 480px) {
-            .nav-grid, .stats-grid {
+            .nav-grid, .stats-grid, .user-stats-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -959,10 +955,6 @@
             }
             
             .toggle-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .user-stats-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -1043,17 +1035,17 @@
                         <div class="user-list" id="top-buyers">
                             <div class="user-item">
                                 <span class="user-rank">1</span>
-                                <span class="user-name">@cryptoking</span>
-                                <span class="user-amount">1,250 TON</span>
+                                <span class="user-name">@crypto_lover</span>
+                                <span class="user-amount">1,200 TON</span>
                             </div>
                             <div class="user-item">
                                 <span class="user-rank">2</span>
-                                <span class="user-name">@tonlover</span>
+                                <span class="user-name">@nft_collector</span>
                                 <span class="user-amount">980 TON</span>
                             </div>
                             <div class="user-item">
                                 <span class="user-rank">3</span>
-                                <span class="user-name">@giftmaster</span>
+                                <span class="user-name">@gift_master</span>
                                 <span class="user-amount">750 TON</span>
                             </div>
                         </div>
@@ -1064,18 +1056,18 @@
                         <div class="gift-list" id="popular-gifts">
                             <div class="gift-item">
                                 <span class="gift-rank">1</span>
-                                <span class="gift-name">Golden NFT</span>
+                                <span class="gift-name">Золотой дракон</span>
                                 <span class="gift-sales">45 шт</span>
                             </div>
                             <div class="gift-item">
                                 <span class="gift-rank">2</span>
-                                <span class="gift-name">Crypto Art</span>
-                                <span class="gift-sales">38 шт</span>
+                                <span class="gift-name">Космический корабль</span>
+                                <span class="gift-sales">32 шт</span>
                             </div>
                             <div class="gift-item">
                                 <span class="gift-rank">3</span>
-                                <span class="gift-name">VIP Badge</span>
-                                <span class="gift-sales">32 шт</span>
+                                <span class="gift-name">Волшебный кристалл</span>
+                                <span class="gift-sales">28 шт</span>
                             </div>
                         </div>
                     </div>
@@ -1115,6 +1107,7 @@
             <h2 style="text-align: center; margin-bottom: 20px;">⚙️ Админ панель</h2>
             
             <div class="admin-panel">
+                <!-- Общая статистика -->
                 <div class="admin-section">
                     <h3>📊 Общая статистика</h3>
                     <div class="stats-grid">
@@ -1123,125 +1116,200 @@
                             <div class="stat-label">Всего пользователей</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value" id="admin-total-sales">543</div>
+                            <div class="stat-value" id="admin-total-sales">892</div>
                             <div class="stat-label">Всего продаж</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value" id="admin-total-revenue">8,420 TON</div>
+                            <div class="stat-value" id="admin-total-revenue">15,640 TON</div>
                             <div class="stat-label">Общий доход</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-value" id="admin-active-users">89</div>
-                            <div class="stat-label">Активных сейчас</div>
+                            <div class="stat-label">Активных сегодня</div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Детальная статистика пользователей -->
                 <div class="admin-section">
-                    <h3>🛠️ Управление ботом</h3>
-                    <div class="toggle-buttons">
-                        <button class="toggle-btn enabled" id="toggle-purchases" onclick="toggleSetting('purchases')">
-                            Покупки включены
-                        </button>
-                        <button class="toggle-btn enabled" id="toggle-sales" onclick="toggleSetting('sales')">
-                            Продажи включены
-                        </button>
-                        <button class="toggle-btn enabled" id="toggle-withdrawals" onclick="toggleSetting('withdrawals')">
-                            Вывод включен
-                        </button>
-                        <button class="toggle-btn enabled" id="toggle-support" onclick="toggleSetting('support')">
-                            Поддержка онлайн
-                        </button>
+                    <h3>📈 Детальная статистика пользователей</h3>
+                    <div class="user-stats-grid">
+                        <div class="user-stat-card">
+                            <div class="user-stat-value" id="new-users-today">23</div>
+                            <div class="user-stat-label">Новых сегодня</div>
+                        </div>
+                        <div class="user-stat-card">
+                            <div class="user-stat-value" id="avg-session-time">8.5м</div>
+                            <div class="user-stat-label">Средняя сессия</div>
+                        </div>
+                        <div class="user-stat-card">
+                            <div class="user-stat-value" id="conversion-rate">12.4%</div>
+                            <div class="user-stat-label">Конверсия в покупки</div>
+                        </div>
+                        <div class="user-stat-card">
+                            <div class="user-stat-value" id="retention-rate">64.7%</div>
+                            <div class="user-stat-label">Удержание (7 дней)</div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Финансовая аналитика -->
+                <div class="admin-section">
+                    <h3>💳 Финансовая аналитика</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="avg-order-value">127.5 TON</div>
+                            <div class="stat-label">Средний чек</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="revenue-per-user">18.3 TON</div>
+                            <div class="stat-label">Доход на пользователя</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="profit-margin">28.6%</div>
+                            <div class="stat-label">Маржа прибыли</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="refund-rate">2.1%</div>
+                            <div class="stat-label">Уровень возвратов</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Аналитика подарков -->
+                <div class="admin-section">
+                    <h3>🎁 Аналитика подарков</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-gifts">156</div>
+                            <div class="stat-label">Всего подарков</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="gift-views">8,742</div>
+                            <div class="stat-label">Просмотры подарков</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="gift-conversion">4.8%</div>
+                            <div class="stat-label">Конверсия в покупки</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="top-gift-price">2,450 TON</div>
+                            <div class="stat-label">Самый дорогой подарок</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Управление пользователями -->
                 <div class="admin-section">
                     <h3>👥 Управление пользователями</h3>
-                    
-                    <div class="user-search-container">
-                        <input type="text" class="user-search-input" id="user-search" placeholder="Поиск пользователя по юзернейму...">
-                        <i class="fas fa-search user-search-icon"></i>
+                    <div class="form-group">
+                        <input type="text" class="search-input" id="user-search" placeholder="🔍 Поиск по юзернейму..." oninput="searchUsers()">
                     </div>
-                    
-                    <div class="admin-user-list" id="admin-user-list">
-                        <!-- Список пользователей будет загружен здесь -->
+                    <div id="users-list" style="max-height: 300px; overflow-y: auto; margin-top: 15px;">
+                        <!-- Список пользователей будет здесь -->
                     </div>
-                    
-                    <div class="user-detail-stats" id="user-detail-stats" style="display: none;">
-                        <h4>📈 Статистика пользователя: <span id="selected-username"></span></h4>
-                        
-                        <div class="user-detail-section">
-                            <h4>💳 Финансовая статистика</h4>
-                            <div class="user-stats-grid">
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-total-spent">0 TON</div>
-                                    <div class="user-stat-label">Всего потрачено</div>
-                                </div>
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-successful-payments">0</div>
-                                    <div class="user-stat-label">Успешных платежей</div>
-                                </div>
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-failed-payments">0</div>
-                                    <div class="user-stat-label">Неудачных платежей</div>
-                                </div>
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-refund-amount">0 TON</div>
-                                    <div class="user-stat-label">Сумма возвратов</div>
-                                </div>
-                            </div>
+                </div>
+
+                <!-- Детали пользователя -->
+                <div class="admin-section" id="user-details-section" style="display: none;">
+                    <h3>👤 Статистика пользователя</h3>
+                    <div id="user-details">
+                        <!-- Детальная статистика пользователя будет здесь -->
+                    </div>
+                </div>
+
+                <!-- Система мониторинга -->
+                <div class="admin-section">
+                    <h3>🔔 Система мониторинга</h3>
+                    <div id="system-alerts">
+                        <div class="alert-item success">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Система работает стабильно</span>
                         </div>
-                        
-                        <div class="user-detail-section">
-                            <h4>🎁 Статистика подарков</h4>
-                            <div class="user-stats-grid">
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-gifts-purchased">0</div>
-                                    <div class="user-stat-label">Куплено подарков</div>
-                                </div>
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-top-gift">-</div>
-                                    <div class="user-stat-label">Любимый подарок</div>
-                                </div>
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-avg-gift-price">0 TON</div>
-                                    <div class="user-stat-label">Средний чек</div>
-                                </div>
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-gifts-sent">0</div>
-                                    <div class="user-stat-label">Подарков отправлено</div>
-                                </div>
-                            </div>
+                        <div class="alert-item warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Низкая конверсия сегодня</span>
                         </div>
-                        
-                        <div class="user-detail-section">
-                            <h4>⏱️ Активность</h4>
-                            <div class="user-stats-grid">
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-hours-spent">0 ч</div>
-                                    <div class="user-stat-label">Время в боте</div>
-                                </div>
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-sessions-count">0</div>
-                                    <div class="user-stat-label">Сессий в боте</div>
-                                </div>
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-support-requests">0</div>
-                                    <div class="user-stat-label">Обращений в поддержку</div>
-                                </div>
-                                <div class="user-stat-card">
-                                    <div class="user-stat-value" id="user-days-active">0</div>
-                                    <div class="user-stat-label">Дней активности</div>
-                                </div>
-                            </div>
+                        <div class="alert-item info">
+                            <i class="fas fa-info-circle"></i>
+                            <span>5 новых пользователей за последний час</span>
                         </div>
-                        
-                        <div class="user-detail-section">
-                            <h4>📋 История покупок</h4>
-                            <div id="user-purchase-history">
-                                <!-- История покупок будет загружена здесь -->
-                            </div>
-                        </div>
+                    </div>
+                </div>
+
+                <!-- Настройки бота -->
+                <div class="admin-section">
+                    <h3>⚡ Настройки бота</h3>
+                    <div class="toggle-buttons">
+                        <button class="toggle-btn enabled" id="toggle-buying" onclick="toggleSetting('buying')">
+                            Покупки включены ✅
+                        </button>
+                        <button class="toggle-btn enabled" id="toggle-selling" onclick="toggleSetting('selling')">
+                            Продажи включены ✅
+                        </button>
+                        <button class="toggle-btn enabled" id="toggle-withdrawals" onclick="toggleSetting('withdrawals')">
+                            Вывод включен ✅
+                        </button>
+                        <button class="toggle-btn enabled" id="toggle-notifications" onclick="toggleSetting('notifications')">
+                            Уведомления включены ✅
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Быстрые действия -->
+                <div class="admin-section">
+                    <h3>🚀 Быстрые действия</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="sendPromotion()">
+                            <i class="fas fa-bullhorn"></i> Запустить акцию
+                        </button>
+                        <button class="action-btn secondary" onclick="updateGiftPrices()">
+                            <i class="fas fa-tags"></i> Обновить цены
+                        </button>
+                        <button class="action-btn secondary" onclick="runMaintenance()">
+                            <i class="fas fa-tools"></i> Тех. обслуживание
+                        </button>
+                        <button class="action-btn secondary" onclick="backupDatabase()">
+                            <i class="fas fa-database"></i> Резервная копия
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Рассылка -->
+                <div class="admin-section">
+                    <h3>📢 Рассылка</h3>
+                    <div class="form-group">
+                        <textarea class="form-input" id="broadcast-message" placeholder="Введите сообщение для рассылки..." rows="4"></textarea>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="sendBroadcast('all')">
+                            <i class="fas fa-users"></i> Всем пользователям
+                        </button>
+                        <button class="action-btn secondary" onclick="sendBroadcast('active')">
+                            <i class="fas fa-bolt"></i> Только активным
+                        </button>
+                        <button class="action-btn secondary" onclick="sendBroadcast('buyers')">
+                            <i class="fas fa-shopping-cart"></i> Только покупателям
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Экспорт данных -->
+                <div class="admin-section">
+                    <h3>📤 Экспорт данных</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn secondary" onclick="exportData('users')">
+                            <i class="fas fa-users"></i> Экспорт пользователей
+                        </button>
+                        <button class="action-btn secondary" onclick="exportData('sales')">
+                            <i class="fas fa-shopping-cart"></i> Экспорт продаж
+                        </button>
+                        <button class="action-btn secondary" onclick="exportData('gifts')">
+                            <i class="fas fa-gift"></i> Экспорт подарков
+                        </button>
+                        <button class="action-btn secondary" onclick="exportData('financial')">
+                            <i class="fas fa-chart-line"></i> Финансовый отчет
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1267,9 +1335,9 @@
                     <label class="form-label">🎁 Выберите подарок для оценки</label>
                     <select class="form-select" id="gift-select">
                         <option value="">-- Выберите подарок --</option>
-                        <option value="golden-nft">Golden NFT</option>
-                        <option value="crypto-art">Crypto Art</option>
-                        <option value="vip-badge">VIP Badge</option>
+                        <option value="dragon">Золотой дракон</option>
+                        <option value="spaceship">Космический корабль</option>
+                        <option value="crystal">Волшебный кристалл</option>
                     </select>
                 </div>
 
@@ -1544,7 +1612,7 @@
     </div>
 
     <script>
-        // Инициализация Telegram WebApp
+        // Инициализация Telegram Web App
         let tg = window.Telegram.WebApp;
         let currentUser = {
             id: tg.initDataUnsafe.user?.id || 'unknown',
@@ -1555,288 +1623,501 @@
         let currentBudget = 50;
         let selectedGift = null;
         let currentPurchaseId = null;
-        let currentTheme = 'dark';
+        let currentTheme = 'light-purple';
         
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
             tg.expand();
             tg.enableClosingConfirmation();
             
-            loadTheme();
+            // Загрузка темы
+            const savedTheme = localStorage.getItem('theme') || 'light-purple';
+            applyTheme(savedTheme);
+            
+            registerUserActivity();
             loadStatistics();
-            loadUserList();
+            updateButtonStates();
             setupEventListeners();
+            loadUsersList();
         });
         
-        // Загрузка темы
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            currentTheme = savedTheme;
-            document.body.setAttribute('data-theme', currentTheme);
+        // Применение темы
+        function applyTheme(theme) {
+            currentTheme = theme;
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            // Обновление иконки
+            const themeBtn = document.getElementById('theme-btn');
+            themeBtn.innerHTML = theme === 'dark' ? '<i class="fas fa-moon"></i>' : 
+                                theme === 'light' ? '<i class="fas fa-sun"></i>' : 
+                                '<i class="fas fa-palette"></i>';
         }
         
         // Переключение темы
         function switchTheme() {
-            const themes = ['dark', 'light', 'purple'];
+            const themes = ['dark', 'light', 'light-purple'];
             const currentIndex = themes.indexOf(currentTheme);
             const nextIndex = (currentIndex + 1) % themes.length;
-            currentTheme = themes[nextIndex];
             
-            document.body.setAttribute('data-theme', currentTheme);
-            localStorage.setItem('theme', currentTheme);
+            const themeBtn = document.getElementById('theme-btn');
+            themeBtn.classList.add('rotating');
             
-            const btn = document.getElementById('theme-btn');
-            btn.classList.add('rotating');
-            setTimeout(() => btn.classList.remove('rotating'), 600);
+            setTimeout(() => {
+                applyTheme(themes[nextIndex]);
+                themeBtn.classList.remove('rotating');
+            }, 600);
+        }
+        
+        // Регистрация активности пользователя
+        async function registerUserActivity() {
+            // Имитация регистрации активности
+            console.log('User activity registered:', currentUser);
         }
         
         // Загрузка статистики
-        function loadStatistics() {
-            // Обновляем основную статистику
-            document.getElementById('total-users').textContent = '1,247';
-            document.getElementById('today-online').textContent = '89';
-            document.getElementById('daily-turnover').textContent = '2,450 TON';
-            document.getElementById('gifts-sold').textContent = '156';
-            
-            // Обновляем админ статистику
-            document.getElementById('admin-total-users').textContent = '1,247';
-            document.getElementById('admin-total-sales').textContent = '543';
-            document.getElementById('admin-total-revenue').textContent = '8,420 TON';
-            document.getElementById('admin-active-users').textContent = '89';
+        async function loadStatistics() {
+            // Имитация загрузки данных
+            setTimeout(() => {
+                document.getElementById('total-users').textContent = '1,247';
+                document.getElementById('today-online').textContent = '89';
+                document.getElementById('daily-turnover').textContent = '2,450 TON';
+                document.getElementById('gifts-sold').textContent = '156';
+                
+                // Админ статистика
+                document.getElementById('admin-total-users').textContent = '1,247';
+                document.getElementById('admin-total-sales').textContent = '892';
+                document.getElementById('admin-total-revenue').textContent = '15,640 TON';
+                document.getElementById('admin-active-users').textContent = '89';
+                
+                // Детальная статистика
+                document.getElementById('new-users-today').textContent = '23';
+                document.getElementById('avg-session-time').textContent = '8.5м';
+                document.getElementById('conversion-rate').textContent = '12.4%';
+                document.getElementById('retention-rate').textContent = '64.7%';
+                
+                // Финансовая аналитика
+                document.getElementById('avg-order-value').textContent = '127.5 TON';
+                document.getElementById('revenue-per-user').textContent = '18.3 TON';
+                document.getElementById('profit-margin').textContent = '28.6%';
+                document.getElementById('refund-rate').textContent = '2.1%';
+                
+                // Аналитика подарков
+                document.getElementById('total-gifts').textContent = '156';
+                document.getElementById('gift-views').textContent = '8,742';
+                document.getElementById('gift-conversion').textContent = '4.8%';
+                document.getElementById('top-gift-price').textContent = '2,450 TON';
+                
+            }, 500);
         }
         
         // Загрузка списка пользователей
-        function loadUserList() {
+        function loadUsersList() {
             const users = [
-                { 
-                    id: 1, 
-                    username: '@cryptoking', 
-                    firstName: 'Alex', 
-                    lastName: 'Crypto', 
-                    joinedDate: '2024-01-15',
-                    stats: {
-                        totalSpent: '1,250 TON',
-                        successfulPayments: 24,
-                        failedPayments: 3,
-                        refundAmount: '150 TON',
-                        giftsPurchased: 18,
-                        topGift: 'Golden NFT',
-                        avgGiftPrice: '69 TON',
-                        giftsSent: 12,
-                        hoursSpent: '42 ч 15 мин',
-                        sessionsCount: 156,
-                        supportRequests: 5,
-                        daysActive: 45
-                    },
-                    purchaseHistory: [
-                        { id: 1, date: '2024-03-15', item: 'Golden NFT', amount: '150 TON', status: 'completed' },
-                        { id: 2, date: '2024-03-12', item: 'Crypto Art', amount: '85 TON', status: 'completed' },
-                        { id: 3, date: '2024-03-10', item: 'VIP Badge', amount: '200 TON', status: 'cancelled' },
-                        { id: 4, date: '2024-03-05', item: 'Rare Collectible', amount: '320 TON', status: 'completed' },
-                        { id: 5, date: '2024-03-01', item: 'Exclusive NFT', amount: '495 TON', status: 'completed' }
-                    ]
-                },
-                { 
-                    id: 2, 
-                    username: '@tonlover', 
-                    firstName: 'Maria', 
-                    lastName: 'Ton', 
-                    joinedDate: '2024-02-03',
-                    stats: {
-                        totalSpent: '980 TON',
-                        successfulPayments: 18,
-                        failedPayments: 2,
-                        refundAmount: '85 TON',
-                        giftsPurchased: 14,
-                        topGift: 'Crypto Art',
-                        avgGiftPrice: '70 TON',
-                        giftsSent: 8,
-                        hoursSpent: '28 ч 40 мин',
-                        sessionsCount: 98,
-                        supportRequests: 2,
-                        daysActive: 32
-                    },
-                    purchaseHistory: [
-                        { id: 1, date: '2024-03-14', item: 'Crypto Art', amount: '85 TON', status: 'completed' },
-                        { id: 2, date: '2024-03-08', item: 'Digital Art', amount: '120 TON', status: 'completed' }
-                    ]
-                },
-                { 
-                    id: 3, 
-                    username: '@giftmaster', 
-                    firstName: 'John', 
-                    lastName: 'Gifts', 
-                    joinedDate: '2024-01-22',
-                    stats: {
-                        totalSpent: '750 TON',
-                        successfulPayments: 12,
-                        failedPayments: 1,
-                        refundAmount: '45 TON',
-                        giftsPurchased: 9,
-                        topGift: 'VIP Badge',
-                        avgGiftPrice: '83 TON',
-                        giftsSent: 6,
-                        hoursSpent: '35 ч 20 мин',
-                        sessionsCount: 112,
-                        supportRequests: 3,
-                        daysActive: 38
-                    },
-                    purchaseHistory: [
-                        { id: 1, date: '2024-03-13', item: 'VIP Badge', amount: '200 TON', status: 'completed' },
-                        { id: 2, date: '2024-03-06', item: 'Special Edition', amount: '180 TON', status: 'completed' }
-                    ]
-                },
-                { 
-                    id: 4, 
-                    username: '@nftcollector', 
-                    firstName: 'Sarah', 
-                    lastName: 'NFT', 
-                    joinedDate: '2024-03-10',
-                    stats: {
-                        totalSpent: '1,520 TON',
-                        successfulPayments: 28,
-                        failedPayments: 4,
-                        refundAmount: '220 TON',
-                        giftsPurchased: 22,
-                        topGift: 'Rare Collectible',
-                        avgGiftPrice: '69 TON',
-                        giftsSent: 15,
-                        hoursSpent: '51 ч 10 мин',
-                        sessionsCount: 178,
-                        supportRequests: 7,
-                        daysActive: 52
-                    },
-                    purchaseHistory: [
-                        { id: 1, date: '2024-03-16', item: 'Rare Collectible', amount: '320 TON', status: 'completed' },
-                        { id: 2, date: '2024-03-11', item: 'Limited Edition', amount: '280 TON', status: 'completed' }
-                    ]
-                }
+                { id: 1, username: '@crypto_lover', joined: '2024-01-15', status: 'active', spent: '1,200 TON', purchases: 15 },
+                { id: 2, username: '@nft_collector', joined: '2024-01-20', status: 'active', spent: '980 TON', purchases: 12 },
+                { id: 3, username: '@gift_master', joined: '2024-02-01', status: 'active', spent: '750 TON', purchases: 8 },
+                { id: 4, username: '@ton_enthusiast', joined: '2024-02-05', status: 'inactive', spent: '320 TON', purchases: 3 },
+                { id: 5, username: '@web3_guru', joined: '2024-02-10', status: 'active', spent: '1,100 TON', purchases: 11 }
             ];
             
-            const userListContainer = document.getElementById('admin-user-list');
-            userListContainer.innerHTML = '';
+            window.allUsers = users;
+            displayUsers(users);
+        }
+        
+        // Отображение пользователей
+        function displayUsers(users) {
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML = '';
             
             users.forEach(user => {
-                const userItem = document.createElement('div');
-                userItem.className = 'admin-user-item';
-                userItem.setAttribute('data-user-id', user.id);
-                userItem.innerHTML = `
-                    <div>
-                        <div style="font-weight: 600;">${user.username}</div>
-                        <div style="font-size: 0.8rem; opacity: 0.7;">${user.firstName} ${user.lastName}</div>
-                    </div>
-                    <div style="font-size: 0.8rem; opacity: 0.7;">с ${user.joinedDate}</div>
+                const userElement = document.createElement('div');
+                userElement.className = 'user-item';
+                userElement.style.cursor = 'pointer';
+                userElement.onclick = () => showUserDetails(user);
+                userElement.innerHTML = `
+                    <span class="user-name">${user.username}</span>
+                    <span class="user-amount">${user.spent}</span>
                 `;
+                usersList.appendChild(userElement);
+            });
+        }
+        
+        // Поиск пользователей
+        function searchUsers() {
+            const searchTerm = document.getElementById('user-search').value.toLowerCase();
+            const filteredUsers = window.allUsers.filter(user => 
+                user.username.toLowerCase().includes(searchTerm)
+            );
+            displayUsers(filteredUsers);
+        }
+        
+        // Показать детали пользователя
+        function showUserDetails(user) {
+            document.getElementById('users-list').style.display = 'none';
+            document.getElementById('user-details-section').style.display = 'block';
+            
+            const userStats = {
+                totalSpent: user.spent,
+                giftsPurchased: user.purchases,
+                hoursInBot: '42',
+                successfulTransactions: '28',
+                failedTransactions: '2',
+                supportTickets: '3',
+                favoriteGifts: ['Золотой дракон', 'Космический корабль', 'Волшебный кристалл'],
+                purchases: [
+                    { id: 1, gift: 'Золотой дракон', amount: '150 TON', status: 'completed', date: '2024-02-15' },
+                    { id: 2, gift: 'Космический корабль', amount: '120 TON', status: 'completed', date: '2024-02-10' },
+                    { id: 3, gift: 'Волшебный кристалл', amount: '80 TON', status: 'cancelled', date: '2024-02-05' }
+                ]
+            };
+            
+            const userDetails = document.getElementById('user-details');
+            userDetails.innerHTML = `
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+                    <h4 style="margin-bottom: 10px; color: var(--accent);">${user.username}</h4>
+                    <p>Зарегистрирован: ${user.joined}</p>
+                    <p>Статус: <span style="color: ${user.status === 'active' ? '#10b981' : '#ef4444'}">${user.status === 'active' ? 'Активен' : 'Неактивен'}</span></p>
+                </div>
                 
-                userItem.addEventListener('click', function() {
-                    document.querySelectorAll('.admin-user-item').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    loadUserStats(user);
-                });
+                <div class="user-stats-grid">
+                    <div class="user-stat-card">
+                        <div class="user-stat-value">${userStats.totalSpent}</div>
+                        <div class="user-stat-label">Всего потрачено</div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="user-stat-value">${userStats.giftsPurchased}</div>
+                        <div class="user-stat-label">Подарков куплено</div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="user-stat-value">${userStats.hoursInBot} ч</div>
+                        <div class="user-stat-label">Время в боте</div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="user-stat-value">${userStats.successfulTransactions}/${userStats.failedTransactions}</div>
+                        <div class="user-stat-label">Успешные/Неудачные транзакции</div>
+                    </div>
+                </div>
                 
-                userListContainer.appendChild(userItem);
-            });
-        }
-        
-        // Загрузка статистики пользователя
-        function loadUserStats(user) {
-            const statsBlock = document.getElementById('user-detail-stats');
-            statsBlock.style.display = 'block';
-            
-            document.getElementById('selected-username').textContent = user.username;
-            
-            // Заполнение данных статистики
-            document.getElementById('user-total-spent').textContent = user.stats.totalSpent;
-            document.getElementById('user-successful-payments').textContent = user.stats.successfulPayments;
-            document.getElementById('user-failed-payments').textContent = user.stats.failedPayments;
-            document.getElementById('user-refund-amount').textContent = user.stats.refundAmount;
-            document.getElementById('user-gifts-purchased').textContent = user.stats.giftsPurchased;
-            document.getElementById('user-top-gift').textContent = user.stats.topGift;
-            document.getElementById('user-avg-gift-price').textContent = user.stats.avgGiftPrice;
-            document.getElementById('user-gifts-sent').textContent = user.stats.giftsSent;
-            document.getElementById('user-hours-spent').textContent = user.stats.hoursSpent;
-            document.getElementById('user-sessions-count').textContent = user.stats.sessionsCount;
-            document.getElementById('user-support-requests').textContent = user.stats.supportRequests;
-            document.getElementById('user-days-active').textContent = user.stats.daysActive;
-            
-            // Заполнение истории покупок
-            const purchaseHistoryContainer = document.getElementById('user-purchase-history');
-            purchaseHistoryContainer.innerHTML = '';
-            
-            user.purchaseHistory.forEach(purchase => {
-                const purchaseItem = document.createElement('div');
-                purchaseItem.className = 'user-purchase-item';
-                purchaseItem.innerHTML = `
-                    <div>
-                        <div style="font-weight: 600;">${purchase.item}</div>
-                        <div style="font-size: 0.8rem; opacity: 0.7;">${purchase.date}</div>
+                <div style="margin: 20px 0;">
+                    <h4 style="margin-bottom: 10px; color: var(--accent);">🎁 История покупок</h4>
+                    <div class="user-purchases-list">
+                        ${userStats.purchases.map(purchase => `
+                            <div class="user-purchase-item">
+                                <div>
+                                    <div style="font-weight: 600;">${purchase.gift}</div>
+                                    <div style="font-size: 0.8rem; opacity: 0.7;">${purchase.date}</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 600; color: var(--accent);">${purchase.amount}</div>
+                                    <div class="purchase-status ${purchase.status}">${purchase.status === 'completed' ? 'Завершено' : purchase.status === 'cancelled' ? 'Отменено' : 'В ожидании'}</div>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
-                    <div style="text-align: right;">
-                        <div style="font-weight: 600;">${purchase.amount}</div>
-                        <div class="purchase-status ${purchase.status}">${getStatusText(purchase.status)}</div>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <h4 style="margin-bottom: 10px; color: var(--accent);">❤️ Любимые подарки</h4>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        ${userStats.favoriteGifts.map(gift => `
+                            <span style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 8px; font-size: 0.9rem;">${gift}</span>
+                        `).join('')}
                     </div>
-                `;
-                purchaseHistoryContainer.appendChild(purchaseItem);
-            });
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <h4 style="margin-bottom: 10px; color: var(--accent);">📞 Обращения в поддержку</h4>
+                    <p>Всего обращений: ${userStats.supportTickets}</p>
+                </div>
+                
+                <button class="action-btn secondary" onclick="backToUsersList()">
+                    <i class="fas fa-arrow-left"></i> Назад к списку пользователей
+                </button>
+            `;
         }
         
-        // Получить текст статуса
-        function getStatusText(status) {
-            switch(status) {
-                case 'completed': return 'Подтвержден';
-                case 'cancelled': return 'Отменен';
-                case 'pending': return 'В обработке';
-                default: return status;
-            }
-        }
-        
-        // Фильтрация пользователей
-        function filterUsers(searchTerm) {
-            const userItems = document.querySelectorAll('.admin-user-item');
-            
-            userItems.forEach(item => {
-                const username = item.querySelector('div > div:first-child').textContent.toLowerCase();
-                if (username.includes(searchTerm.toLowerCase())) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+        // Назад к списку пользователей
+        function backToUsersList() {
+            document.getElementById('users-list').style.display = 'block';
+            document.getElementById('user-details-section').style.display = 'none';
         }
         
         // Переключение настроек
         function toggleSetting(setting) {
-            const btn = document.getElementById(`toggle-${setting}`);
-            const isEnabled = btn.classList.contains('enabled');
+            const button = document.getElementById(`toggle-${setting}`);
+            const isEnabled = button.classList.contains('enabled');
             
             if (isEnabled) {
-                btn.classList.remove('enabled');
-                btn.classList.add('disabled');
-                btn.textContent = btn.textContent.replace('включены', 'выключены')
-                                              .replace('включен', 'выключен')
-                                              .replace('онлайн', 'офлайн');
+                button.classList.remove('enabled');
+                button.classList.add('disabled');
+                button.innerHTML = button.textContent.replace('✅', '❌');
             } else {
-                btn.classList.remove('disabled');
-                btn.classList.add('enabled');
-                btn.textContent = btn.textContent.replace('выключены', 'включены')
-                                              .replace('выключен', 'включен')
-                                              .replace('офлайн', 'онлайн');
+                button.classList.remove('disabled');
+                button.classList.add('enabled');
+                button.innerHTML = button.textContent.replace('❌', '✅');
             }
             
-            showNotification(`Настройка "${getSettingName(setting)}" ${isEnabled ? 'выключена' : 'включена'}`, 'success');
+            showNotification(`Настройка "${getSettingName(setting)}" ${isEnabled ? 'отключена' : 'включена'}`);
         }
         
-        // Получить название настройки
         function getSettingName(setting) {
             const names = {
-                'purchases': 'Покупки',
-                'sales': 'Продажи',
+                'buying': 'Покупки',
+                'selling': 'Продажи',
                 'withdrawals': 'Вывод',
-                'support': 'Поддержка'
+                'notifications': 'Уведомления'
             };
             return names[setting] || setting;
+        }
+        
+        // Быстрые действия
+        function sendPromotion() {
+            showNotification('Запуск акции... Функция в разработке', 'info');
+        }
+        
+        function updateGiftPrices() {
+            showNotification('Обновление цен подарков...', 'info');
+        }
+        
+        function runMaintenance() {
+            showNotification('Запуск технического обслуживания...', 'warning');
+        }
+        
+        function backupDatabase() {
+            showNotification('Создание резервной копии базы данных...', 'success');
+        }
+        
+        // Рассылка
+        function sendBroadcast(audience) {
+            const message = document.getElementById('broadcast-message').value;
+            if (!message.trim()) {
+                showNotification('Введите сообщение для рассылки', 'error');
+                return;
+            }
+            
+            const audiences = {
+                'all': 'всем пользователям',
+                'active': 'активным пользователям', 
+                'buyers': 'покупателям'
+            };
+            
+            showNotification(`Рассылка отправлена ${audiences[audience]}!`, 'success');
+            document.getElementById('broadcast-message').value = '';
+        }
+        
+        // Экспорт данных
+        function exportData(type) {
+            const types = {
+                'users': 'пользователей',
+                'sales': 'продаж', 
+                'gifts': 'подарков',
+                'financial': 'финансовый отчет'
+            };
+            
+            showNotification(`Экспорт данных ${types[type]} запущен`, 'success');
+        }
+        
+        // Обновление состояния кнопок
+        async function updateButtonStates() {
+            // Имитация проверки состояния кнопок
+        }
+        
+        // Загрузка реальных подарков
+        async function loadRealGifts() {
+            showScreen('catalog-screen');
+            const catalogContent = document.getElementById('catalog-content');
+            catalogContent.innerHTML = '<div class="loading">🔄 Загрузка каталога...</div>';
+            
+            setTimeout(() => {
+                const gifts = [
+                    {
+                        id: 1,
+                        name: 'Золотой дракон',
+                        price: 150,
+                        total_price: 157.5,
+                        image_url: 'https://via.placeholder.com/120',
+                        market: 'Portals',
+                        rarity: 'legendary'
+                    },
+                    {
+                        id: 2,
+                        name: 'Космический корабль',
+                        price: 120,
+                        total_price: 126,
+                        image_url: 'https://via.placeholder.com/120',
+                        market: 'GetGems',
+                        rarity: 'epic'
+                    },
+                    {
+                        id: 3,
+                        name: 'Волшебный кристалл',
+                        price: 80,
+                        total_price: 84,
+                        image_url: 'https://via.placeholder.com/120',
+                        market: 'Portals',
+                        rarity: 'rare'
+                    }
+                ];
+                
+                catalogContent.innerHTML = '';
+                gifts.forEach(gift => {
+                    const giftCard = document.createElement('div');
+                    giftCard.className = 'gift-card';
+                    giftCard.innerHTML = `
+                        <div class="gift-image">
+                            <img src="${gift.image_url}" alt="${gift.name}">
+                        </div>
+                        <div class="gift-info">
+                            <h3 class="gift-name">${gift.name}</h3>
+                            <div class="gift-price">${gift.total_price} TON</div>
+                            <div class="gift-market">${gift.market}</div>
+                            <div class="gift-rarity ${gift.rarity}">${getRarityName(gift.rarity)}</div>
+                        </div>
+                        <button class="buy-btn" onclick="selectGift(${JSON.stringify(gift).replace(/"/g, '&quot;')})">
+                            🛒 Купить
+                        </button>
+                    `;
+                    catalogContent.appendChild(giftCard);
+                });
+            }, 1000);
+        }
+        
+        // Получение названия редкости
+        function getRarityName(rarity) {
+            const names = {
+                'common': 'Обычный',
+                'rare': 'Редкий',
+                'epic': 'Эпический',
+                'legendary': 'Легендарный'
+            };
+            return names[rarity] || rarity;
+        }
+        
+        // Выбор подарка
+        function selectGift(gift) {
+            selectedGift = gift;
+            showScreen('purchase-screen');
+            
+            const giftCard = document.getElementById('purchase-gift-card');
+            giftCard.innerHTML = `
+                <div class="gift-image">
+                    <img src="${gift.image_url}" alt="${gift.name}">
+                </div>
+                <div class="gift-info">
+                    <h3 class="gift-name">${gift.name}</h3>
+                    <div class="gift-price">${gift.total_price} TON</div>
+                    <div class="gift-market">${gift.market}</div>
+                </div>
+            `;
+            
+            document.getElementById('summary-price').textContent = gift.price + ' TON';
+            document.getElementById('summary-fee').textContent = (gift.total_price - gift.price).toFixed(2) + ' TON';
+            document.getElementById('summary-total').textContent = gift.total_price + ' TON';
+        }
+        
+        // Подтверждение покупки
+        function confirmPurchase() {
+            const username = document.getElementById('username-input').value.trim();
+            const wallet = document.getElementById('wallet-input').value.trim();
+            
+            if (!username) {
+                showNotification('Введите ваш Telegram юзернейм', 'error');
+                return;
+            }
+            
+            if (!wallet) {
+                showNotification('Введите ваш TON кошелек', 'error');
+                return;
+            }
+            
+            currentPurchaseId = `purchase_${Date.now()}_${currentUser.id}`;
+            
+            document.getElementById('payment-amount').textContent = selectedGift.total_price + ' TON';
+            document.getElementById('wallet-address').textContent = 'UQAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+            
+            showScreen('payment-screen');
+        }
+        
+        // Проверка оплаты
+        async function checkPayment() {
+            const checkBtn = document.getElementById('check-payment-btn');
+            checkBtn.disabled = true;
+            checkBtn.innerHTML = '🔄 Проверяем...';
+            
+            setTimeout(() => {
+                document.getElementById('confirm-gift-name').textContent = selectedGift.name;
+                document.getElementById('confirm-username').textContent = document.getElementById('username-input').value;
+                document.getElementById('confirm-amount').textContent = selectedGift.total_price + ' TON';
+                
+                showScreen('confirmation-screen');
+                
+                checkBtn.disabled = false;
+                checkBtn.innerHTML = '🔄 Проверить оплату';
+            }, 2000);
+        }
+        
+        // Поиск подарков
+        async function performSearch() {
+            const searchTerm = document.getElementById('search-input').value;
+            const maxPrice = currentBudget;
+            
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = '<div class="loading">🔍 Ищем подарки...</div>';
+            
+            setTimeout(() => {
+                const gifts = [
+                    { name: 'Золотой дракон', price: '150 TON', rarity: 'legendary' },
+                    { name: 'Космический корабль', price: '120 TON', rarity: 'epic' },
+                    { name: 'Волшебный кристалл', price: '80 TON', rarity: 'rare' }
+                ];
+                
+                const filteredGifts = gifts.filter(gift => 
+                    (!searchTerm || gift.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+                    (parseInt(gift.price) <= parseInt(maxPrice))
+                );
+                
+                if (filteredGifts.length === 0) {
+                    resultsContainer.innerHTML = '<div class="no-results">😔 Ничего не найдено</div>';
+                    return;
+                }
+                
+                resultsContainer.innerHTML = filteredGifts.map(gift => `
+                    <div class="gift-card">
+                        <div class="gift-image">
+                            <img src="https://via.placeholder.com/120" alt="${gift.name}">
+                        </div>
+                        <div class="gift-info">
+                            <h3 class="gift-name">${gift.name}</h3>
+                            <div class="gift-price">${gift.price}</div>
+                            <div class="gift-rarity ${gift.rarity}">${getRarityName(gift.rarity)}</div>
+                            <button class="buy-btn" onclick="selectGift(${JSON.stringify({...gift, total_price: gift.price, image_url: 'https://via.placeholder.com/120', market: 'Portals'}).replace(/"/g, '&quot;')})">
+                                🛒 Купить
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }, 1500);
+        }
+        
+        // Установка бюджета
+        function setBudget(amount) {
+            currentBudget = amount;
+            document.getElementById('budget-setter').value = amount;
+            document.getElementById('budget-display').textContent = amount.toLocaleString();
+            
+            const largeBudgetDisplay = document.getElementById('budget-large-display');
+            if (amount >= 10000) {
+                largeBudgetDisplay.style.display = 'block';
+            } else {
+                largeBudgetDisplay.style.display = 'none';
+            }
+        }
+        
+        // Сохранение бюджета
+        function saveBudget() {
+            showNotification(`Бюджет установлен: ${currentBudget.toLocaleString()} TON`);
+            showScreen('main-screen');
         }
         
         // Показать экран
@@ -1851,12 +2132,12 @@
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
-            notification.textContent = message;
+            notification.innerHTML = message;
             
             document.body.appendChild(notification);
             
             setTimeout(() => {
-                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                notification.style.animation = 'slideOutRight 0.3s ease-in';
                 setTimeout(() => {
                     if (notification.parentNode) {
                         notification.parentNode.removeChild(notification);
@@ -1867,12 +2148,6 @@
         
         // Настройка слушателей событий
         function setupEventListeners() {
-            // Поиск пользователей
-            document.getElementById('user-search').addEventListener('input', function(e) {
-                filterUsers(e.target.value);
-            });
-            
-            // Слайдер бюджета на экране поиска
             const budgetSlider = document.getElementById('budget-slider');
             if (budgetSlider) {
                 budgetSlider.addEventListener('input', function() {
@@ -1889,7 +2164,6 @@
                 });
             }
             
-            // Слайдер бюджета на экране бюджета
             const budgetSetter = document.getElementById('budget-setter');
             if (budgetSetter) {
                 budgetSetter.addEventListener('input', function() {
@@ -1900,24 +2174,6 @@
         }
         
         // Вспомогательные функции
-        function setBudget(amount) {
-            currentBudget = amount;
-            document.getElementById('budget-setter').value = amount;
-            document.getElementById('budget-display').textContent = amount.toLocaleString();
-            
-            const largeBudgetDisplay = document.getElementById('budget-large-display');
-            if (amount >= 10000) {
-                largeBudgetDisplay.style.display = 'block';
-            } else {
-                largeBudgetDisplay.style.display = 'none';
-            }
-        }
-        
-        function saveBudget() {
-            showNotification(`Бюджет установлен: ${currentBudget.toLocaleString()} TON`);
-            showScreen('main-screen');
-        }
-        
         function copyWalletAddress() {
             const walletAddress = document.getElementById('wallet-address').textContent;
             navigator.clipboard.writeText(walletAddress).then(() => {
@@ -1926,7 +2182,7 @@
         }
         
         function openWalletApp() {
-            showNotification('Функция открытия кошелька в разработке');
+            showNotification('Открытие кошелька...');
         }
         
         function contactSupport() {
@@ -1949,27 +2205,6 @@
             document.getElementById('budget-amount').textContent = '50';
             document.getElementById('search-results').innerHTML = '<div class="loading">🔍 Введите параметры поиска...</div>';
             currentBudget = 50;
-        }
-        
-        function loadRealGifts() {
-            showScreen('catalog-screen');
-            document.getElementById('catalog-content').innerHTML = '<div class="no-results">🎁 Каталог в разработке</div>';
-        }
-        
-        function performSearch() {
-            document.getElementById('search-results').innerHTML = '<div class="no-results">🔍 Функция поиска в разработке</div>';
-        }
-        
-        function selectGift(gift) {
-            showNotification('Функция выбора подарка в разработке');
-        }
-        
-        function confirmPurchase() {
-            showNotification('Функция покупки в разработке');
-        }
-        
-        function checkPayment() {
-            showNotification('Функция проверки платежа в разработке');
         }
     </script>
 </body>
