@@ -2,8 +2,20 @@
 from aiohttp import web
 import asyncio
 import os
-from database import stats_db
-from webapp_api import *
+import sys
+
+# Добавляем текущую директорию в путь Python
+sys.path.append(os.path.dirname(__file__))
+
+# Теперь импортируем модули
+try:
+    from database import stats_db
+    from webapp_api import *
+except ImportError as e:
+    print(f"Import error: {e}")
+    print(f"Current directory: {os.getcwd()}")
+    print(f"Files in directory: {os.listdir('.')}")
+    raise
 
 async def handle_index(request):
     return web.FileResponse('./static/index.html')
@@ -97,3 +109,4 @@ if __name__ == '__main__':
     app = init_app()
     port = int(os.environ.get('PORT', 8080))
     web.run_app(app, host='0.0.0.0', port=port)
+
