@@ -1,10 +1,21 @@
-# api/main.py
+import os
+import sys
 from aiohttp import web
 import asyncio
-import json
-import os
-from .database import stats_db
-from .webapp_api import *
+
+# Добавляем путь к корню проекта
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(current_dir)
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
+from api.database import stats_db
+from api.webapp_api import *
+
+async def handle_index(request):
+    # Указываем абсолютный путь к index.html
+    index_path = os.path.join(project_root, 'index.html')
+    return web.FileResponse(index_path)
 
 async def handle_index(request):
     return web.FileResponse('./index.html')
@@ -104,10 +115,10 @@ def init_app():
     app.router.add_get('/index.html', handle_index)
     app.router.add_post('/api/{endpoint:.*}', handle_api)
     app.router.add_get('/api/{endpoint:.*}', handle_api)
-    app.router.add_static('/static/', path='./static/', name='static')
     
     return app
 
 if __name__ == '__main__':
     app = init_app()
-    web.run_app(app, host='0.0.0.0', port=8080)
+    port = int(os.environ.get('PORT', 8080))
+    web.run_app(app, host='0.0.0.0', port=port)
