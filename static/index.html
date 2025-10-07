@@ -1033,7 +1033,7 @@
             id: tg.initDataUnsafe.user?.id || 'unknown',
             username: tg.initDataUnsafe.user?.username || 'Аноним',
             firstName: tg.initDataUnsafe.user?.first_name || 'Пользователь',
-            isAdmin: tg.initDataUnsafe.user?.id === 'ADMIN_USER_ID' // Заменить на реальный ID админа
+            isAdmin: tg.initDataUnsafe.user?.id === '5851663966' // Заменить на реальный ID админа
         };
         
         let currentBudget = 50;
@@ -1556,9 +1556,66 @@
 
         // Настройка обработчиков событий
         function setupEventListeners() {
-            // Добавить реальные обработчики событий
+            const budgetSlider = document.getElementById('budget-slider');
+            if (budgetSlider) {
+                budgetSlider.addEventListener('input', function() {
+                    const value = parseInt(this.value);
+                    document.getElementById('budget-amount').textContent = value.toLocaleString();
+                    currentBudget = value;
+                    
+                    const largeBudget = document.getElementById('large-budget');
+                    if (value >= 10000) {
+                        largeBudget.style.display = 'block';
+                    } else {
+                        largeBudget.style.display = 'none';
+                    }
+                });
+            }
+            
+            const budgetSetter = document.getElementById('budget-setter');
+            if (budgetSetter) {
+                budgetSetter.addEventListener('input', function() {
+                    const value = parseInt(this.value);
+                    setBudget(value);
+                });
+            }
+        }
+        
+        // Вспомогательные функции
+        function copyWalletAddress() {
+            const walletAddress = document.getElementById('wallet-address').textContent;
+            navigator.clipboard.writeText(walletAddress).then(() => {
+                showNotification('Адрес скопирован!');
+            });
+        }
+        
+        function openWalletApp() {
+            showNotification('Открытие кошелька...');
+        }
+        
+        function contactSupport() {
+            tg.openTelegramLink('https://t.me/GiftPrisesHelperBot');
+        }
+        
+        function connectTelegramAccount() {
+            showNotification('Функция подключения аккаунта в разработке');
+        }
+        
+        function evaluateGift() {
+            showNotification('Функция оценки подарка в разработке');
+        }
+        
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('backdrop-input').value = '';
+            document.getElementById('symbol-input').value = '';
+            document.getElementById('budget-slider').value = 50;
+            document.getElementById('budget-amount').textContent = '50';
+            document.getElementById('search-results').innerHTML = '<div class="loading">🔍 Введите параметры поиска...</div>';
+            currentBudget = 50;
         }
     </script>
 </body>
 </html>
 ```
+
